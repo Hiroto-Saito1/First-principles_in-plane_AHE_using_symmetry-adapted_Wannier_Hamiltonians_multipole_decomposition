@@ -83,6 +83,12 @@ dependencies:
 
 ```bash
 python -m pip install -e ".[test,plot]"
+./scripts/reproduce_all_figures.sh
+```
+
+Individual figure groups can also be regenerated directly:
+
+```bash
 python scripts/reproduce_figures/plot_ahc_111.py
 python scripts/reproduce_figures/plot_ahc_103.py
 python scripts/reproduce_figures/plot_rank_resolved_103.py
@@ -92,6 +98,11 @@ python scripts/reproduce_figures/plot_strain_103.py
 Generated figures are written to `results/figures/`, which is intentionally
 ignored by Git.
 
+The PDFs in `figures/paper/` are the exact figures used in the manuscript and
+serve as reference artifacts. Repository-local scripts generate equivalent
+data figures under `results/figures/`; they are not expected to reproduce PDF
+files byte-for-byte.
+
 ## Figure Mapping
 
 Use these files to connect the manuscript to repository artifacts:
@@ -100,6 +111,8 @@ Use these files to connect the manuscript to repository artifacts:
 - `docs/paper_mapping.md`: human-readable mapping from manuscript figures to
   data and scripts.
 - `docs/data_inventory.md`: status of included data and large generated files.
+- `inputs/`: committed calculation input templates and manifests for the
+  first-principles workflows.
 
 ## Code Scope
 

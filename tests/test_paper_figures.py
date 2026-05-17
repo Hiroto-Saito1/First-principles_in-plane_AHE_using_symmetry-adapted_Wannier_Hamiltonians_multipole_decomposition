@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 import re
+import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,7 +36,16 @@ def test_figure_inventory_matches_manuscript() -> None:
         assert (ROOT / row["included_pdf"]).is_file()
         assert (ROOT / row["processed_data"]).exists()
         assert (ROOT / row["plotting_script"]).exists()
-        assert row["reproducibility_level"] in {"1", "2", "3"}
+        assert row["reproduction_category"] in {
+            "reproducible_plot",
+            "static_asset",
+            "workflow_required",
+        }
+        if row["reproduction_category"] == "reproducible_plot":
+            assert row["generated_output"].startswith("results/figures/")
+            assert row["plotting_script"].endswith(".py")
+        if row["reproduction_category"] == "static_asset":
+            assert row["generated_output"] == ""
 
 
 def test_committed_paper_figures_are_small() -> None:
@@ -47,3 +57,14 @@ def test_committed_paper_figures_are_small() -> None:
         if path.stat().st_size > limit
     ]
     assert oversized == []
+
+
+def test_reproduce_all_figures_check_mode() -> None:
+    """Smoke-check the all-in-one figure reproduction entry point without plotting."""
+    result = subprocess.run(
+        ["bash", str(ROOT / "scripts" / "reproduce_all_figures.sh"), "--check"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert "inputs and scripts are present" in result.stdout

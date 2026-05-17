@@ -261,22 +261,26 @@ Do not add default tests that require:
 Already present:
 
 - exact manuscript PDFs under `figures/paper/`;
+- figure inventory categories for `reproducible_plot`, `static_asset`, and
+  `workflow_required`;
+- `scripts/reproduce_all_figures.sh` for all currently available
+  repository-local Python plots;
 - processed data and plotting scripts for `(111)` AHC;
 - processed data and plotting scripts for `(103)` AHC;
 - processed data and plotting scripts for rank-cumulative `(103)` AHC;
 - processed data and plotting scripts for `[103]` strain response;
+- initial portable DFT input templates under `inputs/dft/`;
 - lightweight package and processed-data tests;
 - generation notes for large files.
 
 Still needed:
 
-- replace the old reproducibility-level language with the new category model;
-- add `scripts/reproduce_all_figures.sh`;
 - extract missing compact data for multipole coefficient, single-rank `(103)`,
   minimal-model, and possibly band/bond figures;
-- add `inputs/` with portable calculation inputs;
-- add tests or inventory checks for the all-in-one reproduction workflow and
-  input manifests.
+- expand `inputs/` with the remaining Wannier90, SymWannier, MultiPie/SAMB,
+  WannierBerri, angle-grid, and production DFT input files;
+- add tests or inventory checks for input manifests once the full input set is
+  curated.
 
 ## Completion Criteria
 

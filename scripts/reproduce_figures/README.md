@@ -4,6 +4,15 @@ Scripts here read from `data/processed/` and write generated figures under
 `results/figures/` by default. The exact manuscript PDFs are committed under
 `figures/paper/`.
 
+To regenerate every figure that currently has committed compact data, run:
+
+```bash
+./scripts/reproduce_all_figures.sh
+```
+
+This produces scientifically equivalent repository-local plots. It does not
+attempt byte-identical reproduction of the final manuscript PDFs.
+
 Available scripts:
 
 - `plot_ahc_111.py`

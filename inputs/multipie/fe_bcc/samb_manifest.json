@@ -1,0 +1,26 @@
+{
+  "system": "bcc Fe",
+  "basis": "SAMB",
+  "shell_count": 35,
+  "expected_metadata_files": [
+    "Fe_samb.py",
+    "Fe_samb.py.gz"
+  ],
+  "required_dictionary": {
+    "top_level_key": "data",
+    "multipole_label_key": "Z",
+    "label_usage": "The first entry of each Z tuple is used as the multipole name in coefficient plots."
+  },
+  "downstream_consumers": [
+    "data/processed/multipole_coefficients/multipole_coefficients.csv",
+    "scripts/reproduce_figures/plot_multipole_coefficients.py",
+    "rank-filtered magnetization rotation for Fe (103)"
+  ],
+  "large_generated_outputs": [
+    "multi_matrix.hdf5",
+    "trs_py_ed_hr.hdf5",
+    "trs_py_pd_hr.hdf5",
+    "trs_tb_hr.hdf5"
+  ]
+}
+

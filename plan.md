@@ -269,6 +269,10 @@ Already present:
 - processed data and plotting scripts for single-rank `(103)` AHC;
 - processed data and plotting scripts for `[103]` strain response;
 - initial portable DFT and Wannier input templates under `inputs/`;
+- portable SymWannier/TRS-Wannier, MultiPie/SAMB, and WannierBerri input
+  manifests under `inputs/`;
+- portable WannierBerri AHC and per-angle job-generation templates;
+- lightweight input-manifest tests;
 - lightweight package and processed-data tests;
 - generation notes for large files.
 
@@ -276,10 +280,11 @@ Still needed:
 
 - extract missing compact data for multipole coefficient, minimal-model, and
   possibly band/bond figures;
-- expand `inputs/` with the remaining SymWannier, MultiPie/SAMB,
-  WannierBerri, angle-grid, and production DFT input files;
-- add tests or inventory checks for input manifests once the full input set is
-  curated.
+- replace any remaining manifest-only input entries with exact production
+  input files when redistributable under the 100 MB policy;
+- add exact production command wrappers for SymWannier/TRS-Wannier and
+  MultiPie/SAMB once the source scripts are cleaned of private paths and
+  cluster assumptions.
 
 ## Completion Criteria
 

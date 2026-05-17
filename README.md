@@ -18,6 +18,8 @@ for reproducing the currently bundled plots.
 - `data/processed/`: compact CSV and JSON files for figure data.
 - `scripts/reproduce_figures/`: plotting scripts that read only
   `data/processed/`.
+- `inputs/`: first-principles input templates and workflow manifests for DFT,
+  Wannier90, SymWannier/TRS-Wannier, MultiPie/SAMB, and WannierBerri.
 - `src/symwan_multipie/`: reusable Python utilities for multipole
   decomposition, magnetization rotation, and reconstruction checks.
 - `tests/`: lightweight tests for the package and processed figure data.
@@ -56,8 +58,8 @@ The repository includes compact data for:
 
 The exact manuscript figure PDFs are included even when the full compact
 source table is still being curated. This currently applies to the multipole
-coefficient bar plots, the single-rank `(103)` comparison, and the minimal
-two-orbital model figures. The generation notes for large or expensive
+coefficient bar plots, the minimal two-orbital model figures, and the
+band/bond convergence figure. The generation notes for large or expensive
 intermediate files are documented in `scripts/workflow/generate_large_files.md`.
 
 Files larger than 100 MB are not stored in Git. Instead, the repository records

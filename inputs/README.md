@@ -17,6 +17,12 @@ directories, caches, and cluster logs should not be committed.
   for the `[103]` strain structure workflow.
 - `wannier/fe_bcc_unstrained/`: initial Wannier90 and `pw2wannier90` inputs
   for the unstrained bcc Fe workflow.
+- `symwannier/fe_bcc/`: portable SymWannier/TRS-Wannier manifests for the Fe
+  Hamiltonian variants, rotation planes, and rank filters.
+- `multipie/fe_bcc/`: SAMB/MultiPie metadata manifest for the Fe 35-shell
+  multipole decomposition.
+- `wannierberri/fe_bcc_rotation/`: portable AHC settings, rotation grids, and
+  per-angle WannierBerri job-generation templates.
 
 ## Pseudopotentials
 

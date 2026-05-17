@@ -1,0 +1,54 @@
+{
+  "system": "bcc Fe",
+  "manuscript": "First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition",
+  "wannier_functions": {
+    "count": 36,
+    "spinor": true,
+    "basis_note": "Fe spinor Wannier model used for the symmetry-adapted Hamiltonian workflows."
+  },
+  "hamiltonian_variants": [
+    {
+      "name": "trs_py_ed_hr",
+      "description": "Time-reversal-symmetric Hamiltonian reconstructed from the SymWannier exact-diagonalization style workflow.",
+      "generated_file": "trs_py_ed_hr.hdf5"
+    },
+    {
+      "name": "trs_py_pd_hr",
+      "description": "Time-reversal-symmetric Hamiltonian reconstructed from the projectability-disentanglement workflow.",
+      "generated_file": "trs_py_pd_hr.hdf5"
+    },
+    {
+      "name": "trs_tb_hr",
+      "description": "Time-reversal-symmetric Hamiltonian reconstructed from the tight-binding reference workflow.",
+      "generated_file": "trs_tb_hr.hdf5"
+    }
+  ],
+  "rotation_planes": [
+    {
+      "label": "111",
+      "axis2": [1.0, 1.0, 1.0],
+      "initial_vector": [-1.0, -1.0, 2.0],
+      "phi_degrees": {
+        "start": 0,
+        "stop": 360,
+        "step": 5
+      }
+    },
+    {
+      "label": "103",
+      "axis2": [1.0, 0.0, 3.0],
+      "initial_vector": [0.0, -1.0, 0.0],
+      "phi_degrees": {
+        "start": 0,
+        "stop": 360,
+        "step": 5
+      }
+    }
+  ],
+  "component_filter": {
+    "types": ["M", "T"],
+    "irreps": ["T1g"],
+    "ranks_for_rank_resolved_runs": [1, 3, 5]
+  }
+}
+

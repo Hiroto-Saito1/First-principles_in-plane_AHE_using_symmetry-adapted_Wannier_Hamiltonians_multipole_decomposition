@@ -15,7 +15,7 @@ The associated manuscript preprint is available at
 | `tests/fixtures/` | generated at test time | Synthetic two-orbital fixture for HDF5 conversion, multipole decomposition, magnetization rotation, and energy-difference tests. |
 | `figures/paper/` | included | Exact PDF files referenced by `main_all.tex`. |
 | `data/processed/figure_inventory.csv` | included | Complete inventory of manuscript figure files, reproduction category, data path, plotting script, and generated output target. |
-| `inputs/` | initial inputs included | Portable first-principles input templates and manifests; this will grow as remaining DFT/Wannier/SymWannier/WannierBerri inputs are curated. |
+| `inputs/` | included | Portable first-principles input templates and manifests for DFT, Wannier90, SymWannier/TRS-Wannier, MultiPie/SAMB, and WannierBerri AHC workflows. |
 | `data/processed/ahc_111/` | included | Compact CSV/JSON data for Fe `(111)` AHC angular dependence and energy-angle data. |
 | `data/processed/ahc_103/` | included | Compact CSV/JSON data for Fe `(103)` AHC angular dependence and energy-angle data. |
 | `data/processed/rank_resolved_103/` | included | Compact rank-cumulative, single-rank, and energy data for Fe `(103)`. |
@@ -41,6 +41,17 @@ not stored in Git.
 | Rank-resolved AHC | Fe rank-filtered AHC summary data | compact summary data and filter metadata |
 | `[103]` strain effect | Fe `[103]` strain AHC summary data | strain-resolved processed data |
 | Minimal `p_z`-`d_xy` model | manuscript/model scripts | standalone Python model and output CSV |
+
+## Included Input Manifests
+
+| Path | Purpose |
+| --- | --- |
+| `inputs/dft/fe_bcc_unstrained/` | Quantum ESPRESSO SCF and NSCF templates for the unstrained bcc Fe workflow. |
+| `inputs/dft/fe_bcc_strain_103/` | Quantum ESPRESSO template and notes for the volume-preserving `[103]` strain workflow. |
+| `inputs/wannier/fe_bcc_unstrained/` | Wannier90 and `pw2wannier90` inputs for the Fe spinor Wannier model. |
+| `inputs/symwannier/fe_bcc/` | Fe SymWannier/TRS-Wannier Hamiltonian variants, rotation planes, and rank-filter manifest. |
+| `inputs/multipie/fe_bcc/` | Fe SAMB/MultiPie manifest for the 35-shell multipole basis and coefficient labels. |
+| `inputs/wannierberri/fe_bcc_rotation/` | WannierBerri AHC settings, `(111)` and `(103)` rotation grids, and per-angle job templates. |
 
 ## Figure Reproduction Categories
 

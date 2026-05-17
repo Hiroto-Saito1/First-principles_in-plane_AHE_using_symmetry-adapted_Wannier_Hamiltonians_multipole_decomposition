@@ -11,8 +11,6 @@
     "w_rank1_2_3_4_5_6_7",
     "w_rank1_2_3_4_5_6_7_8"
   ],
-  "reference_source_directory": "/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/\u662f\u5e38\u7814\u7a76\u5ba4/2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_103/theta0_qe-7.2/hamiltonian_hdf5_trs/anisotropy",
-  "source_directory": "/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/\u662f\u5e38\u7814\u7a76\u5ba4/2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_103/theta0_qe-7.2/hamiltonian_hdf5_trs/anisotropy_w_rank3",
   "source_files": [
     "angle_dep_ahc.xml",
     "angle_dep_w_rank*.xml",

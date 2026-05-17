@@ -7,13 +7,8 @@ This directory contains compact rank-cumulative processed data for the bcc Fe
 - `sigma_perp_group*.pdf`
 - `sigma_axis_group*.pdf`
 
-The main source files are:
-
-```text
-tests/Fe/FM_sqa_103/theta0_qe-7.2/hamiltonian_hdf5_trs/anisotropy_w_rank3/angle_dep_ahc.xml
-tests/Fe/FM_sqa_103/theta0_qe-7.2/hamiltonian_hdf5_trs/anisotropy_w_rank3/angle_dep_w_rank*.xml
-tests/Fe/FM_sqa_103/theta0_qe-7.2/hamiltonian_hdf5_trs/anisotropy/angle_dep_ahc.xml
-```
+The CSV files contain rank-cumulative AHC components and energy-angle data
+used by the corresponding manuscript panels.
 
 The exact manuscript PDFs for the single-rank comparison
 `sigma_para.pdf`, `sigma_perp.pdf`, and `sigma_axis.pdf` are included under

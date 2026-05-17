@@ -15,22 +15,16 @@ Fe using time-reversal-symmetric Wannier Hamiltonians, symmetry-adapted
 multipole basis (SAMB) decomposition, magnetization rotation, rank-resolved
 contribution analysis, and strain-effect calculations.
 
-The old repository is a read-only reference and must not be modified during
-this reconstruction.
-
-Old repository:
-
-```text
-/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2024/github_projects/symwan_multipie
-```
+The production calculation workspace is a private reference and must not be
+modified during this reconstruction.
 
 ## Core Principles
 
 1. Build a public repository containing the code, lightweight test data,
    processed representative data, and figure-generation scripts needed to
    reproduce or verify the manuscript results.
-2. Avoid copying the old repository wholesale. The old calculation tree is
-   about 16 GB, so large calculation directories should be reduced to the
+2. Avoid copying the production workspace wholesale. The full calculation tree
+   is large, so calculation directories should be reduced to the
    required inputs, lightweight outputs, metadata, and retrieval instructions.
 3. Use a test-driven development workflow. Start with small fixtures and tests,
    then port and clean the old code until the tests pass.
@@ -84,7 +78,7 @@ Old repository:
 
 ## Code To Port
 
-The first source files to port from the old repository are:
+The first source files to port from the production workflow are:
 
 - `src/multipole.py`: convert MultiPie `_matrix.pkl` or `_matrix.py` outputs
   into sparse HDF5 multipole-matrix files.
@@ -197,7 +191,7 @@ Expected mappings:
 
 2. Create small fixtures.
    - Use CH4 or a synthetic minimal Hamiltonian small enough for regular tests.
-   - If fixtures are copied from the old repository, record their provenance in
+   - If fixtures are derived from production workflow outputs, record their provenance in
      `tests/fixtures/README.md`.
 
 3. Port the core code.
@@ -239,7 +233,7 @@ Expected mappings:
   test path, and paper-result mapping.
 - The main manuscript results can be traced to specific data files and scripts.
 - The new repository stands alone for public documentation and lightweight
-  validation, without requiring the old repository.
+  validation, without requiring the production calculation workspace.
 - The handling of large data is documented in `data/README.md` or
   `docs/data_inventory.md`.
 
@@ -251,7 +245,7 @@ manuscript figures reproducible from repository artifacts. Work in this order.
 1. Build a figure inventory from `main_all.tex`.
    - Extract every `\includegraphics{...}` target.
    - Assign each target a manuscript figure/table label, short description,
-     source directory in the old repository, expected processed-data file, and
+     source workflow, expected processed-data file, and
      expected plotting script.
    - Record this in `docs/paper_mapping.md`.
 
@@ -286,7 +280,7 @@ manuscript figures reproducible from repository artifacts. Work in this order.
    - Use JSON or YAML for plot metadata such as axis labels, units, fitting
      parameters, magnetization plane, strain value, and source path.
    - Include a `README.md` in each processed-data subdirectory explaining how
-     the files were extracted from the old repository.
+     the files were extracted from the paper workflow outputs.
 
 5. Add one plotting script per manuscript figure group.
    - Put scripts under `scripts/reproduce_figures/`.

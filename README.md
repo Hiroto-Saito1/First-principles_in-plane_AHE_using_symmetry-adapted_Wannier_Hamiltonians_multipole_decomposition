@@ -1,69 +1,73 @@
 # First-Principles Analysis of In-Plane Anomalous Hall Effect
 
-This repository is being reconstructed as the data-availability and
-reproducibility repository for the manuscript:
+This repository accompanies the manuscript:
 
 > First-principles analysis of in-plane anomalous Hall effect using
 > symmetry-adapted Wannier Hamiltonians and multipole decomposition
 
-The repository will collect the scripts, lightweight test data, processed
-results, and documentation needed to trace the calculations reported in the
-paper. The main target system is body-centered cubic Fe, where the in-plane
-anomalous Hall effect (IAHE) is analyzed using time-reversal-symmetric
-Wannier Hamiltonians and a symmetry-adapted multipole basis.
+It is intended for readers who want to inspect, reuse, or verify the data
+behind the paper. The repository contains the published figures, compact
+processed data for the main figure workflows, lightweight tests, and scripts
+for reproducing the currently bundled plots.
 
-## Current Status
+## What This Repository Contains
 
-This directory is currently a reconstruction workspace, not yet a finished
-public code repository.
+- `figures/paper/`: the PDF figures used in the manuscript.
+- `data/processed/`: compact CSV and JSON files for figure data.
+- `scripts/reproduce_figures/`: plotting scripts that read only
+  `data/processed/`.
+- `src/symwan_multipie/`: reusable Python utilities for multipole
+  decomposition, magnetization rotation, and reconstruction checks.
+- `tests/`: lightweight tests for the package and processed figure data.
+- `docs/`: workflow notes and figure-to-data mappings.
 
-The current repository contains:
+The complete figure inventory is available at
+`data/processed/figure_inventory.csv`.
 
-- `main_all.tex`: manuscript source.
-- `main_all.pdf`: compiled manuscript.
-- `plan.md`: reconstruction plan for the public repository.
-- `figures/paper/`: exact PDF figure files referenced by `main_all.tex`.
-- `data/processed/`: compact CSV/JSON data extracted for the manuscript
-  figure workflows that can be reproduced without large raw calculations.
-- `scripts/reproduce_figures/`: plotting scripts that read
-  `data/processed/` and write regenerated figures under `results/figures/`.
-- `src/symwan_multipie/`: initial Python package for multipole HDF5
-  conversion, multipole decomposition, magnetization rotation, and
-  reconstruction-error checks.
-- `tests/`: lightweight synthetic fixtures and pytest coverage for the core
-  workflow.
-- `docs/`: workflow, data-inventory, and manuscript-mapping notes.
+## Scientific Context
 
-The original working repository is used only as a read-only reference. It
-should not be modified during this reconstruction.
+The paper studies the in-plane anomalous Hall effect (IAHE) in body-centered
+cubic Fe. The analysis combines first-principles electronic-structure
+calculations, symmetry-adapted Wannier Hamiltonians, symmetry-adapted multipole
+basis (SAMB) decomposition, magnetization rotation, and intrinsic anomalous
+Hall conductivity calculations.
 
-```text
-/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2024/github_projects/symwan_multipie
-```
+The main result is that high-rank magnetic and magnetic-toroidal multipoles
+can contribute to the IAHE with amplitudes comparable to the magnetic-dipole
+term. In the `(103)` magnetization-rotation plane, rank-4 magnetic-toroidal
+components reshape the out-of-plane Hall response and can act with the
+opposite sign. The repository is organized so these data products can be
+checked without requiring the full production calculation directory.
 
-## Scientific Scope
+## Data Availability
 
-The project studies the microscopic origin of the IAHE in ferromagnets. The
-paper combines the following components:
+The repository includes compact data for:
 
-- First-principles electronic-structure calculations for bcc Fe.
-- Symmetry-adapted Wannier Hamiltonians constructed with SymWannier.
-- Time-reversal-symmetric Wannier gauge fixing for magnetization rotation.
-- Symmetry-adapted multipole basis (SAMB) generated with MultiPie.
-- Multipole decomposition of the Wannier Hamiltonian into electric,
-  magnetic, magnetic toroidal, and electric toroidal components.
-- Intrinsic anomalous Hall conductivity calculations using WannierBerri.
+- `(111)` AHC angular dependence:
+  `data/processed/ahc_111/`
+- `(103)` AHC angular dependence:
+  `data/processed/ahc_103/`
+- rank-cumulative `(103)` AHC contributions:
+  `data/processed/rank_resolved_103/`
+- tensile and compressive `[103]` strain response:
+  `data/processed/strain_103/`
 
-The main physical result is that high-rank magnetic and magnetic-toroidal
-multipoles can contribute to IAHE with amplitudes comparable to the magnetic
-dipole contribution. In the `(103)` magnetization-rotation plane, magnetic
-toroidal rank-4 components reshape the out-of-plane AHC response and can act
-with the opposite sign. The manuscript further shows that uniaxial strain
-along `[103]` can tune this response and even invert its sign.
+The exact manuscript figure PDFs are included even when the full compact
+source table is still being curated. This currently applies to the multipole
+coefficient bar plots, the single-rank `(103)` comparison, and the minimal
+two-orbital model figures. The generation notes for large or expensive
+intermediate files are documented in `scripts/workflow/generate_large_files.md`.
 
-## Installation
+Files larger than 100 MB are not stored in Git. Instead, the repository records
+the procedure needed to regenerate them and commits only compact summaries,
+metadata, scripts, and final paper figures.
 
-For lightweight development and tests:
+## Quick Start
+
+To inspect the data, no installation is required; the CSV and JSON files can be
+opened directly under `data/processed/`.
+
+To run the lightweight tests:
 
 ```bash
 python -m venv .venv
@@ -72,129 +76,57 @@ python -m pip install -e ".[test]"
 pytest
 ```
 
-Conda environment templates are also provided:
+To regenerate the bundled data-backed figures, install the plotting
+dependencies:
 
 ```bash
-conda env create -f environments/h5py-mpi.yml
-conda env create -f environments/wannierberri.yml
-```
-
-The default tests use synthetic fixtures and do not require full Fe production
-data, Quantum ESPRESSO, SymWannier, MultiPie, or WannierBerri.
-
-## Intended Repository Goals
-
-The reconstructed repository should make the paper results traceable without
-requiring the full private working directory. In particular, it should provide:
-
-- A clean Python package for multipole decomposition and magnetization
-  rotation of Wannier Hamiltonians.
-- Small test fixtures for fast automated tests.
-- Processed data used for the manuscript figures.
-- Figure reproduction scripts.
-- Documentation connecting each paper figure or table to the corresponding
-  data and script.
-- Clear generation procedures for files larger than 100 MB.
-
-The repository is not intended to contain every raw DFT or cluster-output
-file. Large intermediate files should be represented by metadata, processed
-outputs, or generation procedures. Files larger than 100 MB are not stored in
-this repository by default.
-
-## Paper Figures
-
-The same PDF figures used by the manuscript are included in `figures/paper/`.
-The complete figure inventory is stored in
-`data/processed/figure_inventory.csv`.
-
-To regenerate the figures that already have compact processed data:
-
-```bash
+python -m pip install -e ".[test,plot]"
 python scripts/reproduce_figures/plot_ahc_111.py
 python scripts/reproduce_figures/plot_ahc_103.py
 python scripts/reproduce_figures/plot_rank_resolved_103.py
 python scripts/reproduce_figures/plot_strain_103.py
 ```
 
-Generated outputs are written under `results/figures/` and are intentionally
+Generated figures are written to `results/figures/`, which is intentionally
 ignored by Git.
 
-## Implemented Code Components
+## Figure Mapping
 
-The initial implementation has been reconstructed from the old repository's
-responsibilities and cleaned for publication-oriented tests:
+Use these files to connect the manuscript to repository artifacts:
 
-- `multipole.py`: converts MultiPie multipole matrices to sparse HDF5 files.
-- `multipole_decomposition.py`: decomposes Wannier Hamiltonians into SAMB
-  components and write coefficients and padded matrices to HDF5.
-- `single_multipole_reader.py`: reads selected multipole components from large
-  HDF5 files.
-- `mag_rotation.py`: rotates selected magnetic and magnetic-toroidal multipole
-  components by rank, type, and irreducible representation.
-- `energy_diff.py`: evaluates reconstruction errors between the original and
-  multipole-decomposed Hamiltonians.
-- `wannier_utils/`: provides minimal utilities for reading Wannier Hamiltonians and
-  evaluating bands.
+- `data/processed/figure_inventory.csv`: machine-readable figure inventory.
+- `docs/paper_mapping.md`: human-readable mapping from manuscript figures to
+  data and scripts.
+- `docs/data_inventory.md`: status of included data and large generated files.
 
-This initial version avoids absolute paths and supports small serial tests.
-Large production workflows can still use MPI-oriented scripts later, but those
-should remain outside the default CI path.
+## Code Scope
 
-## Testing Policy
+The Python package currently provides:
 
-This repository is being built using a test-driven workflow. The current test
-suite covers:
+- MultiPie/SAMB sparse HDF5 conversion helpers.
+- Hamiltonian decomposition into SAMB components.
+- selected multipole reading from HDF5 outputs.
+- magnetization rotation utilities for magnetic and magnetic-toroidal
+  components.
+- reconstruction-error utilities for lightweight validation.
+- minimal Wannier Hamiltonian readers and band-evaluation helpers.
 
-- HDF5 conversion of small multipole matrix fixtures.
-- Orthogonality and normalization of the multipole basis.
-- Reconstruction of a small Hamiltonian from multipole coefficients.
-- Hermiticity and real-valued decomposition coefficients.
-- Magnetization rotation against analytic or existing TRS-Wannier reference
-  results.
-- Energy-difference regression tests for lightweight fixtures.
-- Basic figure-data loading and sanity checks for the processed Fe results.
+The default tests use synthetic fixtures and processed CSV files. They do not
+require Quantum ESPRESSO, SymWannier, MultiPie, WannierBerri, MPI, or the full
+Fe production data.
 
-Large MPI, WannierBerri, and full DFT workflows are documented as
-integration or reproduction workflows rather than required for every CI run.
+## Environment Notes
 
-## Planned Layout
+For larger reproduction workflows, environment templates are provided:
 
-```text
-.
-├── README.md
-├── plan.md
-├── pyproject.toml
-├── environments/
-├── src/
-│   └── symwan_multipie/
-├── tests/
-│   └── fixtures/
-├── examples/
-├── data/
-│   └── processed/
-├── scripts/
-│   └── reproduce_figures/
-└── docs/
-    ├── workflow.md
-    ├── data_inventory.md
-    └── paper_mapping.md
+```bash
+conda env create -f environments/h5py-mpi.yml
+conda env create -f environments/wannierberri.yml
 ```
 
-See `plan.md` for the detailed reconstruction strategy.
+These environments are not needed for the default test suite.
 
-## Immediate Next Steps
+## Citation
 
-1. Extract compact multipole-coefficient CSV data from the decomposed HDF5
-   outputs used for `bar_ed_all_35.pdf` and `bar_ed_wo_q_35.pdf`.
-2. Extract compact single-rank `(103)` AHC data for `sigma_para.pdf`,
-   `sigma_perp.pdf`, and `sigma_axis.pdf`.
-3. Add compact minimal-model CSV data for the two model figures.
-4. Add CLI entry points for conversion, decomposition, and rotation workflows.
-5. Expand the lightweight synthetic fixtures with a reduced CH4 fixture.
-
-## Notes
-
-The old repository contains a mix of reusable code, calculation examples,
-cluster job scripts, generated outputs, and large intermediate data. During
-this reconstruction, only the parts needed for a clean public data repository
-should be copied here. The old repository should remain unchanged.
+If this repository helps your work, please cite the associated manuscript and
+use the metadata in `CITATION.cff` when citing the repository.

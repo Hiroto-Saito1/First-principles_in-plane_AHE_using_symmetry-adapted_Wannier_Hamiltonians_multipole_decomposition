@@ -8,11 +8,9 @@ Included CSV files:
 - `strain_plus_ahc.csv`: tensile strain series from 0% to +1%.
 - `strain_minus_ahc.csv`: compressive strain series from 0% to -1%.
 
-The source XML files were extracted from:
-
-```text
-tests/Fe/FM_sqa_103_strained_along_103/*/angle_dep_ahc_dft.xml
-```
+The CSV files contain strain-resolved AHC tensor components and projected AHC
+components for the corresponding manuscript panels. The `strain_percent`
+column gives the applied engineering strain in percent.
 
 The strained DFT and Wannier working directories are not stored. The
 generation procedure for the strained cell parameters is documented in

@@ -7,11 +7,7 @@ magnetization-rotation figures:
 - `fit_ahc_perp_103.pdf`
 - `fit_ahc_axis_103.pdf`
 
-The CSV files were extracted from the old read-only repository:
-
-```text
-tests/Fe/FM_sqa_103/angle_dep_ahc_dft.xml
-tests/Fe/FM_sqa_103/angle_dep_ed.xml
-```
+The CSV files contain AHC tensor components, projected AHC components, and
+energy-angle data used by the corresponding manuscript panels.
 
 No raw DFT, Wannier, HDF5, or WannierBerri working files are stored here.

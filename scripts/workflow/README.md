@@ -9,8 +9,8 @@ Scripts added here should perform reusable data transformations, such as:
 
 Current scripts:
 
-- `extract_processed_data_from_old_repo.py`: extracts compact CSV/JSON
-  processed data from small XML summaries in the read-only old repository.
+- `extract_processed_data.py`: extracts compact CSV/JSON
+  processed data from small XML summaries produced by the paper workflows.
 - `strain_103_cell.py`: prints volume-preserving `[103]` strained bcc Fe cell
   parameters for Quantum ESPRESSO.
 - `generate_large_files.md`: records generation procedures for large files

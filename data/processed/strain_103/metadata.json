@@ -2,7 +2,6 @@
   "description": "Volume-preserving uniaxial strain along [103] for bcc Fe.",
   "fermi_level_ev": 17.4112,
   "large_file_policy": "Strained DFT and Wannier directories are regenerated from documented CELL_PARAMETERS, not stored.",
-  "source_directory": "/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/\u662f\u5e38\u7814\u7a76\u5ba4/2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_103_strained_along_103",
   "source_files": [
     "*/angle_dep_ahc_dft.xml"
   ],

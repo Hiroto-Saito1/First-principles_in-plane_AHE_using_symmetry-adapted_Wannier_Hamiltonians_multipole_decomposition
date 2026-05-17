@@ -1,11 +1,10 @@
 # Test Fixtures
 
 The current tests generate synthetic fixtures at runtime. Any future fixture
-files copied from the old working repository must record:
+files derived from production workflow outputs must record:
 
-- source path,
+- source workflow,
 - reduction procedure,
 - reason for inclusion,
 - expected size,
 - corresponding manuscript result, if any.
-

@@ -179,8 +179,6 @@ Extract or reconstruct compact data for the remaining Python-plotted figures:
 
 - multipole coefficient CSV for `bar_ed_all_35.pdf` and
   `bar_ed_wo_q_35.pdf`;
-- single-rank `(103)` AHC data for `sigma_para.pdf`, `sigma_perp.pdf`, and
-  `sigma_axis.pdf`;
 - minimal-model CSV for `sigma_axis_model_1st_nn.pdf` and
   `sigma_axis_model_2nd_nn.pdf`;
 - band/bond convergence data for `band_bond.pdf` if compact processed data are
@@ -268,16 +266,17 @@ Already present:
 - processed data and plotting scripts for `(111)` AHC;
 - processed data and plotting scripts for `(103)` AHC;
 - processed data and plotting scripts for rank-cumulative `(103)` AHC;
+- processed data and plotting scripts for single-rank `(103)` AHC;
 - processed data and plotting scripts for `[103]` strain response;
-- initial portable DFT input templates under `inputs/dft/`;
+- initial portable DFT and Wannier input templates under `inputs/`;
 - lightweight package and processed-data tests;
 - generation notes for large files.
 
 Still needed:
 
-- extract missing compact data for multipole coefficient, single-rank `(103)`,
-  minimal-model, and possibly band/bond figures;
-- expand `inputs/` with the remaining Wannier90, SymWannier, MultiPie/SAMB,
+- extract missing compact data for multipole coefficient, minimal-model, and
+  possibly band/bond figures;
+- expand `inputs/` with the remaining SymWannier, MultiPie/SAMB,
   WannierBerri, angle-grid, and production DFT input files;
 - add tests or inventory checks for input manifests once the full input set is
   curated.

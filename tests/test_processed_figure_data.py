@@ -70,6 +70,25 @@ def test_rank_resolved_data_cover_expected_cumulative_series() -> None:
     assert abs(as_float(row["sigma_axis_s_cm"]) - 207.3349877712) < 1e-9
 
 
+def test_single_rank_data_cover_expected_rank_series() -> None:
+    """Verify that single-rank `(103)` AHC data include rank-only and reference series."""
+    data = rows(PROCESSED / "rank_resolved_103" / "single_rank_ahc.csv")
+    single_rank = [row for row in data if row["series_group"] == "single_rank"]
+    reference = [row for row in data if row["series_group"] == "reference"]
+    assert len(single_rank) == 65
+    assert len(reference) == 37
+    assert {row["method"] for row in single_rank} == {
+        "w_rank1",
+        "w_rank3",
+        "w_rank4",
+        "w_rank5",
+        "w_rankNone",
+    }
+    assert {row["method"] for row in reference} == {"SW+ED"}
+    row = select(single_rank, method="w_rank4", phi_deg="90")
+    assert abs(as_float(row["sigma_axis_s_cm"]) + 97.7569471188) < 1e-9
+
+
 def test_strain_csvs_cover_tensile_and_compressive_series() -> None:
     """Check that strain data cover tensile and compressive branches with expected grids."""
     plus = rows(PROCESSED / "strain_103" / "strain_plus_ahc.csv")

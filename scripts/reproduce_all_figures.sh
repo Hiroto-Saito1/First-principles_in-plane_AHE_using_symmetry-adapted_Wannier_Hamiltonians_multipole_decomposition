@@ -15,6 +15,7 @@ required_inputs=(
   "$ROOT/data/processed/ahc_111/ahc_angle_dependence.csv"
   "$ROOT/data/processed/ahc_103/ahc_angle_dependence.csv"
   "$ROOT/data/processed/rank_resolved_103/rank_resolved_ahc.csv"
+  "$ROOT/data/processed/rank_resolved_103/single_rank_ahc.csv"
   "$ROOT/data/processed/strain_103/strain_plus_ahc.csv"
   "$ROOT/data/processed/strain_103/strain_minus_ahc.csv"
 )
@@ -60,7 +61,6 @@ Generated repository-local figures under:
 
 Skipped workflow-required figures until compact data are added:
   multipole coefficient bar plots
-  single-rank (103) AHC comparison plots
   minimal-model sigma_axis scans
   band/bond convergence plot
 EOF

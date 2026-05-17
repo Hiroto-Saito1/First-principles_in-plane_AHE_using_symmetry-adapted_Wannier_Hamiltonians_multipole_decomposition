@@ -15,6 +15,8 @@ directories, caches, and cluster logs should not be committed.
   unstrained bcc Fe workflow.
 - `dft/fe_bcc_strain_103/`: initial Quantum ESPRESSO input template and notes
   for the `[103]` strain structure workflow.
+- `wannier/fe_bcc_unstrained/`: initial Wannier90 and `pw2wannier90` inputs
+  for the unstrained bcc Fe workflow.
 
 ## Pseudopotentials
 

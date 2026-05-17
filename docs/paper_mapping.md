@@ -29,8 +29,8 @@ data/processed/figure_inventory.csv
 | Leading multipole coefficients | target CSV under `data/processed/multipole_coefficients/` | `scripts/reproduce_figures/plot_multipole_coefficients.py` | `workflow_required` |
 | `(111)` AHC angular dependence | `data/processed/ahc_111/` | `scripts/reproduce_figures/plot_ahc_111.py` | `reproducible_plot` |
 | `(103)` AHC angular dependence | `data/processed/ahc_103/` | `scripts/reproduce_figures/plot_ahc_103.py` | `reproducible_plot` |
-| Rank-cumulative AHC contributions | `data/processed/rank_resolved_103/` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | `reproducible_plot` |
-| Single-rank AHC contributions | target CSV under `data/processed/rank_resolved_103/` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | `workflow_required` |
+| Rank-cumulative AHC contributions | `data/processed/rank_resolved_103/rank_resolved_ahc.csv` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | `reproducible_plot` |
+| Single-rank AHC contributions | `data/processed/rank_resolved_103/single_rank_ahc.csv` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | `reproducible_plot` |
 | `[103]` strain effect | `data/processed/strain_103/` | `scripts/reproduce_figures/plot_strain_103.py` | `reproducible_plot` |
 | Minimal `p_z`-`d_xy` model | target CSV under `data/processed/minimal_model/` | `scripts/reproduce_figures/plot_minimal_model.py` | `workflow_required` |
 

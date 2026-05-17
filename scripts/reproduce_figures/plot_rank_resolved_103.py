@@ -26,6 +26,7 @@ GROUPS = [
     ["w_rank1_2_3", "w_rank1_2_3_4"],
     ["w_rank1_2_3_4_5", "w_rank1_2_3_4_5_6"],
 ]
+SINGLE_RANK_METHODS = ["w_rank1", "w_rank3", "w_rank4", "w_rank5"]
 
 def plot_component(rows, methods, component: str, output: Path) -> None:
     plt = get_pyplot()
@@ -56,6 +57,35 @@ def plot_component(rows, methods, component: str, output: Path) -> None:
     plt.close()
 
 
+def plot_single_rank(rows, component: str, output: Path) -> None:
+    plt = get_pyplot()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    by_key = {(row["series_group"], row["method"]): [] for row in rows}
+    for row in rows:
+        by_key[(row["series_group"], row["method"])].append(row)
+
+    plt.figure(figsize=(5.2, 3.8))
+    for method in SINGLE_RANK_METHODS:
+        series = by_key.get(("single_rank", method), [])
+        if not series:
+            continue
+        x, y = sorted_xy(series, component)
+        plt.plot(x, y, marker="o", markersize=3, linewidth=1.2, label=method.replace("_", " "))
+    reference = by_key.get(("reference", "SW+ED"), [])
+    if reference:
+        x, y = sorted_xy(reference, component)
+        plt.plot(x, y, color="black", marker="*", markersize=5, linewidth=1.5, label="all")
+    plt.xlabel("psi [deg]")
+    plt.ylabel(f"sigma_{component} at E_F [S/cm]")
+    plt.xlim(0, 180)
+    plt.xticks(range(0, 181, 30))
+    plt.grid(True, linewidth=0.4)
+    plt.legend(fontsize=7)
+    plt.tight_layout()
+    plt.savefig(output)
+    plt.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT / "rank_resolved_103")
@@ -66,6 +96,12 @@ def main() -> None:
     for idx, methods in enumerate(GROUPS, start=1):
         for component in components:
             plot_component(rows, methods, component, args.output_dir / f"sigma_{component}_group{idx}.pdf")
+
+    single_rank_path = PROCESSED / "rank_resolved_103" / "single_rank_ahc.csv"
+    if single_rank_path.is_file():
+        single_rank_rows = read_csv(single_rank_path)
+        for component in components:
+            plot_single_rank(single_rank_rows, component, args.output_dir / f"sigma_{component}.pdf")
 
 
 if __name__ == "__main__":

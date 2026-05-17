@@ -1,8 +1,9 @@
 # Data Inventory
 
-This file tracks data that are included in the repository or referenced from
-external locations. Large raw data should be listed here rather than committed
-directly to Git.
+This file tracks data that are included in the repository and data products
+that must be regenerated. Files larger than 100 MB should not be committed to
+Git. For those files, this repository should provide the generation procedure
+rather than the file itself.
 
 ## Included Data
 
@@ -37,12 +38,26 @@ subset is copied into this repository.
 
 ## Large Data Policy
 
-Large files should be handled by one of the following mechanisms:
+The default policy is:
 
-- external archive such as Zenodo,
-- Git LFS if small enough and intentionally versioned,
-- documented "available upon request" status.
+- Commit compact processed data and metadata needed to reproduce manuscript
+  figures.
+- Do not commit files larger than 100 MB.
+- Do not use Git LFS or an external archive by default for files larger than
+  100 MB.
+- For each file larger than 100 MB, document how to generate it from smaller
+  committed inputs or from the documented first-principles workflow.
 
-Each external dataset should include checksum, size, source path, generation
-script, and corresponding manuscript figure or table.
+Each large generated file entry should include the expected path, source
+workflow, command sequence, required software versions, expected approximate
+size, and checksum if a generated local copy is available.
 
+## Large Generated Files To Document
+
+| File class | Store in Git? | Required documentation |
+| --- | --- | --- |
+| Raw Quantum ESPRESSO work directories | No | input templates, pseudopotentials, k meshes, cutoffs, run order |
+| Wannier intermediate files | No if >100 MB | SymWannier/TRS-Wannier commands and source inputs |
+| Multipole HDF5 matrices | No if >100 MB | MultiPie generation command and conversion command |
+| Rank-resolved rotated Hamiltonians | No if >100 MB | filter settings and `MagRotation` command |
+| WannierBerri AHC intermediate outputs | No if >100 MB | AHC command, Fermi level, k mesh, adaptive settings |

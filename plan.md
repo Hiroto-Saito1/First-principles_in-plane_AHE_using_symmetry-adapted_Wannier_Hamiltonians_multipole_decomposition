@@ -117,16 +117,22 @@ Good candidates for GitHub:
 - Representative multipole-coefficient tables.
 - Lightweight data needed by figure-generation scripts.
 - Calculation-condition files, input templates, and software-version metadata.
+- Any required file below 100 MB, provided it is genuinely useful for
+  reproducibility and not an avoidable intermediate.
 
 Files that should not be stored directly in GitHub:
 
 - Full large DFT working directories.
-- Large HDF5 files, Wannier intermediate files, and full cluster-output logs.
+- Any file larger than 100 MB.
+- Large HDF5 files, Wannier intermediate files, and full cluster-output logs
+  when they can be regenerated.
 - Job scripts containing private absolute paths or machine-specific settings.
 
-If large data are required, use Zenodo, Git LFS, or an "available upon request"
-policy, and record the mapping in `data/README.md` or
-`docs/data_inventory.md`.
+For files larger than 100 MB, do not use Git, Git LFS, or an external archive
+by default. Instead, document the exact procedure needed to generate the file
+from smaller committed inputs or from the documented first-principles workflow.
+The procedure should be recorded in `data/README.md`, `docs/data_inventory.md`,
+or a workflow document under `scripts/workflow/`.
 
 ## Test-Driven Development Plan
 
@@ -251,10 +257,12 @@ manuscript figures reproducible from repository artifacts. Work in this order.
 
 2. Classify each figure by reproducibility level.
    - Level 1: can be reproduced from compact processed data committed to Git.
-   - Level 2: needs medium-size derived files that may require Git LFS or an
-     external archive.
+   - Level 2: needs derived files below 100 MB that may be committed if they
+     materially improve reproducibility.
    - Level 3: needs expensive DFT/Wannier/AHC recomputation and should be
-     documented as a workflow rather than run in CI.
+     documented as a workflow rather than run in CI. Any required file larger
+     than 100 MB belongs here and should be described by generation steps, not
+     stored.
    - Store this classification in `docs/data_inventory.md`.
 
 3. Extract processed data for the primary manuscript figures.
@@ -296,11 +304,13 @@ manuscript figures reproducible from repository artifacts. Work in this order.
      signs, peak or valley locations, and selected reference values.
    - Keep tests lightweight and independent of WannierBerri or full DFT.
 
-7. Decide large-data hosting.
-   - For each file required to go from Hamiltonian to processed AHC data,
-     record whether it will be committed, stored in Git LFS, archived on
-     Zenodo, or listed as available upon request.
-   - Include checksums for any externally hosted files.
+7. Document generation procedures for files larger than 100 MB.
+   - For each large Hamiltonian, HDF5, Wannier, or AHC intermediate file,
+     record the command sequence, input files, software versions, and expected
+     output path.
+   - Include expected file sizes and checksums only when a local generated copy
+     is available.
+   - Keep these large generated files out of Git.
 
 8. Only after figure reproduction is traceable, add workflow CLI entry points.
    - Multipole conversion CLI.

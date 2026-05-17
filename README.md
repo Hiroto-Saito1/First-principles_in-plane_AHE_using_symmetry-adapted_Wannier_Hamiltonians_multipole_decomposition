@@ -89,11 +89,12 @@ requiring the full private working directory. In particular, it should provide:
 - Figure reproduction scripts.
 - Documentation connecting each paper figure or table to the corresponding
   data and script.
-- Clear instructions for large data that cannot be stored directly in Git.
+- Clear generation procedures for files larger than 100 MB.
 
 The repository is not intended to contain every raw DFT or cluster-output
 file. Large intermediate files should be represented by metadata, processed
-outputs, or external archive links.
+outputs, or generation procedures. Files larger than 100 MB are not stored in
+this repository by default.
 
 ## Implemented Code Components
 
@@ -164,8 +165,8 @@ See `plan.md` for the detailed reconstruction strategy.
 2. Add CLI entry points for conversion, decomposition, and rotation workflows.
 3. Curate processed Fe `(111)`, `(103)`, strain, and rank-resolved data.
 4. Add figure reproduction scripts under `scripts/reproduce_figures/`.
-5. Continue updating `docs/data_inventory.md` to decide which Fe data are small enough for
-   GitHub and which should be archived externally.
+5. Continue updating `docs/data_inventory.md` to decide which Fe data are small
+   enough for GitHub and which should be represented by generation procedures.
 
 ## Notes
 

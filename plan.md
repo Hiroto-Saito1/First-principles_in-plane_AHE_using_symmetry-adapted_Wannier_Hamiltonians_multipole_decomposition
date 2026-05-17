@@ -239,12 +239,71 @@ Expected mappings:
 
 ## Immediate Tasks
 
-1. Add command-line entry points for multipole conversion, Hamiltonian
-   decomposition, and magnetization rotation.
-2. Replace the synthetic-only fixtures with one reduced CH4 fixture copied from
-   the old repository with documented provenance.
-3. Curate processed Fe manuscript data for the `(111)`, `(103)`, strain, and
-   rank-resolved AHC figures.
-4. Add figure-reproduction scripts under `scripts/reproduce_figures/`.
-5. Decide whether large Fe HDF5/Wannier files will be hosted through Zenodo,
-   Git LFS, or an "available upon request" policy.
+The next milestone is not more package scaffolding. It is to make the
+manuscript figures reproducible from repository artifacts. Work in this order.
+
+1. Build a figure inventory from `main_all.tex`.
+   - Extract every `\includegraphics{...}` target.
+   - Assign each target a manuscript figure/table label, short description,
+     source directory in the old repository, expected processed-data file, and
+     expected plotting script.
+   - Record this in `docs/paper_mapping.md`.
+
+2. Classify each figure by reproducibility level.
+   - Level 1: can be reproduced from compact processed data committed to Git.
+   - Level 2: needs medium-size derived files that may require Git LFS or an
+     external archive.
+   - Level 3: needs expensive DFT/Wannier/AHC recomputation and should be
+     documented as a workflow rather than run in CI.
+   - Store this classification in `docs/data_inventory.md`.
+
+3. Extract processed data for the primary manuscript figures.
+   - `(111)` AHC angular dependence: `fit_ahc_para.pdf`,
+     `fit_ahc_perp.pdf`, `fit_ahc_axis.pdf`.
+   - `(103)` AHC angular dependence: `fit_ahc_para_103.pdf`,
+     `fit_ahc_perp_103.pdf`, `fit_ahc_axis_103.pdf`.
+   - Rank-resolved `(103)` AHC: `sigma_para_group*.pdf`,
+     `sigma_perp_group*.pdf`, `sigma_axis_group*.pdf`,
+     `sigma_para.pdf`, `sigma_perp.pdf`, `sigma_axis.pdf`.
+   - Strain response: `sigma_plus_strain_sigma_axis.pdf` and
+     `sigma_minus_strain_sigma_axis.pdf`.
+   - Multipole coefficients: `bar_ed_all_35.pdf`,
+     `bar_ed_wo_q_35.pdf`, and the named multipole schematic inputs if they
+     can be represented compactly.
+   - Minimal model: `sigma_axis_model_1st_nn.pdf` and
+     `sigma_axis_model_2nd_nn.pdf`.
+
+4. Standardize processed-data files under `data/processed/`.
+   - Prefer CSV for tabular curve data.
+   - Use JSON or YAML for plot metadata such as axis labels, units, fitting
+     parameters, magnetization plane, strain value, and source path.
+   - Include a `README.md` in each processed-data subdirectory explaining how
+     the files were extracted from the old repository.
+
+5. Add one plotting script per manuscript figure group.
+   - Put scripts under `scripts/reproduce_figures/`.
+   - Each script should read only `data/processed/` inputs.
+   - Each script should write to `results/figures/` or a user-specified output
+     directory.
+   - The script name should match the paper mapping, for example
+     `plot_ahc_111.py`, `plot_ahc_103.py`, `plot_rank_resolved_103.py`,
+     `plot_strain_103.py`, `plot_multipole_coefficients.py`, and
+     `plot_minimal_model.py`.
+
+6. Add regression tests for figure data.
+   - Tests should load each processed-data file.
+   - Check compact numerical invariants such as row counts, angle ranges,
+     signs, peak or valley locations, and selected reference values.
+   - Keep tests lightweight and independent of WannierBerri or full DFT.
+
+7. Decide large-data hosting.
+   - For each file required to go from Hamiltonian to processed AHC data,
+     record whether it will be committed, stored in Git LFS, archived on
+     Zenodo, or listed as available upon request.
+   - Include checksums for any externally hosted files.
+
+8. Only after figure reproduction is traceable, add workflow CLI entry points.
+   - Multipole conversion CLI.
+   - Hamiltonian decomposition CLI.
+   - Magnetization rotation CLI.
+   - AHC-summary extraction CLI.

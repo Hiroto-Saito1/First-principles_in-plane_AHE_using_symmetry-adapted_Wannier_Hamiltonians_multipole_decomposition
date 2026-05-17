@@ -1,3 +1,5 @@
+"""Tests for Hamiltonian decomposition and reconstruction in the fixture SAMB basis."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -6,6 +8,7 @@ from symwan_multipie import Multipole, MultipoleDecomposition
 
 
 def test_hamiltonian_decomposition_reconstructs_fixture(multipie_pickle, fixture_ham, tmp_path):
+    """Verify that a complete multipole basis exactly reconstructs the fixture Hamiltonian."""
     multipole_path = tmp_path / "basis.hdf5"
     Multipole(multipie_pickle).write_hdf5(multipole_path)
 
@@ -17,6 +20,7 @@ def test_hamiltonian_decomposition_reconstructs_fixture(multipie_pickle, fixture
 
 
 def test_decomposition_hdf5_output_is_readable(multipie_pickle, fixture_ham, tmp_path):
+    """Check that decomposition results can be written to the public HDF5 schema."""
     multipole_path = tmp_path / "basis.hdf5"
     output_path = tmp_path / "decomposition.hdf5"
     Multipole(multipie_pickle).write_hdf5(multipole_path)
@@ -25,4 +29,3 @@ def test_decomposition_hdf5_output_is_readable(multipie_pickle, fixture_ham, tmp
     decomposition.write_hdf5(output_path)
 
     assert output_path.exists()
-

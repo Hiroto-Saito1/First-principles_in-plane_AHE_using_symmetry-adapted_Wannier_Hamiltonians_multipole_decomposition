@@ -1,3 +1,5 @@
+"""Shared fixtures for lightweight multipole-decomposition tests."""
+
 from __future__ import annotations
 
 import pickle
@@ -13,6 +15,7 @@ SQRT2_INV = 1 / np.sqrt(2)
 
 
 def pauli_basis() -> list[np.ndarray]:
+    """Return a normalized two-orbital Pauli basis used as a complete SAMB fixture."""
     identity = SQRT2_INV * np.array([[1, 0], [0, 1]], dtype=np.complex128)
     sigma_z = SQRT2_INV * np.array([[1, 0], [0, -1]], dtype=np.complex128)
     sigma_x = SQRT2_INV * np.array([[0, 1], [1, 0]], dtype=np.complex128)
@@ -21,6 +24,7 @@ def pauli_basis() -> list[np.ndarray]:
 
 
 def matrix_dict_from_basis() -> dict:
+    """Build a MultiPie-like sparse matrix dictionary from the Pauli fixture basis."""
     entries = {}
     labels = ["z_000", "z_001", "z_002", "z_003"]
     for label, matrix in zip(labels, pauli_basis()):
@@ -35,6 +39,7 @@ def matrix_dict_from_basis() -> dict:
 
 
 def write_samb(path: Path) -> None:
+    """Write a minimal SAMB metadata file with labels used by rotation filters."""
     path.write_text(
         """
 fixture_samb = {
@@ -54,6 +59,7 @@ fixture_samb = {
 
 @pytest.fixture
 def multipie_pickle(tmp_path: Path) -> Path:
+    """Create a temporary MultiPie-style pickle containing the fixture basis."""
     path = tmp_path / "fixture_matrix.pkl"
     with path.open("wb") as fp:
         pickle.dump(matrix_dict_from_basis(), fp)
@@ -62,6 +68,7 @@ def multipie_pickle(tmp_path: Path) -> Path:
 
 @pytest.fixture
 def samb_path(tmp_path: Path) -> Path:
+    """Create a temporary SAMB metadata file for type, rank, and irrep filtering."""
     path = tmp_path / "fixture_samb.py"
     write_samb(path)
     return path
@@ -69,6 +76,7 @@ def samb_path(tmp_path: Path) -> Path:
 
 @pytest.fixture
 def fixture_ham() -> HamR:
+    """Return a Hermitian one-cell Hamiltonian expanded in the complete fixture basis."""
     basis = pauli_basis()
     hrs = 1.25 * basis[0] - 0.5 * basis[1] + 0.3 * basis[2] + 0.2 * basis[3]
     return HamR(
@@ -76,4 +84,3 @@ def fixture_ham() -> HamR:
         ndegen=np.array([1], dtype=np.int64),
         hrs=hrs.reshape(1, 2, 2),
     )
-

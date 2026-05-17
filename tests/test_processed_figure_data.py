@@ -1,3 +1,5 @@
+"""Regression tests for compact processed data behind manuscript figures."""
+
 from __future__ import annotations
 
 import csv
@@ -9,15 +11,18 @@ PROCESSED = ROOT / "data" / "processed"
 
 
 def rows(path: Path) -> list[dict[str, str]]:
+    """Read a processed CSV file as dictionaries keyed by column name."""
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
 
 
 def as_float(value: str) -> float:
+    """Convert a CSV field to float for numerical regression checks."""
     return float(value)
 
 
 def select(rows_: list[dict[str, str]], **matches: str) -> dict[str, str]:
+    """Select exactly one processed-data row matching the requested field values."""
     hits = [
         row
         for row in rows_
@@ -28,6 +33,7 @@ def select(rows_: list[dict[str, str]], **matches: str) -> dict[str, str]:
 
 
 def test_primary_ahc_csv_shapes_and_reference_values() -> None:
+    """Check primary `(111)` and `(103)` AHC CSV sizes, labels, and reference values."""
     ahc_111 = rows(PROCESSED / "ahc_111" / "ahc_angle_dependence.csv")
     ahc_103 = rows(PROCESSED / "ahc_103" / "ahc_angle_dependence.csv")
     assert len(ahc_111) == 39
@@ -42,6 +48,7 @@ def test_primary_ahc_csv_shapes_and_reference_values() -> None:
 
 
 def test_rank_resolved_data_cover_expected_cumulative_series() -> None:
+    """Verify that rank-cumulative `(103)` data include all expected cumulative series."""
     data = rows(PROCESSED / "rank_resolved_103" / "rank_resolved_ahc.csv")
     cumulative = [row for row in data if row["series_group"] == "rank_cumulative"]
     assert len(cumulative) == 117
@@ -64,6 +71,7 @@ def test_rank_resolved_data_cover_expected_cumulative_series() -> None:
 
 
 def test_strain_csvs_cover_tensile_and_compressive_series() -> None:
+    """Check that strain data cover tensile and compressive branches with expected grids."""
     plus = rows(PROCESSED / "strain_103" / "strain_plus_ahc.csv")
     minus = rows(PROCESSED / "strain_103" / "strain_minus_ahc.csv")
     assert len(plus) == 234

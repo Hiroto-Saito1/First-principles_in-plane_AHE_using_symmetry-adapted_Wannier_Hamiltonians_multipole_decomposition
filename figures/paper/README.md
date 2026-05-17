@@ -1,7 +1,8 @@
 # Paper Figures
 
 This directory contains the exact PDF figure files referenced by
-`main_all.tex`.
+`main_all.tex` for the manuscript
+[arXiv:2601.05689](https://arxiv.org/abs/2601.05689).
 
 These PDFs are included so the public repository contains the same figures as
 the manuscript. Processed data and reproduction scripts are tracked separately

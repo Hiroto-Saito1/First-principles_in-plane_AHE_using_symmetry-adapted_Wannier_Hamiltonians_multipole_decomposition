@@ -5,6 +5,8 @@ This repository accompanies the manuscript:
 > First-principles analysis of in-plane anomalous Hall effect using
 > symmetry-adapted Wannier Hamiltonians and multipole decomposition
 
+Manuscript: [arXiv:2601.05689](https://arxiv.org/abs/2601.05689)
+
 It is intended for readers who want to inspect, reuse, or verify the data
 behind the paper. The repository contains the published figures, compact
 processed data for the main figure workflows, lightweight tests, and scripts
@@ -129,4 +131,5 @@ These environments are not needed for the default test suite.
 ## Citation
 
 If this repository helps your work, please cite the associated manuscript and
-use the metadata in `CITATION.cff` when citing the repository.
+use the metadata in `CITATION.cff` when citing the repository. The manuscript
+preprint is available as [arXiv:2601.05689](https://arxiv.org/abs/2601.05689).

@@ -1,3 +1,5 @@
+"""Tests for SAMB component selection and magnetization rotation utilities."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -6,6 +8,7 @@ from symwan_multipie import MagRotation, Multipole, MultipoleDecomposition
 
 
 def test_filter_z_indices(multipie_pickle, fixture_ham, samb_path, tmp_path):
+    """Verify that type, rank, and irrep filters select the expected SAMB indices."""
     multipole_path = tmp_path / "basis.hdf5"
     multi_path = tmp_path / "multi.hdf5"
     Multipole(multipie_pickle).write_hdf5(multipole_path)
@@ -20,6 +23,7 @@ def test_filter_z_indices(multipie_pickle, fixture_ham, samb_path, tmp_path):
 
 
 def test_spin_rotation_maps_sigma_z_to_sigma_x(multipie_pickle, samb_path, tmp_path):
+    """Check an analytic 90-degree spin rotation that maps sigma_z onto sigma_x."""
     multipole_path = tmp_path / "basis.hdf5"
     multi_path = tmp_path / "multi.hdf5"
     Multipole(multipie_pickle).write_hdf5(multipole_path)
@@ -50,4 +54,3 @@ def test_spin_rotation_maps_sigma_z_to_sigma_x(multipie_pickle, samb_path, tmp_p
         assert np.allclose(rotation.rotated_hamiltonian(), expected, atol=1e-14)
     finally:
         rotation.close()
-

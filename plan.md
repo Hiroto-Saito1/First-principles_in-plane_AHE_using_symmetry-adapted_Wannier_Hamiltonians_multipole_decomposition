@@ -18,6 +18,17 @@ contribution analysis, and strain-effect calculations.
 The production calculation workspace is a private reference and must not be
 modified during this reconstruction.
 
+Local provenance paths used during reconstruction:
+
+- Paper, figure, and processed-data reference:
+  `/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/論文/Multipole-decomposition-of-symmetry-adapted-Wannier-Hamiltonian-using-projectability-disentanglement`
+- Original code reference:
+  `/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/symwan_proj`
+
+These paths are local reconstruction notes only. Public-facing documentation
+should describe reproducible artifacts and workflows rather than depending on
+these private directories.
+
 ## Core Principles
 
 1. Build a public repository containing the code, lightweight test data,

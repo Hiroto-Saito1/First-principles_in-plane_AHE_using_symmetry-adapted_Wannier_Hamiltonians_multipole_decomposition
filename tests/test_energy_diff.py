@@ -1,9 +1,12 @@
+"""Tests for band-energy reconstruction errors from decomposed Hamiltonians."""
+
 from __future__ import annotations
 
 from symwan_multipie import EnergyDiff, Multipole, MultipoleDecomposition
 
 
 def test_energy_diff_is_zero_for_complete_fixture(multipie_pickle, fixture_ham, samb_path, tmp_path):
+    """Confirm that energy differences vanish when all fixture multipoles are retained."""
     multipole_path = tmp_path / "basis.hdf5"
     multi_path = tmp_path / "multi.hdf5"
     Multipole(multipie_pickle).write_hdf5(multipole_path)
@@ -13,4 +16,3 @@ def test_energy_diff_is_zero_for_complete_fixture(multipie_pickle, fixture_ham, 
 
     assert diff.max_diff < 1e-14
     assert diff.energy_diff < 1e-14
-

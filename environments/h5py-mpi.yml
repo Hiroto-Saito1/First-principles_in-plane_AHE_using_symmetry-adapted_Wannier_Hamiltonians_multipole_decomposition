@@ -1,0 +1,12 @@
+name: symwan-multipie
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - h5py
+  - numpy
+  - pytest
+  - sympy
+  - mpi4py
+  - hdf5=*=mpi*
+

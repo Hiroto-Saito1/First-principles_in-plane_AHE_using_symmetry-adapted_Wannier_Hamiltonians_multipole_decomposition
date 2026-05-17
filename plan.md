@@ -239,8 +239,12 @@ Expected mappings:
 
 ## Immediate Tasks
 
-1. Create `pyproject.toml` and `src/symwan_multipie/`.
-2. Port the core code from the old repository in read-only mode.
-3. Create minimal data under `tests/fixtures/`.
-4. Write the first tests for multipole HDF5 I/O and Hamiltonian reconstruction.
-5. After those tests pass, build the Fe manuscript-data inventory.
+1. Add command-line entry points for multipole conversion, Hamiltonian
+   decomposition, and magnetization rotation.
+2. Replace the synthetic-only fixtures with one reduced CH4 fixture copied from
+   the old repository with documented provenance.
+3. Curate processed Fe manuscript data for the `(111)`, `(103)`, strain, and
+   rank-resolved AHC figures.
+4. Add figure-reproduction scripts under `scripts/reproduce_figures/`.
+5. Decide whether large Fe HDF5/Wannier files will be hosted through Zenodo,
+   Git LFS, or an "available upon request" policy.

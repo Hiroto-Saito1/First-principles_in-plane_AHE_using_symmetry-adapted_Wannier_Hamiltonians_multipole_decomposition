@@ -1,0 +1,16 @@
+name: symwan-multipie-wannierberri
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - h5py
+  - matplotlib
+  - numpy
+  - pandas
+  - pytest
+  - scipy
+  - sympy
+  - pip
+  - pip:
+      - wannierberri>=1.1
+

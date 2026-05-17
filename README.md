@@ -17,12 +17,17 @@ Wannier Hamiltonians and a symmetry-adapted multipole basis.
 This directory is currently a reconstruction workspace, not yet a finished
 public code repository.
 
-The present files are:
+The current repository contains:
 
 - `main_all.tex`: manuscript source.
 - `main_all.pdf`: compiled manuscript.
 - `plan.md`: reconstruction plan for the public repository.
-- `README.md`: this overview.
+- `src/symwan_multipie/`: initial Python package for multipole HDF5
+  conversion, multipole decomposition, magnetization rotation, and
+  reconstruction-error checks.
+- `tests/`: lightweight synthetic fixtures and pytest coverage for the core
+  workflow.
+- `docs/`: workflow, data-inventory, and manuscript-mapping notes.
 
 The original working repository is used only as a read-only reference. It
 should not be modified during this reconstruction.
@@ -51,6 +56,27 @@ toroidal rank-4 components reshape the out-of-plane AHC response and can act
 with the opposite sign. The manuscript further shows that uniaxial strain
 along `[103]` can tune this response and even invert its sign.
 
+## Installation
+
+For lightweight development and tests:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[test]"
+pytest
+```
+
+Conda environment templates are also provided:
+
+```bash
+conda env create -f environments/h5py-mpi.yml
+conda env create -f environments/wannierberri.yml
+```
+
+The default tests use synthetic fixtures and do not require full Fe production
+data, Quantum ESPRESSO, SymWannier, MultiPie, or WannierBerri.
+
 ## Intended Repository Goals
 
 The reconstructed repository should make the paper results traceable without
@@ -69,31 +95,31 @@ The repository is not intended to contain every raw DFT or cluster-output
 file. Large intermediate files should be represented by metadata, processed
 outputs, or external archive links.
 
-## Planned Code Components
+## Implemented Code Components
 
-The core implementation will be reconstructed from the old repository and
-cleaned for publication:
+The initial implementation has been reconstructed from the old repository's
+responsibilities and cleaned for publication-oriented tests:
 
-- `multipole.py`: convert MultiPie multipole matrices to sparse HDF5 files.
-- `multipole_decomposition.py`: decompose Wannier Hamiltonians into SAMB
+- `multipole.py`: converts MultiPie multipole matrices to sparse HDF5 files.
+- `multipole_decomposition.py`: decomposes Wannier Hamiltonians into SAMB
   components and write coefficients and padded matrices to HDF5.
-- `single_multipole_reader.py`: read selected multipole components from large
+- `single_multipole_reader.py`: reads selected multipole components from large
   HDF5 files.
-- `mag_rotation.py`: rotate selected magnetic and magnetic-toroidal multipole
+- `mag_rotation.py`: rotates selected magnetic and magnetic-toroidal multipole
   components by rank, type, and irreducible representation.
-- `energy_diff.py`: evaluate reconstruction errors between the original and
+- `energy_diff.py`: evaluates reconstruction errors between the original and
   multipole-decomposed Hamiltonians.
-- `wannier_utils/`: minimal utilities for reading Wannier Hamiltonians and
+- `wannier_utils/`: provides minimal utilities for reading Wannier Hamiltonians and
   evaluating bands.
 
-The final code should avoid absolute paths, separate command-line interfaces
-from library APIs, and support small serial tests even if large production
-jobs use MPI.
+This initial version avoids absolute paths and supports small serial tests.
+Large production workflows can still use MPI-oriented scripts later, but those
+should remain outside the default CI path.
 
 ## Testing Policy
 
-This repository will be built using a test-driven workflow. The initial test
-suite should cover:
+This repository is being built using a test-driven workflow. The current test
+suite covers:
 
 - HDF5 conversion of small multipole matrix fixtures.
 - Orthogonality and normalization of the multipole basis.
@@ -104,7 +130,7 @@ suite should cover:
 - Energy-difference regression tests for lightweight fixtures.
 - Basic figure-data loading and sanity checks for the processed Fe results.
 
-Large MPI, WannierBerri, and full DFT workflows should be documented as
+Large MPI, WannierBerri, and full DFT workflows are documented as
 integration or reproduction workflows rather than required for every CI run.
 
 ## Planned Layout
@@ -134,11 +160,11 @@ See `plan.md` for the detailed reconstruction strategy.
 
 ## Immediate Next Steps
 
-1. Create the package skeleton under `src/symwan_multipie/`.
-2. Add `pyproject.toml`, `.gitignore`, license, and citation metadata.
-3. Copy and clean the core source files from the old repository.
-4. Create minimal fixtures and write the first pytest tests.
-5. Build `docs/data_inventory.md` to decide which Fe data are small enough for
+1. Expand the lightweight synthetic fixtures with a reduced CH4 fixture.
+2. Add CLI entry points for conversion, decomposition, and rotation workflows.
+3. Curate processed Fe `(111)`, `(103)`, strain, and rank-resolved data.
+4. Add figure reproduction scripts under `scripts/reproduce_figures/`.
+5. Continue updating `docs/data_inventory.md` to decide which Fe data are small enough for
    GitHub and which should be archived externally.
 
 ## Notes

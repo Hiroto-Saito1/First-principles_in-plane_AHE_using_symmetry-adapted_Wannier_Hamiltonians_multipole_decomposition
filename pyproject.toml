@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "symwan-multipie"
+version = "0.1.0"
+description = "Utilities for multipole decomposition and magnetization rotation of symmetry-adapted Wannier Hamiltonians."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Hiroto Saito" },
+  { name = "Takashi Koretsune" },
+]
+dependencies = [
+  "h5py>=3.8",
+  "numpy>=1.23",
+  "sympy>=1.10",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=7",
+]
+plot = [
+  "matplotlib>=3.7",
+  "pandas>=2.0",
+]
+wannierberri = [
+  "wannierberri>=1.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+

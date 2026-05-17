@@ -1,0 +1,16 @@
+{
+  "description": "Processed bcc Fe (103) angular data.",
+  "fermi_level_ev": 17.4112,
+  "large_file_policy": "No raw DFT, Wannier, or AHC intermediate files were copied.",
+  "source_directory": "/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/\u662f\u5e38\u7814\u7a76\u5ba4/2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_103",
+  "source_files": [
+    "angle_dep_ahc_dft.xml",
+    "angle_dep_ed.xml"
+  ],
+  "units": {
+    "ahc": "S/cm",
+    "angle": "degree",
+    "energy": "eV",
+    "relative_energy": "micro-eV"
+  }
+}

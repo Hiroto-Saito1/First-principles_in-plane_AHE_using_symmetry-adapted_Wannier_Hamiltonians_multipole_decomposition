@@ -317,3 +317,44 @@ manuscript figures reproducible from repository artifacts. Work in this order.
    - Hamiltonian decomposition CLI.
    - Magnetization rotation CLI.
    - AHC-summary extraction CLI.
+
+## Current Figure-Reproduction Progress
+
+The repository now contains the exact PDF files referenced by `main_all.tex`
+under `figures/paper/`. This satisfies the requirement that the public
+repository include the same figures as the manuscript.
+
+Completed compact-data items:
+
+1. Full figure inventory:
+   - `data/processed/figure_inventory.csv`
+   - `tests/test_paper_figures.py`
+
+2. Primary AHC angular-dependence data:
+   - `data/processed/ahc_111/`
+   - `data/processed/ahc_103/`
+   - `scripts/reproduce_figures/plot_ahc_111.py`
+   - `scripts/reproduce_figures/plot_ahc_103.py`
+
+3. Rank-cumulative `(103)` data:
+   - `data/processed/rank_resolved_103/`
+   - `scripts/reproduce_figures/plot_rank_resolved_103.py`
+
+4. `[103]` strain data:
+   - `data/processed/strain_103/`
+   - `scripts/reproduce_figures/plot_strain_103.py`
+
+5. Lightweight regression tests:
+   - `tests/test_processed_figure_data.py`
+
+Remaining compact-data extraction items:
+
+1. Multipole coefficient CSV for `bar_ed_all_35.pdf` and
+   `bar_ed_wo_q_35.pdf`.
+2. Single-rank `(103)` AHC CSV for `sigma_para.pdf`, `sigma_perp.pdf`, and
+   `sigma_axis.pdf`.
+3. Minimal-model CSV for `sigma_axis_model_1st_nn.pdf` and
+   `sigma_axis_model_2nd_nn.pdf`.
+
+Files larger than 100 MB remain excluded from Git. Their generation procedures
+are documented in `scripts/workflow/generate_large_files.md`.

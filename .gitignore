@@ -20,3 +20,6 @@ env/
 *.out
 *.synctex.gz
 *.toc
+
+# Generated reproduction outputs
+results/

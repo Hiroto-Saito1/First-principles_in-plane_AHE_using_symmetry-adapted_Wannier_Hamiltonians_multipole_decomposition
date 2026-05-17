@@ -22,6 +22,11 @@ The current repository contains:
 - `main_all.tex`: manuscript source.
 - `main_all.pdf`: compiled manuscript.
 - `plan.md`: reconstruction plan for the public repository.
+- `figures/paper/`: exact PDF figure files referenced by `main_all.tex`.
+- `data/processed/`: compact CSV/JSON data extracted for the manuscript
+  figure workflows that can be reproduced without large raw calculations.
+- `scripts/reproduce_figures/`: plotting scripts that read
+  `data/processed/` and write regenerated figures under `results/figures/`.
 - `src/symwan_multipie/`: initial Python package for multipole HDF5
   conversion, multipole decomposition, magnetization rotation, and
   reconstruction-error checks.
@@ -96,6 +101,24 @@ file. Large intermediate files should be represented by metadata, processed
 outputs, or generation procedures. Files larger than 100 MB are not stored in
 this repository by default.
 
+## Paper Figures
+
+The same PDF figures used by the manuscript are included in `figures/paper/`.
+The complete figure inventory is stored in
+`data/processed/figure_inventory.csv`.
+
+To regenerate the figures that already have compact processed data:
+
+```bash
+python scripts/reproduce_figures/plot_ahc_111.py
+python scripts/reproduce_figures/plot_ahc_103.py
+python scripts/reproduce_figures/plot_rank_resolved_103.py
+python scripts/reproduce_figures/plot_strain_103.py
+```
+
+Generated outputs are written under `results/figures/` and are intentionally
+ignored by Git.
+
 ## Implemented Code Components
 
 The initial implementation has been reconstructed from the old repository's
@@ -161,12 +184,13 @@ See `plan.md` for the detailed reconstruction strategy.
 
 ## Immediate Next Steps
 
-1. Expand the lightweight synthetic fixtures with a reduced CH4 fixture.
-2. Add CLI entry points for conversion, decomposition, and rotation workflows.
-3. Curate processed Fe `(111)`, `(103)`, strain, and rank-resolved data.
-4. Add figure reproduction scripts under `scripts/reproduce_figures/`.
-5. Continue updating `docs/data_inventory.md` to decide which Fe data are small
-   enough for GitHub and which should be represented by generation procedures.
+1. Extract compact multipole-coefficient CSV data from the decomposed HDF5
+   outputs used for `bar_ed_all_35.pdf` and `bar_ed_wo_q_35.pdf`.
+2. Extract compact single-rank `(103)` AHC data for `sigma_para.pdf`,
+   `sigma_perp.pdf`, and `sigma_axis.pdf`.
+3. Add compact minimal-model CSV data for the two model figures.
+4. Add CLI entry points for conversion, decomposition, and rotation workflows.
+5. Expand the lightweight synthetic fixtures with a reduced CH4 fixture.
 
 ## Notes
 

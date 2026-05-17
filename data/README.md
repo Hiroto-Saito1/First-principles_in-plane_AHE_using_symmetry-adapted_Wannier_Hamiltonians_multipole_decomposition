@@ -13,3 +13,16 @@ Planned subdirectories:
   scripts.
 - generation procedures for >100 MB files: recorded in
   `docs/data_inventory.md` or workflow documents.
+
+Current processed data include:
+
+- `processed/figure_inventory.csv`: complete list of figure files referenced
+  by `main_all.tex`.
+- `processed/ahc_111/`: compact Fe `(111)` AHC and energy-angle data.
+- `processed/ahc_103/`: compact Fe `(103)` AHC and energy-angle data.
+- `processed/rank_resolved_103/`: compact rank-cumulative Fe `(103)` AHC and
+  energy data.
+- `processed/strain_103/`: compact tensile and compressive `[103]` strain AHC
+  data.
+- `processed/multipole_coefficients/` and `processed/minimal_model/`: tracked
+  generation targets for data that still need compact CSV extraction.

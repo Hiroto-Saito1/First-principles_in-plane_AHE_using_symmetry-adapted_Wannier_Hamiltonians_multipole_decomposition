@@ -6,20 +6,27 @@ scripts are added.
 
 ## Current Status
 
-Only the lightweight code and synthetic tests have been added. Manuscript
-figure data are still placeholders.
+The exact PDF files referenced by `main_all.tex` are included under
+`figures/paper/`. Compact CSV/JSON data and plotting scripts have been added
+for the primary AHC, rank-cumulative, and strain figures. The complete
+machine-readable inventory is:
+
+```text
+data/processed/figure_inventory.csv
+```
 
 ## Planned Figure And Table Mapping
 
 | Manuscript artifact | Repository data | Script or test | Status |
 | --- | --- | --- | --- |
 | SAMB reconstruction accuracy table | small fixture and future Fe summary | `tests/test_decomposition.py`, future processed table | initial fixture implemented |
-| Leading multipole coefficients | `data/processed/` CSV/JSON | future `scripts/reproduce_figures/` script | pending |
-| `(111)` AHC angular dependence | `data/processed/fe_111_*` | future figure script | pending |
-| `(103)` AHC angular dependence | `data/processed/fe_103_*` | future figure script | pending |
-| Rank-resolved AHC contributions | `data/processed/fe_103_rank_*` | future figure script plus `MagRotation` filters | pending |
-| `[103]` strain effect | `data/processed/fe_103_strain_*` | future figure script | pending |
-| Minimal `p_z`-`d_xy` model | future model output CSV | future standalone model script | pending |
+| All manuscript PDF figures | `figures/paper/` | `tests/test_paper_figures.py` | exact PDFs included |
+| Leading multipole coefficients | `figures/paper/bar_ed_*.pdf`; target CSV under `data/processed/multipole_coefficients/` | `scripts/reproduce_figures/plot_multipole_coefficients.py` | exact PDFs included; compact CSV pending |
+| `(111)` AHC angular dependence | `data/processed/ahc_111/` | `scripts/reproduce_figures/plot_ahc_111.py` | processed data included |
+| `(103)` AHC angular dependence | `data/processed/ahc_103/` | `scripts/reproduce_figures/plot_ahc_103.py` | processed data included |
+| Rank-resolved AHC contributions | `data/processed/rank_resolved_103/` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | rank-cumulative data included |
+| `[103]` strain effect | `data/processed/strain_103/` | `scripts/reproduce_figures/plot_strain_103.py` | processed data included |
+| Minimal `p_z`-`d_xy` model | `figures/paper/sigma_axis_model_*.pdf`; target CSV under `data/processed/minimal_model/` | `scripts/reproduce_figures/plot_minimal_model.py` | exact PDFs included; compact CSV pending |
 
 ## Code-Level Mapping
 
@@ -31,4 +38,3 @@ figure data are still placeholders.
 | Magnetization rotation | `symwan_multipie.mag_rotation` |
 | Reconstruction error metrics | `symwan_multipie.energy_diff` |
 | Minimal Wannier Hamiltonian reader | `symwan_multipie.wannier_utils.hamiltonian` |
-

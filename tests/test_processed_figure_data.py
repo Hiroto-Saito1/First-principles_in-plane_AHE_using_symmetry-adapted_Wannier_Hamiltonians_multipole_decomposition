@@ -99,3 +99,33 @@ def test_strain_csvs_cover_tensile_and_compressive_series() -> None:
     assert sorted({as_float(row["strain_percent"]) for row in minus}) == [-1.0, -0.8, -0.6, -0.4, -0.2, 0.0]
     assert {row["strain_branch"] for row in plus} == {"tensile"}
     assert {row["strain_branch"] for row in minus} == {"compressive"}
+
+
+def test_recovered_multipole_coefficients_cover_paper_bar_inputs() -> None:
+    """Check recovered multipole coefficient rows used by the bar plots."""
+    data = rows(PROCESSED / "multipole_coefficients" / "multipole_coefficients.csv")
+    assert len(data) == 39
+    assert {"bar_ed_all_35.pdf", "bar_ed_wo_q_35.pdf"} == {
+        row["source_pdf"] for row in data
+    }
+    strongest = max(data, key=lambda row: as_float(row["abs_coefficient_ev"]))
+    assert strongest["index"] == "2"
+    assert strongest["name"].startswith("Q(")
+    assert abs(as_float(strongest["coefficient_ev"]) - 80.0) < 1e-8
+    assert any(row["name"].startswith("T(") for row in data)
+
+
+def test_recovered_minimal_model_scans_cover_expected_parameters() -> None:
+    """Check recovered minimal-model scans and their manuscript angle grid."""
+    data = rows(PROCESSED / "minimal_model" / "model_sigma_axis.csv")
+    assert len(data) == 143
+    assert sorted({row["scan"] for row in data}) == ["first_nn", "second_nn"]
+    assert sorted({as_float(row["phi_deg"]) for row in data}) == list(range(0, 181, 15))
+    assert sorted(
+        {as_float(row["parameter_value"]) for row in data if row["scan"] == "first_nn"}
+    ) == [0.0, 0.05, 0.1, 0.15, 0.2]
+    assert sorted(
+        {as_float(row["parameter_value"]) for row in data if row["scan"] == "second_nn"}
+    ) == [0.0, 0.1, 0.11, 0.12, 0.13, 0.14]
+    row = select(data, scan="first_nn", parameter_value="0.2", phi_deg="90")
+    assert 23.0 < as_float(row["sigma_axis"]) < 24.0

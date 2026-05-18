@@ -51,6 +51,28 @@ Procedure:
 5. Run `scripts/reproduce_figures/plot_multipole_coefficients.py`.
 
 The exact manuscript PDFs are already committed in `figures/paper/`.
+A compact recovery CSV is also committed at
+`data/processed/multipole_coefficients/multipole_coefficients.csv`; it was
+recovered from the vector data embedded in the exact manuscript PDFs because
+the original compact HDF5-derived CSV was not preserved.
+
+## Minimal Two-Orbital Model Figures
+
+Purpose: regenerate `sigma_axis_model_1st_nn.pdf` and
+`sigma_axis_model_2nd_nn.pdf`.
+
+The manuscript records the model Hamiltonian and parameter scans. The original
+compact model CSV was not preserved, so this repository currently commits
+`data/processed/minimal_model/model_sigma_axis.csv`, recovered from the vector
+paths embedded in the exact manuscript PDFs. The recovery command is:
+
+```bash
+python scripts/workflow/extract_pdf_vector_data.py --target minimal-model
+```
+
+A future improvement can replace the recovered CSV with a standalone
+Hamiltonian/AHC recalculation script that directly evaluates the model from
+the manuscript equations.
 
 ## Rank-Resolved Rotated Hamiltonians
 

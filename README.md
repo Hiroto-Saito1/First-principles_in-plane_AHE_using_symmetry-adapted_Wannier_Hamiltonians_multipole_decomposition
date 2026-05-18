@@ -55,12 +55,15 @@ The repository includes compact data for:
   `data/processed/rank_resolved_103/`
 - tensile and compressive `[103]` strain response:
   `data/processed/strain_103/`
+- leading multipole coefficient bar plots:
+  `data/processed/multipole_coefficients/`
+- minimal two-orbital model scans:
+  `data/processed/minimal_model/`
 
 The exact manuscript figure PDFs are included even when the full compact
-source table is still being curated. This currently applies to the multipole
-coefficient bar plots, the minimal two-orbital model figures, and the
-band/bond convergence figure. The generation notes for large or expensive
-intermediate files are documented in `scripts/workflow/generate_large_files.md`.
+source table is still being curated. This currently applies to the band/bond
+convergence figure. The generation notes for large or expensive intermediate
+files are documented in `scripts/workflow/generate_large_files.md`.
 
 Files larger than 100 MB are not stored in Git. Instead, the repository records
 the procedure needed to regenerate them and commits only compact summaries,

@@ -18,6 +18,8 @@ required_inputs=(
   "$ROOT/data/processed/rank_resolved_103/single_rank_ahc.csv"
   "$ROOT/data/processed/strain_103/strain_plus_ahc.csv"
   "$ROOT/data/processed/strain_103/strain_minus_ahc.csv"
+  "$ROOT/data/processed/multipole_coefficients/multipole_coefficients.csv"
+  "$ROOT/data/processed/minimal_model/model_sigma_axis.csv"
 )
 
 required_scripts=(
@@ -25,6 +27,8 @@ required_scripts=(
   "$ROOT/scripts/reproduce_figures/plot_ahc_103.py"
   "$ROOT/scripts/reproduce_figures/plot_rank_resolved_103.py"
   "$ROOT/scripts/reproduce_figures/plot_strain_103.py"
+  "$ROOT/scripts/reproduce_figures/plot_multipole_coefficients.py"
+  "$ROOT/scripts/reproduce_figures/plot_minimal_model.py"
 )
 
 missing=0
@@ -54,13 +58,15 @@ mkdir -p "$OUTPUT_ROOT"
   --output-dir "$OUTPUT_ROOT/rank_resolved_103"
 "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_strain_103.py" \
   --output-dir "$OUTPUT_ROOT/strain_103"
+"$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_multipole_coefficients.py" \
+  --output-dir "$OUTPUT_ROOT/multipole_coefficients"
+"$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_minimal_model.py" \
+  --output-dir "$OUTPUT_ROOT/minimal_model"
 
 cat <<EOF
 Generated repository-local figures under:
   $OUTPUT_ROOT
 
 Skipped workflow-required figures until compact data are added:
-  multipole coefficient bar plots
-  minimal-model sigma_axis scans
   band/bond convergence plot
 EOF

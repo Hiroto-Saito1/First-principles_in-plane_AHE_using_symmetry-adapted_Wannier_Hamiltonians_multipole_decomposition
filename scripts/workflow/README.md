@@ -11,6 +11,9 @@ Current scripts:
 
 - `extract_processed_data.py`: extracts compact CSV/JSON
   processed data from small XML summaries produced by the paper workflows.
+- `extract_pdf_vector_data.py`: recovers compact CSV data from the Matplotlib
+  vector paths embedded in manuscript PDFs when the original compact CSV is
+  missing.
 - `strain_103_cell.py`: prints volume-preserving `[103]` strained bcc Fe cell
   parameters for Quantum ESPRESSO.
 - `generate_large_files.md`: records generation procedures for large files

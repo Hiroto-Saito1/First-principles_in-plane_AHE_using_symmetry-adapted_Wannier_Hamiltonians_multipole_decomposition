@@ -12,7 +12,8 @@ The exact PDF files referenced by `main_all.tex` are included under
 `figures/paper/`. Repository-local reproduction scripts generate equivalent
 data figures under `results/figures/`, while static assets remain committed as
 reference PDFs. Compact CSV/JSON data and plotting scripts have been added for
-the primary AHC, rank-cumulative, and strain figures. The complete
+the primary AHC, rank-resolved, strain, multipole-coefficient, and
+minimal-model figures. The complete
 machine-readable inventory is:
 
 ```text
@@ -26,13 +27,13 @@ data/processed/figure_inventory.csv
 | SAMB reconstruction accuracy table | small fixture and future Fe summary | `tests/test_decomposition.py`, future processed table | workflow/data follow-up |
 | All manuscript PDF figures | `figures/paper/` | `tests/test_paper_figures.py` | reference PDFs |
 | Static schematics and structure figures | `figures/paper/`, `data/processed/static_schematics/README.md` | inventory checks | `static_asset` |
-| Leading multipole coefficients | target CSV under `data/processed/multipole_coefficients/` | `scripts/reproduce_figures/plot_multipole_coefficients.py` | `workflow_required` |
+| Leading multipole coefficients | `data/processed/multipole_coefficients/multipole_coefficients.csv` | `scripts/reproduce_figures/plot_multipole_coefficients.py` | `reproducible_plot` |
 | `(111)` AHC angular dependence | `data/processed/ahc_111/` | `scripts/reproduce_figures/plot_ahc_111.py` | `reproducible_plot` |
 | `(103)` AHC angular dependence | `data/processed/ahc_103/` | `scripts/reproduce_figures/plot_ahc_103.py` | `reproducible_plot` |
 | Rank-cumulative AHC contributions | `data/processed/rank_resolved_103/rank_resolved_ahc.csv` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | `reproducible_plot` |
 | Single-rank AHC contributions | `data/processed/rank_resolved_103/single_rank_ahc.csv` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | `reproducible_plot` |
 | `[103]` strain effect | `data/processed/strain_103/` | `scripts/reproduce_figures/plot_strain_103.py` | `reproducible_plot` |
-| Minimal `p_z`-`d_xy` model | target CSV under `data/processed/minimal_model/` | `scripts/reproduce_figures/plot_minimal_model.py` | `workflow_required` |
+| Minimal `p_z`-`d_xy` model | `data/processed/minimal_model/model_sigma_axis.csv` | `scripts/reproduce_figures/plot_minimal_model.py` | `reproducible_plot` |
 
 ## Code-Level Mapping
 

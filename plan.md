@@ -175,14 +175,19 @@ version, checksum, and expected destination path.
 
 ### 3. Complete Missing Processed Data
 
-Extract or reconstruct compact data for the remaining Python-plotted figures:
+Compact CSV data now exist for the AHC, rank-resolved, strain,
+multipole-coefficient, and minimal-model figure groups. The multipole and
+minimal-model CSV files were recovered from the vector data embedded in the
+exact manuscript PDFs because the original compact CSV tables were not
+preserved.
 
-- multipole coefficient CSV for `bar_ed_all_35.pdf` and
-  `bar_ed_wo_q_35.pdf`;
-- minimal-model CSV for `sigma_axis_model_1st_nn.pdf` and
-  `sigma_axis_model_2nd_nn.pdf`;
-- band/bond convergence data for `band_bond.pdf` if compact processed data are
-  available below 100 MB.
+Remaining data work:
+
+- replace the PDF-vector-recovered multipole and minimal-model CSV files with
+  direct workflow outputs if the original compact data or recalculation
+  scripts are recovered;
+- extract or reconstruct band/bond convergence data for `band_bond.pdf` if it
+  should be treated as a generated plot rather than a static composite.
 
 Each processed-data directory should contain a README explaining:
 
@@ -268,6 +273,9 @@ Already present:
 - processed data and plotting scripts for rank-cumulative `(103)` AHC;
 - processed data and plotting scripts for single-rank `(103)` AHC;
 - processed data and plotting scripts for `[103]` strain response;
+- recovered compact data and plotting scripts for multipole coefficient bar
+  plots;
+- recovered compact data and plotting scripts for minimal-model scans;
 - initial portable DFT and Wannier input templates under `inputs/`;
 - portable SymWannier/TRS-Wannier, MultiPie/SAMB, and WannierBerri input
   manifests under `inputs/`;
@@ -278,8 +286,11 @@ Already present:
 
 Still needed:
 
-- extract missing compact data for multipole coefficient, minimal-model, and
-  possibly band/bond figures;
+- extract or reconstruct compact data for the band/bond convergence figure if
+  it should be treated as a generated plot rather than a static composite;
+- replace PDF-vector-recovered multipole and minimal-model CSV files with
+  direct workflow outputs if the original compact data or recalculation
+  scripts are recovered;
 - replace any remaining manifest-only input entries with exact production
   input files when redistributable under the 100 MB policy;
 - add exact production command wrappers for SymWannier/TRS-Wannier and

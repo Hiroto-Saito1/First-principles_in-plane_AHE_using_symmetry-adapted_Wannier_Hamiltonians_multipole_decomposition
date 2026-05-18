@@ -1,21 +1,29 @@
 # Multipole Coefficient Data
 
-The exact manuscript PDFs for the coefficient-bar figures are included under
-`figures/paper/`:
-
-- `bar_ed_all_35.pdf`
-- `bar_ed_wo_q_35.pdf`
-
-The compact coefficient table is not yet included because it must be generated
-from the decomposed TRS-Wannier HDF5 outputs and the corresponding SAMB name
-table. Those large or generated files should not be copied directly into Git
-when they exceed 100 MB.
-
-The expected follow-up file is:
-
 ```text
 data/processed/multipole_coefficients/multipole_coefficients.csv
 ```
 
-The generation procedure is documented in
+This CSV contains compact multipole coefficients for the manuscript
+coefficient-bar figures:
+
+- `bar_ed_all_35.pdf`
+- `bar_ed_wo_q_35.pdf`
+
+The table was recovered from the Matplotlib vector paths and labels embedded
+in the committed manuscript PDFs using
+`scripts/workflow/extract_pdf_vector_data.py`. The original first-principles
+source is the decomposed TRS-Wannier HDF5 output and the corresponding SAMB
+name table, but those generated files were not preserved in a Git-suitable
+compact form.
+
+Columns:
+
+- `index`: multipole index `z_i`.
+- `name`: SAMB multipole label shown in the manuscript figure.
+- `coefficient_ev`: coefficient value in eV.
+- `abs_coefficient_ev`: absolute coefficient value in eV.
+- `source_pdf`: manuscript PDF used for vector-data recovery.
+
+The full HDF5-based generation procedure remains documented in
 `scripts/workflow/generate_large_files.md`.

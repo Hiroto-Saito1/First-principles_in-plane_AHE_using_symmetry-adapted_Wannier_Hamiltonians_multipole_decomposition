@@ -22,6 +22,8 @@ Available scripts:
 - `plot_multipole_coefficients.py`
 - `plot_minimal_model.py`
 
-The last two scripts require compact CSV files that still need to be
-generated from the large production outputs; see
+The multipole-coefficient and minimal-model CSV files were recovered from the
+vector data embedded in the exact manuscript PDFs because the original compact
+CSV tables were not preserved. The full first-principles regeneration path
+still starts from the large outputs documented in
 `scripts/workflow/generate_large_files.md`.

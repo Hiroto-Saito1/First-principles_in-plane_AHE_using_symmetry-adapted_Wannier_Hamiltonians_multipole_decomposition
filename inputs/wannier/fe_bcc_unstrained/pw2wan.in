@@ -5,8 +5,4 @@
   seedname = 'pwscf'
   irr_bz = .true.
   write_unk = .false.
-  atom_proj = .true.
-  !atom_proj_ext = .true.
-  !atom_proj_dir = './atom_proj'
-  atom_proj_exclude = 1,2,5,6,7,8,9,10
 /

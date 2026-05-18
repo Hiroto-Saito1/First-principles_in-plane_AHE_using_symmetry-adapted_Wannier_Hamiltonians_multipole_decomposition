@@ -19,8 +19,14 @@ magnetization-rotation workflows.
 
 ## Settings Captured Here
 
+- `Fe.py`: compact MultiPie model definition for the 35-shell spinful Fe
+  decomposition.
+- `Fe_model.py`: expanded MultiPie model metadata emitted by the production
+  Fe basis generation step.
 - `samb_manifest.json`: compact manifest of the expected Fe SAMB basis
   metadata, downstream consumers, and generated files.
+- `submit_samb.sh`: portable post-processing template for extracting the
+  manuscript-selected SAMB labels from a MultiPie output directory.
 
 ## Expected Generated Files
 
@@ -35,4 +41,3 @@ The production workflow should generate files analogous to:
 Do not commit generated HDF5 files larger than 100 MB. Instead, extract the
 compact coefficient table described in
 `data/processed/multipole_coefficients/README.md`.
-

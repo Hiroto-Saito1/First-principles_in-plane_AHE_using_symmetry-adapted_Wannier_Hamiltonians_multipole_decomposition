@@ -2,7 +2,7 @@
 num_bands = 50
 num_wann = 18
 dis_num_iter = 200
-num_iter = 100
+num_iter = 0
 dis_froz_max = 25.4091
 dis_froz_min = -20
 dis_win_min = -20
@@ -10,7 +10,11 @@ spinors = .true.
 write_hr = .true.
 write_tb = .true.
 
-auto_projections = .true.
+
+
+begin projections
+Fe: s,p,d  [0,0,1]
+end projections
 
 begin unit_cell_cart
 ang

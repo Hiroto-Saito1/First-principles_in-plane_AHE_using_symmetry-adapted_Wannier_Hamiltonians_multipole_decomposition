@@ -23,16 +23,35 @@ decomposition, magnetization-rotation, and WannierBerri AHC workflows.
 
 - `symwannier_settings.json`: compact manifest of the Fe model size,
   Hamiltonian variants, magnetization axes, and downstream generated files.
+- `write_trs_ham.py`: cleaned helper that reconstructs a TRS-style
+  `trs_py_ed_tb.dat` from `pwscf_py_ed_tb.dat`.
+- `decompose_ham.py`: cleaned decomposition driver that writes compact HDF5
+  decomposition outputs from `*.dat` Hamiltonians.
+- `energy_diff_fe.py`: cleaned reconstruction-error driver for the Fe
+  `wan`, `symwan`, and `trs` Hamiltonian branches.
+- `submit_energy_diff.sh`: local shell wrapper that reproduces the manuscript
+  energy-difference report variants without cluster-specific PBS settings.
 
 ## Expected Generated Files
 
 The workflow should produce Hamiltonian files analogous to:
 
 - `pwscf_py_ed_tb.dat`
+- `trs_py_ed_tb.dat`
 - `trs_py_ed_hr.hdf5`
 - `trs_py_pd_hr.hdf5`
 - `trs_tb_hr.hdf5`
 
+## Typical Command Order
+
+From a working directory that contains the generated `pwscf*.dat` files and
+the recovered `Fe_samb.py` / `multi_matrix.hdf5` artifacts:
+
+```bash
+python inputs/symwannier/fe_bcc/write_trs_ham.py --input pwscf_py_ed_tb.dat --output-tb trs_py_ed_tb.dat
+python inputs/symwannier/fe_bcc/decompose_ham.py --matrix-path multi_matrix.hdf5 --symwan-ed --trs-py-ed --wan-orig
+python inputs/symwannier/fe_bcc/energy_diff_fe.py --samb-path Fe_samb.py
+```
+
 The HDF5 files are large generated outputs. Keep them out of Git and document
 their generation in `scripts/workflow/generate_large_files.md`.
-

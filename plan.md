@@ -279,9 +279,10 @@ workspaces.
 
 ## Current Known Gaps
 
-- SOC-aware DFT and Wannier inputs for `FM_sqa_{z,103,111}` are not yet
-  committed; they live in the local paper workspace and must be transferred.
-- Modified pw2wannier90.f90 diff is not yet extracted.
+- The unstrained SOC-aware DFT and Wannier templates are now committed, but
+  the axis-specific production wrappers and remaining `FM_sqa_{103,111}`
+  workflow scripts still need to be transferred from the local paper
+  workspace.
 - `band_bond.pdf` source data is not yet committed.
 - Multipole-coefficient and minimal-model CSV currently use PDF-vector
   fallback.

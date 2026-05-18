@@ -1,12 +1,16 @@
 # Unstrained bcc Fe Wannier Inputs
 
-This directory contains initial Wannier90 and `pw2wannier90` input templates
-for the unstrained bcc Fe workflow.
+This directory contains the portable Wannier90 and `pw2wannier90` input
+templates for the unstrained bcc Fe workflow. The current files are aligned
+with the source `FM_sqa_z/.../symwannier/` production inputs used for the
+public reproduction package.
 
 ## Files
 
 - `pw2wan.in`: Quantum ESPRESSO `pw2wannier90` input.
-- `pwscf.win`: Wannier90 input with the 8 x 8 x 8 k-point grid.
+- `pwscf.win`: Wannier90 input with the 8 x 8 x 8 k-point grid, explicit
+  `Fe: s,p,d [0,0,1]` projections, `spinors = .true.`, and the production
+  disentanglement window.
 - `kpoints.py`: helper script used to generate the k-point list in
   `pwscf.win`.
 

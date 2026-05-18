@@ -138,3 +138,39 @@ class HamR:
                         f"{value.real:20.12e}{value.imag:20.12e}\n"
                     )
 
+    def export_tb_dat(self, path: Path | str) -> None:
+        """Write the Hamiltonian in Wannier90 `tb.dat` format."""
+
+        if self.a is None or self.Amnrs is None:
+            raise ValueError("tb.dat export requires lattice vectors `a` and position matrices `Amnrs`.")
+
+        with open(path, "w") as fp:
+            fp.write("created by symwan_multipie\n")
+            for axis in self.a:
+                fp.write(" ".join(f"{float(value):.10f}" for value in axis) + "\n")
+            fp.write(f"{self.num_wann}\n")
+            fp.write(f"{self.nrpts}\n")
+            for start in range(0, self.nrpts, 15):
+                fp.write(" ".join(str(x) for x in self.ndegen[start : start + 15]) + "\n")
+
+            for ir in range(self.nrpts):
+                fp.write("\n")
+                fp.write(f"{self.irvec[ir, 0]} {self.irvec[ir, 1]} {self.irvec[ir, 2]}\n")
+                for row, col in product(range(self.num_wann), repeat=2):
+                    value = self.hrs[ir, row, col]
+                    fp.write(
+                        f"{row + 1:5d} {col + 1:5d} "
+                        f"{value.real:15.14e} {value.imag:15.14e}\n"
+                    )
+
+            for ir in range(self.nrpts):
+                fp.write("\n")
+                fp.write(f"{self.irvec[ir, 0]} {self.irvec[ir, 1]} {self.irvec[ir, 2]}\n")
+                for row, col in product(range(self.num_wann), repeat=2):
+                    value = self.Amnrs[ir, row, col]
+                    fp.write(
+                        f"{row + 1:5d} {col + 1:5d} "
+                        f"{value[0].real:12.8e} {value[0].imag:12.8e} "
+                        f"{value[1].real:12.8e} {value[1].imag:12.8e} "
+                        f"{value[2].real:12.8e} {value[2].imag:12.8e}\n"
+                    )

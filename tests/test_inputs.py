@@ -54,6 +54,52 @@ def test_input_manifests_capture_rotation_and_ahc_settings() -> None:
     assert symwannier["component_filter"]["irreps"] == ["T1g"]
 
 
+def test_soc_templates_and_multipie_inputs_are_present() -> None:
+    """The public input layer should include the recovered SOC and SAMB files."""
+    nscf_text = (INPUTS / "dft/fe_bcc_unstrained/nscf.in").read_text(
+        encoding="utf-8"
+    )
+    assert "noncolin = .true." in nscf_text
+    assert "lspinorb = .true." in nscf_text
+    assert "Fe.rel-pbe-spn-rrkjus_psl.0.2.1.UPF" in nscf_text
+
+    wannier_text = (INPUTS / "wannier/fe_bcc_unstrained/pwscf.win").read_text(
+        encoding="utf-8"
+    )
+    assert "begin projections" in wannier_text
+    assert "Fe: s,p,d  [0,0,1]" in wannier_text
+    assert "spinors = .true." in wannier_text
+
+    for relative_path in [
+        "multipie/fe_bcc/Fe.py",
+        "multipie/fe_bcc/Fe_model.py",
+        "multipie/fe_bcc/submit_samb.sh",
+    ]:
+        assert (INPUTS / relative_path).is_file(), f"Missing {relative_path}"
+
+    for relative_path in [
+        "symwannier/fe_bcc/write_trs_ham.py",
+        "symwannier/fe_bcc/decompose_ham.py",
+        "symwannier/fe_bcc/energy_diff_fe.py",
+        "symwannier/fe_bcc/submit_energy_diff.sh",
+    ]:
+        assert (INPUTS / relative_path).is_file(), f"Missing {relative_path}"
+
+
+def test_qe_patch_artifacts_are_present() -> None:
+    """The public docs should include the recorded QE pw2wannier90 patch."""
+    patch_dir = ROOT / "docs" / "qe_patch"
+    readme = patch_dir / "README.md"
+    patch_file = patch_dir / "pw2wannier90.patch"
+
+    assert readme.is_file()
+    assert patch_file.is_file()
+    patch_text = patch_file.read_text(encoding="utf-8")
+    assert patch_text.startswith("--- PP/src/pw2wannier90.f90")
+    assert "spin_eig" in patch_text
+    assert "proj_sign" in patch_text
+
+
 def test_inputs_do_not_embed_private_absolute_paths() -> None:
     """Public inputs should not depend on a private workstation directory."""
     forbidden = ["/Users/", "/home/", "CloudStorage", "Dropbox"]
@@ -64,4 +110,3 @@ def test_inputs_do_not_embed_private_absolute_paths() -> None:
         text = path.read_text(encoding="utf-8")
         for needle in forbidden:
             assert needle not in text, f"{path} contains private path token {needle}"
-

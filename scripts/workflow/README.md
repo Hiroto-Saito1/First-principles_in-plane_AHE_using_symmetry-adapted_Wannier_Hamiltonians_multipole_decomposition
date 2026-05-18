@@ -9,6 +9,8 @@ Scripts added here should perform reusable data transformations, such as:
 
 Current scripts:
 
+- `rebuild_processed_data.py`: rebuilds all committed processed CSV files from
+  `data/source/` production export snapshots and fallback PDF-vector sources.
 - `extract_processed_data.py`: extracts compact CSV/JSON
   processed data from small XML summaries produced by the paper workflows.
 - `extract_pdf_vector_data.py`: recovers compact CSV data from the Matplotlib

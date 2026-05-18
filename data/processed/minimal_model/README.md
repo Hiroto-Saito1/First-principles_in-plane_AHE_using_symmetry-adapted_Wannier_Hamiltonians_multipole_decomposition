@@ -17,6 +17,10 @@ parameters are described in the manuscript; a standalone recalculation script
 can replace this recovered table later if the original model workflow is
 curated.
 
+Fallback source metadata is recorded in `data/source/pdf_vector/README.md`.
+This is explicitly a recovered manuscript-vector provenance path, not a direct
+model recalculation path.
+
 Columns:
 
 - `scan`: `first_nn` for the first-nearest-neighbor magnetic-toroidal hopping

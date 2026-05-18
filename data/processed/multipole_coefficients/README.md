@@ -17,6 +17,10 @@ source is the decomposed TRS-Wannier HDF5 output and the corresponding SAMB
 name table, but those generated files were not preserved in a Git-suitable
 compact form.
 
+Fallback source metadata is recorded in `data/source/pdf_vector/README.md`.
+This is explicitly a recovered manuscript-vector provenance path, not a
+first-principles regeneration path.
+
 Columns:
 
 - `index`: multipole index `z_i`.

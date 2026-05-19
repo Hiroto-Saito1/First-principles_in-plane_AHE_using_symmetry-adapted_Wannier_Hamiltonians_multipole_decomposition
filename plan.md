@@ -104,7 +104,7 @@ expected destination path are documented in `inputs/dft/README.md`.
 `data/source/` contains committed under-100-MB source files used to rebuild
 `data/processed/`:
 
-- production export CSV/TXT (e.g. `z_coefficients.dat`,
+- production export CSV/TXT (e.g. compact coefficient CSV exports,
   `Fe-ahc_iter-0020.dat`, `angle_dep_ahc.xml`, `energy_diff_35*.out`);
 - PDF-vector recovery only as a labeled fallback for figures whose original
   source was not preserved.
@@ -238,9 +238,12 @@ Based on Phase A:
   `data/source/pdf_vector/band_bond/`, compact curve CSV under
   `data/processed/band_bond/`, and
   `scripts/reproduce_figures/plot_band_bond.py`.
-- Multipole coefficients: replace PDF-vector recovery with direct
-  `z_coefficients.dat` extraction from
-  `FM_sqa_z/theta0_qe-7.2/z_coefficients/`.
+- Multipole coefficients: replace PDF-vector provenance with a direct compact
+  coefficient export from the original workflow input, which appears to have
+  been an HDF5 `z_coefficients` dataset plus SAMB labels rather than a
+  preserved `z_coefficients.dat` text file. The public scripts for
+  `matrix -> multi_matrix.hdf5 -> decomposition HDF5 -> compact CSV` are now
+  committed, but the original manuscript compact export is still missing.
 - Minimal `p_z`-`d_xy` model: recover the original model script as
   `examples/minimal_model/` and route through `scripts/workflow/` rather
   than PDF-vector recovery.
@@ -284,7 +287,10 @@ workspaces.
   `FM_sqa_{103,111}` still need to be transferred or summarized where they
   carry unique settings not captured by the generic public drivers.
 - Multipole-coefficient and minimal-model CSV currently use PDF-vector
-  fallback.
+  fallback. Multipole coefficients now have a tracked recovered source
+  snapshot under `data/source/pdf_vector/multipole_coefficients/`, but the
+  original compact coefficient source is still missing locally even though the
+  public HDF5-generation route is now documented and scripted.
 - Pseudopotentials are intentionally not redistributed.
 
 ## Completion Definition

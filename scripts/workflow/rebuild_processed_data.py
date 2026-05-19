@@ -54,6 +54,13 @@ PRODUCTION_EXPORTS = [
     ),
 ]
 
+PDF_VECTOR_SNAPSHOTS = [
+    (
+        SOURCE / "pdf_vector/multipole_coefficients/multipole_coefficients.csv",
+        PROCESSED / "multipole_coefficients/multipole_coefficients.csv",
+    ),
+]
+
 
 def copy_export(source: Path, destination: Path) -> None:
     """Copy one committed production export into the processed-data tree."""
@@ -76,9 +83,11 @@ def main() -> None:
     for source, destination in PRODUCTION_EXPORTS:
         copy_export(source, destination)
 
+    for source, destination in PDF_VECTOR_SNAPSHOTS:
+        copy_export(source, destination)
+
     if not args.skip_pdf_vector:
         extract_pdf_vector_data.write_band_bond()
-        extract_pdf_vector_data.write_multipole_coefficients()
         extract_pdf_vector_data.write_minimal_model()
 
     print("Rebuilt processed CSV files from committed source data.")

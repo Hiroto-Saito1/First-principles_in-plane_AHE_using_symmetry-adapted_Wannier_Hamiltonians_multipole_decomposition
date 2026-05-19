@@ -9,8 +9,15 @@ Scripts added here should perform reusable data transformations, such as:
 
 Current scripts:
 
+- `build_multipole_hdf5.py`: converts a MultiPie matrix dictionary export
+  such as `Fe_all_35_matrix.py` or `Fe_all_35_matrix.pkl` into the compact
+  `multi_matrix.hdf5` basis used by the public decomposition workflow.
+- `export_multipole_coefficients.py`: extracts a compact coefficient CSV from
+  a decomposition HDF5 that contains `z_coefficients` plus the corresponding
+  `Fe_samb.py` label table.
 - `rebuild_processed_data.py`: rebuilds all committed processed CSV files from
-  `data/source/` production export snapshots and fallback PDF-vector sources.
+  `data/source/` production export snapshots and fallback PDF-vector sources or
+  source snapshots.
 - `extract_processed_data.py`: extracts compact CSV/JSON
   processed data from small XML summaries produced by the paper workflows.
 - `extract_pdf_vector_data.py`: recovers compact CSV data from the Matplotlib

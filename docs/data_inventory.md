@@ -22,7 +22,7 @@ The associated manuscript preprint is available at
 | `data/processed/rank_resolved_103/` | included | Compact rank-cumulative, single-rank, and energy data for Fe `(103)`. |
 | `data/processed/strain_103/` | included | Compact strain-dependent Fe `(103)` AHC data for tensile and compressive `[103]` strain. |
 | `data/processed/band_bond/` | included | Compact band-curve CSV for the Fe SAMB bond-cutoff convergence figure, recovered from per-panel vector PDFs. |
-| `data/processed/multipole_coefficients/` | included | Compact coefficient CSV recovered from the vector data embedded in the manuscript coefficient-bar PDFs. |
+| `data/processed/multipole_coefficients/` | included | Compact coefficient CSV with a tracked recovered source snapshot under `data/source/pdf_vector/multipole_coefficients/`; the direct route via `multi_matrix.hdf5` and decomposition HDF5 is documented, but the original manuscript compact export is still missing locally. |
 | `data/processed/minimal_model/` | included | Compact minimal-model scan CSV recovered from the vector data embedded in the manuscript model PDFs. |
 
 ## Source Workflow Scope

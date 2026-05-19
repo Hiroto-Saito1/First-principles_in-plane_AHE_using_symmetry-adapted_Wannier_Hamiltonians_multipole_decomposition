@@ -38,9 +38,10 @@ The workflow should produce Hamiltonian files analogous to:
 
 - `pwscf_py_ed_tb.dat`
 - `trs_py_ed_tb.dat`
-- `trs_py_ed_hr.hdf5`
-- `trs_py_pd_hr.hdf5`
-- `trs_tb_hr.hdf5`
+- `pwscf_py_ed_tb.hdf5`
+- `pwscf_py_pd_tb.hdf5`
+- `trs_py_ed_tb.hdf5`
+- `pwscf_tb.hdf5`
 
 ## Typical Command Order
 
@@ -48,10 +49,18 @@ From a working directory that contains the generated `pwscf*.dat` files and
 the recovered `Fe_samb.py` / `multi_matrix.hdf5` artifacts:
 
 ```bash
+python scripts/workflow/build_multipole_hdf5.py --matrix-path Fe_all_35_matrix.py --output multi_matrix.hdf5
 python inputs/symwannier/fe_bcc/write_trs_ham.py --input pwscf_py_ed_tb.dat --output-tb trs_py_ed_tb.dat
 python inputs/symwannier/fe_bcc/decompose_ham.py --matrix-path multi_matrix.hdf5 --symwan-ed --trs-py-ed --wan-orig
 python inputs/symwannier/fe_bcc/energy_diff_fe.py --samb-path Fe_samb.py
+python scripts/workflow/export_multipole_coefficients.py --multi-path trs_py_ed_tb.hdf5 --samb-path Fe_samb.py --output coefficients.csv --mode bar-merged
 ```
 
 The HDF5 files are large generated outputs. Keep them out of Git and document
 their generation in `scripts/workflow/generate_large_files.md`.
+
+For the manuscript coefficient figures, the important generated file is the
+decomposition HDF5 with a `z_coefficients` dataset. The archived `plot_bar.py`
+workflow consumes that HDF5 plus `Fe_samb.py`; the public
+`export_multipole_coefficients.py` helper exists to turn the same pair into a
+compact CSV before plotting.

@@ -34,10 +34,26 @@ The production workflow should generate files analogous to:
 
 - `Fe_samb.py` or `Fe_samb.py.gz`
 - `multi_matrix.hdf5`
-- `trs_py_ed_hr.hdf5` with `z_coefficients`
-- `trs_py_pd_hr.hdf5` with `z_coefficients`
-- `trs_tb_hr.hdf5` with `z_coefficients`
+- `pwscf_py_ed_tb.hdf5` with `z_coefficients`
+- `pwscf_py_pd_tb.hdf5` with `z_coefficients`
+- `trs_py_ed_tb.hdf5` with `z_coefficients`
+- `pwscf_tb.hdf5` with `z_coefficients`
 
 Do not commit generated HDF5 files larger than 100 MB. Instead, extract the
 compact coefficient table described in
 `data/processed/multipole_coefficients/README.md`.
+
+## Typical HDF5 Build Step
+
+After MultiPie emits a matrix dictionary such as `Fe_all_35_matrix.py`,
+`Fe_all_35_matrix.pkl`, or the gzipped variants, convert it to the compact
+basis HDF5 used by the public decomposition workflow:
+
+```bash
+python scripts/workflow/build_multipole_hdf5.py --matrix-path Fe_all_35_matrix.py --output multi_matrix.hdf5
+```
+
+That file is then consumed by
+`inputs/symwannier/fe_bcc/decompose_ham.py` to generate decomposition HDF5
+files with the `z_coefficients` dataset. The archived manuscript bar-plot
+workflow reads those decomposition HDF5 files together with `Fe_samb.py`.

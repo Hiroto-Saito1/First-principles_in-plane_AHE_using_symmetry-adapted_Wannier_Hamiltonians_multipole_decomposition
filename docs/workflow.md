@@ -36,6 +36,8 @@ new repository converts the matrix output into a compact HDF5 representation:
 ```
 
 The implemented entry point is `symwan_multipie.Multipole`.
+The corresponding public workflow wrapper is
+`scripts/workflow/build_multipole_hdf5.py`.
 
 ## 4. Multipole Decomposition
 
@@ -54,6 +56,37 @@ output HDF5 stores:
 - padded sparse multipole matrices.
 
 The implemented entry point is `symwan_multipie.MultipoleDecomposition`.
+The public wrapper for the Fe workflow is
+`inputs/symwannier/fe_bcc/decompose_ham.py`.
+
+### 4a. Coefficient-Plot Route
+
+The manuscript multipole-coefficient bar plots do not come from a text file
+named `z_coefficients.dat`. The archived `plot_bar.py` workflow reads:
+
+- a decomposition HDF5 containing the `z_coefficients` dataset, and
+- the corresponding `Fe_samb.py` file for SAMB labels.
+
+In public-repo terms, the intended compact route is:
+
+```text
+Fe_all_35_matrix.py or .pkl
+  -> multi_matrix.hdf5
+  -> trs_py_ed_tb.hdf5 (or pwscf_py_ed_tb.hdf5 / pwscf_py_pd_tb.hdf5)
+  -> compact coefficient CSV
+```
+
+The repository now includes the two conversion steps as reusable scripts:
+
+```bash
+python scripts/workflow/build_multipole_hdf5.py --matrix-path Fe_all_35_matrix.py --output multi_matrix.hdf5
+python inputs/symwannier/fe_bcc/decompose_ham.py --matrix-path multi_matrix.hdf5 --trs-py-ed
+python scripts/workflow/export_multipole_coefficients.py --multi-path trs_py_ed_tb.hdf5 --samb-path Fe_samb.py --output coefficients.csv --mode bar-merged
+```
+
+The original compact coefficient HDF5/CSV used for the manuscript is still
+missing from the currently available local workspaces, so the committed
+processed CSV remains a tracked recovered snapshot rather than a direct export.
 
 ## 5. Magnetization Rotation
 
@@ -76,4 +109,3 @@ because they can be computationally expensive.
 Figure scripts should read from `data/processed/` and write to a dedicated
 output directory. Each script must be mapped to a manuscript figure in
 `docs/paper_mapping.md`.
-

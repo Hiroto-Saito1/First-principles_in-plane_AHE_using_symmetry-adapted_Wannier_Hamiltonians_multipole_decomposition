@@ -16,11 +16,20 @@
     "scripts/reproduce_figures/plot_multipole_coefficients.py",
     "rank-filtered magnetization rotation for Fe (103)"
   ],
+  "workflow_scripts": {
+    "matrix_to_hdf5": "scripts/workflow/build_multipole_hdf5.py",
+    "decomposition": "inputs/symwannier/fe_bcc/decompose_ham.py",
+    "coefficient_export": "scripts/workflow/export_multipole_coefficients.py"
+  },
+  "bar_plot_inputs": {
+    "decomposition_hdf5": "trs_py_ed_tb.hdf5",
+    "samb_labels": "Fe_samb.py"
+  },
   "large_generated_outputs": [
     "multi_matrix.hdf5",
-    "trs_py_ed_hr.hdf5",
-    "trs_py_pd_hr.hdf5",
-    "trs_tb_hr.hdf5"
+    "pwscf_py_ed_tb.hdf5",
+    "pwscf_py_pd_tb.hdf5",
+    "trs_py_ed_tb.hdf5",
+    "pwscf_tb.hdf5"
   ]
 }
-

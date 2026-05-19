@@ -52,6 +52,24 @@ def test_input_manifests_capture_rotation_and_ahc_settings() -> None:
     )
     assert symwannier["wannier_functions"]["count"] == 36
     assert symwannier["component_filter"]["irreps"] == ["T1g"]
+    assert {
+        variant["generated_file"] for variant in symwannier["hamiltonian_variants"]
+    } == {
+        "pwscf_py_ed_tb.hdf5",
+        "pwscf_py_pd_tb.hdf5",
+        "trs_py_ed_tb.hdf5",
+        "pwscf_tb.hdf5",
+    }
+
+    samb_manifest = json.loads(
+        (INPUTS / "multipie/fe_bcc/samb_manifest.json").read_text(encoding="utf-8")
+    )
+    assert samb_manifest["workflow_scripts"]["matrix_to_hdf5"] == (
+        "scripts/workflow/build_multipole_hdf5.py"
+    )
+    assert samb_manifest["bar_plot_inputs"]["decomposition_hdf5"] == (
+        "trs_py_ed_tb.hdf5"
+    )
 
 
 def test_soc_templates_and_multipie_inputs_are_present() -> None:

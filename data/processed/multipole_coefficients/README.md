@@ -12,14 +12,17 @@ coefficient-bar figures:
 
 The table was recovered from the Matplotlib vector paths and labels embedded
 in the committed manuscript PDFs using
-`scripts/workflow/extract_pdf_vector_data.py`. The original first-principles
-source is the decomposed TRS-Wannier HDF5 output and the corresponding SAMB
-name table, but those generated files were not preserved in a Git-suitable
-compact form.
+`scripts/workflow/extract_pdf_vector_data.py`. A committed source snapshot now
+lives under `data/source/pdf_vector/multipole_coefficients/` so ordinary
+rebuilds do not need to reparse the PDFs. The original first-principles source
+is the decomposed TRS-Wannier HDF5 output and the corresponding SAMB name
+table, but those generated files were not preserved in a Git-suitable compact
+form.
 
-Fallback source metadata is recorded in `data/source/pdf_vector/README.md`.
-This is explicitly a recovered manuscript-vector provenance path, not a
-first-principles regeneration path.
+Fallback source metadata is recorded in `data/source/pdf_vector/README.md` and
+`data/source/pdf_vector/multipole_coefficients/README.md`. This is explicitly
+a recovered manuscript-vector provenance path, not a first-principles
+regeneration path.
 
 Columns:
 
@@ -31,3 +34,9 @@ Columns:
 
 The full HDF5-based generation procedure remains documented in
 `scripts/workflow/generate_large_files.md`.
+
+When the decomposition HDF5 is available, the direct compact-export command is:
+
+```bash
+python scripts/workflow/export_multipole_coefficients.py --multi-path trs_py_ed_tb.hdf5 --samb-path Fe_samb.py --output multipole_coefficients.csv --mode bar-merged
+```

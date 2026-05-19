@@ -124,6 +124,13 @@ def test_processed_csv_files_have_source_chain() -> None:
         assert (ROOT / source).is_file(), f"{processed} has no source export"
 
     assert (ROOT / "data/source/pdf_vector/README.md").is_file()
+    assert (
+        ROOT
+        / "data/source/pdf_vector/multipole_coefficients/multipole_coefficients.csv"
+    ).is_file()
+    assert (
+        ROOT / "data/source/pdf_vector/multipole_coefficients/README.md"
+    ).is_file()
     assert (ROOT / "data/source/pdf_vector/band_bond/README.md").is_file()
     for source_pdf in [
         "data/source/pdf_vector/band_bond/band_1.pdf",

@@ -8,19 +8,24 @@
   },
   "hamiltonian_variants": [
     {
-      "name": "trs_py_ed_hr",
-      "description": "Time-reversal-symmetric Hamiltonian reconstructed from the SymWannier exact-diagonalization style workflow.",
-      "generated_file": "trs_py_ed_hr.hdf5"
+      "name": "symwan_ed_decomposition",
+      "description": "Decomposition HDF5 generated from the SymWannier exact-diagonalization style workflow.",
+      "generated_file": "pwscf_py_ed_tb.hdf5"
     },
     {
-      "name": "trs_py_pd_hr",
-      "description": "Time-reversal-symmetric Hamiltonian reconstructed from the projectability-disentanglement workflow.",
-      "generated_file": "trs_py_pd_hr.hdf5"
+      "name": "symwan_pd_decomposition",
+      "description": "Decomposition HDF5 generated from the projectability-disentanglement workflow.",
+      "generated_file": "pwscf_py_pd_tb.hdf5"
     },
     {
-      "name": "trs_tb_hr",
-      "description": "Time-reversal-symmetric Hamiltonian reconstructed from the tight-binding reference workflow.",
-      "generated_file": "trs_tb_hr.hdf5"
+      "name": "trs_symwan_ed_decomposition",
+      "description": "Decomposition HDF5 generated from the TRS-Wannier exact-diagonalization style workflow.",
+      "generated_file": "trs_py_ed_tb.hdf5"
+    },
+    {
+      "name": "wan_orig_decomposition",
+      "description": "Decomposition HDF5 generated from the original tight-binding reference workflow.",
+      "generated_file": "pwscf_tb.hdf5"
     }
   ],
   "rotation_planes": [
@@ -51,4 +56,3 @@
     "ranks_for_rank_resolved_runs": [1, 3, 5]
   }
 }
-

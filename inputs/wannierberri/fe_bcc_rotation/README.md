@@ -37,8 +37,8 @@ with WannierBerri on a dense k mesh.
 
 ## Expected Command Order
 
-1. Generate TRS-Wannier HDF5 files from the DFT and Wannier90 inputs.
-2. Generate SAMB metadata and decomposed Hamiltonians.
+1. Generate the `tb.dat` Hamiltonian files from the DFT and Wannier90 inputs.
+2. Generate SAMB metadata, `multi_matrix.hdf5`, and decomposition HDF5 files.
 3. Rotate the selected magnetic and magnetic-toroidal `T1g` Hamiltonian
    components on the angle grid in `rotation_grid.json`.
 4. Use `make_ahc_jobs.py` to create per-angle AHC folders.

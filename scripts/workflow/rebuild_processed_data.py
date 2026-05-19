@@ -77,6 +77,7 @@ def main() -> None:
         copy_export(source, destination)
 
     if not args.skip_pdf_vector:
+        extract_pdf_vector_data.write_band_bond()
         extract_pdf_vector_data.write_multipole_coefficients()
         extract_pdf_vector_data.write_minimal_model()
 
@@ -85,4 +86,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

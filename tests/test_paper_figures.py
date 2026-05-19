@@ -111,6 +111,7 @@ def test_processed_csv_files_have_source_chain() -> None:
         Path("data/processed/strain_103/strain_minus_ahc.csv"),
     }
     pdf_vector_backed = {
+        Path("data/processed/band_bond/band_bond_curves.csv"),
         Path("data/processed/multipole_coefficients/multipole_coefficients.csv"),
         Path("data/processed/minimal_model/model_sigma_axis.csv"),
     }
@@ -123,7 +124,16 @@ def test_processed_csv_files_have_source_chain() -> None:
         assert (ROOT / source).is_file(), f"{processed} has no source export"
 
     assert (ROOT / "data/source/pdf_vector/README.md").is_file()
+    assert (ROOT / "data/source/pdf_vector/band_bond/README.md").is_file()
     for source_pdf in [
+        "data/source/pdf_vector/band_bond/band_1.pdf",
+        "data/source/pdf_vector/band_bond/band_2.pdf",
+        "data/source/pdf_vector/band_bond/band_3.pdf",
+        "data/source/pdf_vector/band_bond/band_4.pdf",
+        "data/source/pdf_vector/band_bond/band_5.pdf",
+        "data/source/pdf_vector/band_bond/band_10.pdf",
+        "data/source/pdf_vector/band_bond/band_20.pdf",
+        "data/source/pdf_vector/band_bond/band_35.pdf",
         "figures/paper/bar_ed_all_35.pdf",
         "figures/paper/bar_ed_wo_q_35.pdf",
         "figures/paper/sigma_axis_model_1st_nn.pdf",

@@ -94,8 +94,9 @@ upgraded to `reproducible_plot`.
 
 ### `band_bond` (figure: convergence with SAMB bond range)
 
-Currently `workflow_required` in this repo. Should remain so until plotted
-from compact data, but local PDF already exists.
+Now `reproducible_plot` in this repo through tracked per-cutoff vector PDFs
+and a repository plotting script. The original local Keynote composite remains
+useful provenance only.
 
 | Item | Path / value |
 | --- | --- |
@@ -104,7 +105,10 @@ from compact data, but local PDF already exists.
 | Per-bond-range band PDFs | `PAPER/figs/Fe/FM_sqa_z/band_bond/band_{1,2,3,4,5,10,20,35}.pdf` |
 | Per-bond-range band data | not committed locally; regenerated from `Hamiltonian.h5` (>100 MB) via the multipole bond-range filter |
 | Generation recipe | `MultipoleDecomposition` with bond-range filter → reconstructed `H(R)` → diagonalize on band path → band data CSV → matplotlib |
-| Destination | (Phase D) compact source under `REPO/data/source/band_bond/`, CSV under `REPO/data/processed/band_bond/`, plotting script `REPO/scripts/reproduce_figures/plot_band_bond.py`. Composite assembled in Python (replace Keynote). |
+| Public source snapshot | `REPO/data/source/pdf_vector/band_bond/band_{1,2,3,4,5,10,20,35}.pdf` |
+| Public processed data | `REPO/data/processed/band_bond/band_bond_curves.csv` |
+| Public plotting script | `REPO/scripts/reproduce_figures/plot_band_bond.py` |
+| Public reference PDF | `REPO/figures/paper/band_bond.pdf` |
 
 ### `bar_ed_all_35`, `bar_ed_wo_q_35` (leading multipole coefficients)
 

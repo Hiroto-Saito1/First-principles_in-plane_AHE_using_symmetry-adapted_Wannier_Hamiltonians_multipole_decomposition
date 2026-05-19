@@ -1,0 +1,27 @@
+# Band/Bond Convergence Data
+
+```text
+data/processed/band_bond/band_bond_curves.csv
+```
+
+This CSV contains the compact curve data used to regenerate the manuscript
+`band_bond.pdf` comparison between DFT bands and bond-cutoff reconstructed
+model bands.
+
+The table was recovered from the vector curves embedded in the per-cutoff
+Matplotlib PDFs under `data/source/pdf_vector/band_bond/` using
+`scripts/workflow/extract_pdf_vector_data.py`. The original first-principles
+source is the TRS-Wannier Hamiltonian plus SAMB bond-range filtering workflow,
+which is still documented in `scripts/workflow/generate_large_files.md`.
+
+Columns:
+
+- `cutoff_shell`: SAMB bond-shell cutoff used for the reconstructed model.
+- `series`: `DFT` for the reference Fe band structure or `model` for the
+  reconstructed bond-cutoff Hamiltonian.
+- `curve_index`: sequential curve identifier within one cutoff and series.
+- `point_index`: sequential point identifier along one plotted curve.
+- `k_path_fraction`: normalized band-path coordinate from `0` (`Γ`) to `1`
+  (`H`) across the plotted `Γ-H-N-Γ-P-H` path.
+- `energy_ev`: plotted energy relative to the Fermi level in eV.
+- `source_pdf`: per-cutoff manuscript PDF used for vector-data recovery.

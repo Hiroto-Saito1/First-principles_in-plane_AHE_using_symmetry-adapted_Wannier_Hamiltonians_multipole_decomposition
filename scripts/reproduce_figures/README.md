@@ -15,6 +15,7 @@ attempt byte-identical reproduction of the final manuscript PDFs.
 
 Available scripts:
 
+- `plot_band_bond.py`
 - `plot_ahc_111.py`
 - `plot_ahc_103.py`
 - `plot_rank_resolved_103.py`
@@ -22,8 +23,9 @@ Available scripts:
 - `plot_multipole_coefficients.py`
 - `plot_minimal_model.py`
 
-The multipole-coefficient and minimal-model CSV files were recovered from the
-vector data embedded in the exact manuscript PDFs because the original compact
-CSV tables were not preserved. The full first-principles regeneration path
-still starts from the large outputs documented in
+The band/bond, multipole-coefficient, and minimal-model CSV files were
+recovered from vector data embedded in tracked manuscript or source PDFs
+because the original compact CSV tables were not preserved. The full
+first-principles regeneration path still starts from the large outputs
+documented in
 `scripts/workflow/generate_large_files.md`.

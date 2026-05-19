@@ -10,7 +10,8 @@ WannierBerri.
   These are small summaries of expensive calculations. The full path from DFT
   inputs to these exports is documented in `scripts/workflow/generate_large_files.md`.
 - `pdf_vector/`: metadata for CSV files recovered from the vector data embedded
-  in manuscript PDFs when the original compact source export was not preserved.
+  in manuscript PDFs or committed per-panel source PDFs when the original
+  compact source export was not preserved.
 
 ## Rebuild Command
 
@@ -19,6 +20,5 @@ python scripts/workflow/rebuild_processed_data.py
 ```
 
 The command rebuilds all committed processed CSV files from this directory and
-from the tracked vector PDFs used for the recovered multipole and minimal-model
-data.
-
+from the tracked vector PDFs used for the recovered band/bond,
+multipole-coefficient, and minimal-model data.

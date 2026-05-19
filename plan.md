@@ -234,11 +234,10 @@ Based on Phase A:
 
 ### Phase D: Recover missing figure data
 
-- `band_bond.pdf`: locate compact band/bond convergence source in
-  `figs/Fe/FM_sqa_z/band_bond/`, commit under `data/source/band_bond/`,
-  extract CSV into `data/processed/band_bond/`, add
-  `scripts/reproduce_figures/plot_band_bond.py`, reclassify to
-  `reproducible_plot` in `figure_inventory.csv`.
+- `band_bond.pdf`: completed via tracked per-cutoff vector PDFs under
+  `data/source/pdf_vector/band_bond/`, compact curve CSV under
+  `data/processed/band_bond/`, and
+  `scripts/reproduce_figures/plot_band_bond.py`.
 - Multipole coefficients: replace PDF-vector recovery with direct
   `z_coefficients.dat` extraction from
   `FM_sqa_z/theta0_qe-7.2/z_coefficients/`.
@@ -284,7 +283,6 @@ workspaces.
   strain-specific, and original per-plane workflow snapshots from
   `FM_sqa_{103,111}` still need to be transferred or summarized where they
   carry unique settings not captured by the generic public drivers.
-- `band_bond.pdf` source data is not yet committed.
 - Multipole-coefficient and minimal-model CSV currently use PDF-vector
   fallback.
 - Pseudopotentials are intentionally not redistributed.

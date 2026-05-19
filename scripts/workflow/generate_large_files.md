@@ -105,10 +105,16 @@ the manuscript equations.
 
 Purpose: regenerate the manuscript `band_bond.pdf` convergence figure.
 
-Current repository status: the final PDF is not tracked because the repository
-does not yet contain compact band/bond convergence data or a plotting script.
-The figure is classified as `workflow_required` in
-`data/processed/figure_inventory.csv`.
+Current repository status: a compact fallback CSV and a repository plotting
+script are now tracked. The committed lightweight path is:
+
+```bash
+python scripts/workflow/extract_pdf_vector_data.py --target band-bond
+python scripts/reproduce_figures/plot_band_bond.py
+```
+
+This reproduces the manuscript-style comparison from tracked per-cutoff vector
+PDFs, not from the original Hamiltonian workflow.
 
 Required upstream products:
 
@@ -119,15 +125,15 @@ band-path eigenvalue summaries or compact band-difference tables
 coefficient/convergence summaries used by the manuscript panel
 ```
 
-Expected public replacement:
+Desired future upgrade beyond the fallback path:
 
-1. Extract compact CSV files with band-path coordinate, reference energy,
-   cutoff-resolved reconstructed energy, and convergence metric columns.
-2. Store those CSV files under a new
-   `data/source/production_exports/band_bond/` directory.
-3. Add a plotting script under `scripts/reproduce_figures/`.
-4. Reclassify `band_bond.pdf` from `workflow_required` to
-   `reproducible_plot` in `data/processed/figure_inventory.csv`.
+1. Extract compact CSV files directly from the bond-filtered Hamiltonian
+   workflow rather than from the plotted PDF curves.
+2. Store those CSV files under a first-principles source directory such as
+   `data/source/production_exports/band_bond/`.
+3. Keep `scripts/reproduce_figures/plot_band_bond.py` as the plotting layer,
+   but switch its input provenance from PDF-vector recovery to direct workflow
+   exports.
 
 ## Rank-Resolved Rotated Hamiltonians
 

@@ -47,6 +47,52 @@ def test_primary_ahc_csv_shapes_and_reference_values() -> None:
     assert abs(as_float(row_103["sigma_zx_s_cm"]) - 785.6033) < 1e-9
 
 
+def test_recovered_band_bond_curves_cover_expected_cutoffs_and_series() -> None:
+    """Check recovered band/bond curve rows and key convergence signatures."""
+    data = rows(PROCESSED / "band_bond" / "band_bond_curves.csv")
+    assert len(data) == 20099
+    assert sorted({int(row["cutoff_shell"]) for row in data}) == [1, 2, 3, 4, 5, 10, 20, 35]
+    assert sorted({row["series"] for row in data}) == ["DFT", "model"]
+    assert {row["source_pdf"] for row in data} == {
+        "band_1.pdf",
+        "band_2.pdf",
+        "band_3.pdf",
+        "band_4.pdf",
+        "band_5.pdf",
+        "band_10.pdf",
+        "band_20.pdf",
+        "band_35.pdf",
+    }
+    assert min(as_float(row["k_path_fraction"]) for row in data) == 0.0
+    assert max(as_float(row["k_path_fraction"]) for row in data) == 1.0
+
+    dft_35 = [
+        row for row in data if row["cutoff_shell"] == "35" and row["series"] == "DFT"
+    ]
+    model_1 = [
+        row for row in data if row["cutoff_shell"] == "1" and row["series"] == "model"
+    ]
+    assert len({row["curve_index"] for row in dft_35}) == 16
+    assert len({row["curve_index"] for row in model_1}) == 14
+
+    dft_gamma = select(
+        data,
+        cutoff_shell="35",
+        series="DFT",
+        curve_index="0",
+        point_index="0",
+    )
+    model_gamma = select(
+        data,
+        cutoff_shell="1",
+        series="model",
+        curve_index="0",
+        point_index="0",
+    )
+    assert abs(as_float(dft_gamma["energy_ev"]) + 8.50769996) < 1e-8
+    assert abs(as_float(model_gamma["energy_ev"]) + 2.86485967) < 1e-8
+
+
 def test_rank_resolved_data_cover_expected_cumulative_series() -> None:
     """Verify that rank-cumulative `(103)` data include all expected cumulative series."""
     data = rows(PROCESSED / "rank_resolved_103" / "rank_resolved_ahc.csv")

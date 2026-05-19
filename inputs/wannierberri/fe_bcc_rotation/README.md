@@ -14,12 +14,21 @@ with WannierBerri on a dense k mesh.
 
 - `rotation_grid.json`: rotation-plane vectors, angle grids, filters, and AHC
   settings used by the Fe workflows.
+- `rotate_mag.py`: cleaned rotation driver that reads a decomposed HDF5 file
+  plus a reference `tb.dat` and writes `*_phi{deg}_tb.dat` files for the
+  selected rotation plane.
+- `calc_energy.py`: cleaned total-energy summary helper that reproduces the
+  old `angle_dep*.xml` and `kmesh_dep*.xml` style outputs from rotated
+  `tb.dat` files.
 - `ahc_template.py`: portable WannierBerri AHC calculation template. It reads
   the tight-binding file path from the command line rather than embedding a
   private workflow path.
 - `make_ahc_jobs.py`: local helper that writes per-angle AHC run directories
   from rotated `*_phi*_tb.dat` files. It prepares scripts but does not submit
   cluster jobs.
+- `submit_ahc_all.py`: cleaned replacement for the old source-tree helper that
+  prepares all selected per-angle AHC folders and can optionally execute them
+  locally.
 
 ## Required External Software
 
@@ -36,6 +45,24 @@ with WannierBerri on a dense k mesh.
 5. Run `ahc_template.py` in each folder.
 6. Extract compact CSV/XML summaries under `data/processed/`.
 
+## Typical Command Order
+
+```bash
+python inputs/wannierberri/fe_bcc_rotation/rotate_mag.py \
+  --multi-path trs_py_ed_tb.hdf5 \
+  --samb-path Fe_samb.py \
+  --tb-input trs_py_ed_tb.dat \
+  --plane 103 \
+  --output-prefix trs_py_ed
+
+python inputs/wannierberri/fe_bcc_rotation/calc_energy.py \
+  --prefix trs_py_ed \
+  --angle-dep
+
+python inputs/wannierberri/fe_bcc_rotation/submit_ahc_all.py \
+  --targets ed_phi \
+  --step 5
+```
+
 Large `Klist_ahc.pickle`, WannierBerri result folders, and rotated
 tight-binding files should stay out of Git when they are generated outputs.
-

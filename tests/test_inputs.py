@@ -85,6 +85,13 @@ def test_soc_templates_and_multipie_inputs_are_present() -> None:
     ]:
         assert (INPUTS / relative_path).is_file(), f"Missing {relative_path}"
 
+    for relative_path in [
+        "wannierberri/fe_bcc_rotation/rotate_mag.py",
+        "wannierberri/fe_bcc_rotation/calc_energy.py",
+        "wannierberri/fe_bcc_rotation/submit_ahc_all.py",
+    ]:
+        assert (INPUTS / relative_path).is_file(), f"Missing {relative_path}"
+
 
 def test_qe_patch_artifacts_are_present() -> None:
     """The public docs should include the recorded QE pw2wannier90 patch."""

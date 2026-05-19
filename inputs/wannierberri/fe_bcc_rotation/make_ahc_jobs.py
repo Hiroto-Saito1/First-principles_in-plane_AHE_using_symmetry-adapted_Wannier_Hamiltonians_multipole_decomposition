@@ -39,29 +39,24 @@ def selected(phi: int, step: int) -> bool:
     return 0 <= phi <= 180 and phi % step == 0
 
 
-def main() -> None:
-    """Create job folders without submitting them to a cluster scheduler."""
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--tb-dir", type=Path, default=Path("."))
-    parser.add_argument("--template", type=Path, default=Path("ahc_template.py"))
-    parser.add_argument("--step", type=int, default=5)
-    parser.add_argument("--target", choices=["ed_phi", "pd_phi", "tb_phi"], default="ed_phi")
-    args = parser.parse_args()
+def prepare_jobs(tb_dir: Path, template: Path, step: int, target: str) -> list[Path]:
+    """Create local per-angle AHC run folders and return the prepared directories."""
 
-    if not args.template.is_file():
-        raise SystemExit(f"Missing AHC template: {args.template}")
+    if not template.is_file():
+        raise FileNotFoundError(f"Missing AHC template: {template}")
 
-    for tb_file in sorted(args.tb_dir.glob("*_phi*_tb.dat")):
+    prepared: list[Path] = []
+    for tb_file in sorted(tb_dir.glob("*_phi*_tb.dat")):
         parsed = parse_phi(tb_file)
         if parsed is None:
             continue
         prefix, phi = parsed
-        if prefix != args.target or not selected(phi, args.step):
+        if prefix != target or not selected(phi, step):
             continue
 
-        run_dir = args.tb_dir / f"{prefix}{phi}"
+        run_dir = tb_dir / f"{prefix}{phi}"
         run_dir.mkdir(exist_ok=True)
-        shutil.copy2(args.template, run_dir / "ahc_template.py")
+        shutil.copy2(template, run_dir / "ahc_template.py")
         wrapper = run_dir / "run_ahc.sh"
         wrapper.write_text(
             "#!/usr/bin/env bash\n"
@@ -70,9 +65,26 @@ def main() -> None:
             encoding="utf-8",
         )
         wrapper.chmod(0o755)
+        prepared.append(run_dir)
         print(f"Prepared {run_dir}")
+
+    return prepared
+
+
+def main() -> None:
+    """Create job folders without submitting them to a cluster scheduler."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--tb-dir", type=Path, default=Path("."))
+    parser.add_argument(
+        "--template",
+        type=Path,
+        default=Path(__file__).with_name("ahc_template.py"),
+    )
+    parser.add_argument("--step", type=int, default=5)
+    parser.add_argument("--target", choices=["ed_phi", "pd_phi", "tb_phi"], default="ed_phi")
+    args = parser.parse_args()
+    prepare_jobs(args.tb_dir, args.template, args.step, args.target)
 
 
 if __name__ == "__main__":
     main()
-

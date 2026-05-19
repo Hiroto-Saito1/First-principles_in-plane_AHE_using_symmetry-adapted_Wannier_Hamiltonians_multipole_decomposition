@@ -279,10 +279,11 @@ workspaces.
 
 ## Current Known Gaps
 
-- The unstrained SOC-aware DFT and Wannier templates are now committed, but
-  the axis-specific production wrappers and remaining `FM_sqa_{103,111}`
-  workflow scripts still need to be transferred from the local paper
-  workspace.
+- The unstrained SOC-aware DFT/Wannier templates and the cleaned generic
+  SymWannier/WannierBerri drivers are now committed, but the rank-resolved,
+  strain-specific, and original per-plane workflow snapshots from
+  `FM_sqa_{103,111}` still need to be transferred or summarized where they
+  carry unique settings not captured by the generic public drivers.
 - `band_bond.pdf` source data is not yet committed.
 - Multipole-coefficient and minimal-model CSV currently use PDF-vector
   fallback.

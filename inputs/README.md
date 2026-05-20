@@ -23,6 +23,9 @@ directories, caches, and cluster logs should not be committed.
   multipole decomposition.
 - `wannierberri/fe_bcc_rotation/`: portable AHC settings, rotation grids, and
   per-angle WannierBerri job-generation templates.
+- `wannierberri/fe_bcc_strain_103/`: reader-facing snapshot of the archived
+  `[103]` strain workflow, linked to the public cell generator and compact
+  strain CSV outputs.
 
 ## Pseudopotentials
 

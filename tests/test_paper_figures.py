@@ -125,11 +125,11 @@ def test_processed_csv_files_have_source_chain() -> None:
         Path("data/processed/rank_resolved_103/single_rank_ahc.csv"),
         Path("data/processed/strain_103/strain_plus_ahc.csv"),
         Path("data/processed/strain_103/strain_minus_ahc.csv"),
+        Path("data/processed/minimal_model/model_sigma_axis.csv"),
     }
     pdf_vector_backed = {
         Path("data/processed/band_bond/band_bond_curves.csv"),
         Path("data/processed/multipole_coefficients/multipole_coefficients.csv"),
-        Path("data/processed/minimal_model/model_sigma_axis.csv"),
     }
     assert processed_csvs == export_backed | pdf_vector_backed
 
@@ -155,6 +155,10 @@ def test_processed_csv_files_have_source_chain() -> None:
         ROOT
         / "data/source/workflow_manifests/multipole_coefficients/selected_z_ids.csv"
     ).is_file()
+    assert (
+        ROOT / "data/source/production_exports/minimal_model/model_sigma_axis.csv"
+    ).is_file()
+    assert (ROOT / "examples/minimal_model/model.py").is_file()
     assert (ROOT / "data/source/pdf_vector/band_bond/README.md").is_file()
     for source_pdf in [
         "data/source/pdf_vector/band_bond/band_1.pdf",
@@ -167,7 +171,5 @@ def test_processed_csv_files_have_source_chain() -> None:
         "data/source/pdf_vector/band_bond/band_35.pdf",
         "figures/paper/bar_ed_all_35.pdf",
         "figures/paper/bar_ed_wo_q_35.pdf",
-        "figures/paper/sigma_axis_model_1st_nn.pdf",
-        "figures/paper/sigma_axis_model_2nd_nn.pdf",
     ]:
         assert (ROOT / source_pdf).is_file()

@@ -6,7 +6,9 @@ files were not preserved. It reads the Matplotlib vector paths in the committed
 paper PDFs and writes small CSV tables consumed by the repository plotting
 scripts. The resulting CSVs are not a substitute for the original HDF5
 workflows, but they preserve the numerical data embedded in the final plotted
-figures.
+figures. It is still used for the band/bond fallback and legacy minimal-model
+recovery, although the repository now prefers direct source exports whenever
+those are available.
 """
 
 from __future__ import annotations

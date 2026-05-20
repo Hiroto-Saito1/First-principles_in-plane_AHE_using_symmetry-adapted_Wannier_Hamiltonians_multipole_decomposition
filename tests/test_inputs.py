@@ -24,6 +24,7 @@ def test_expected_input_groups_have_readmes() -> None:
         "symwannier/fe_bcc",
         "multipie/fe_bcc",
         "wannierberri/fe_bcc_rotation",
+        "wannierberri/fe_bcc_strain_103",
     ]
     for group in groups:
         readme = INPUTS / group / "README.md"
@@ -44,6 +45,39 @@ def test_input_manifests_capture_rotation_and_ahc_settings() -> None:
     assert rotation["wannierberri"]["grid_NK"] == [100, 100, 100]
     assert rotation["wannierberri"]["adpt_num_iter"] == 20
     assert rotation["fermi_energy_ev"] == 17.4112
+
+    snapshots = json.loads(
+        (
+            INPUTS / "wannierberri/fe_bcc_rotation/workflow_snapshots.json"
+        ).read_text(encoding="utf-8")
+    )
+    variants = {entry["id"]: entry for entry in snapshots["workflow_variants"]}
+    assert variants["111_base"]["fit_models"]["ahc_sigma_axis"] == (
+        "sqrt(6) / 6 * beta * cos(3 * psi)"
+    )
+    assert "sin(psi)^3" in variants["103_base"]["fit_models"]["ahc_sigma_axis"]
+    assert variants["111_rank_resolved"]["rank_scan_modes"][0]["observed_aliases"] == [
+        "angle_dep_w_all.xml"
+    ]
+    assert variants["103_rank_resolved"]["rank_scan_modes"][1]["group_size"] == 2
+
+    strain_manifest = json.loads(
+        (
+            INPUTS / "wannierberri/fe_bcc_strain_103/strain_manifest.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert strain_manifest["strain_axis_hkl"] == [1.0, 0.0, 3.0]
+    assert strain_manifest["engineering_strain_percent"]["tensile"] == [
+        0.0,
+        0.2,
+        0.4,
+        0.6,
+        0.8,
+        1.0,
+    ]
+    assert strain_manifest["public_replacements"]["cell_generator"] == (
+        "scripts/workflow/strain_103_cell.py"
+    )
 
     symwannier = json.loads(
         (INPUTS / "symwannier/fe_bcc/symwannier_settings.json").read_text(

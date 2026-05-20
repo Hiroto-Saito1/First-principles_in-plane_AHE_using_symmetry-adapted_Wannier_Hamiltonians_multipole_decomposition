@@ -25,7 +25,7 @@ WannierBerri, MPI, or cluster calculation directories.
 - `test_processed_figure_data.py`: validates compact processed CSV data for
   the band/bond convergence curves, `(111)` and `(103)` AHC curves,
   rank-cumulative `(103)` data, tensile/compressive `[103]` strain series,
-  recovered multipole coefficients, and recovered minimal-model scans.
+  recovered multipole coefficients, and archived minimal-model scans.
 - `test_inputs.py`: checks that curated first-principles input groups have
   reader-facing README files, preserve the key rotation/AHC settings in JSON
   manifests, and do not embed private absolute paths.

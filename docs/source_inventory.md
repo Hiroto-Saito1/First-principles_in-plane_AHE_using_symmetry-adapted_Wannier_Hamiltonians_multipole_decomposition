@@ -82,8 +82,8 @@ upgraded to `reproducible_plot`.
 | Figure | Local PDF | Generator | Status & destination |
 | --- | --- | --- | --- |
 | `sigma_vec.pdf` | not located in `figs/` | none found (Keynote/manual) | stays `not_included` |
-| `bcc_111.pdf` | `PAPER/figs/Fe/FM_sqa_111/bcc_111.pdf` | **`PAPER/figs/Fe/FM_sqa_111/bcc_111.py`** (matplotlib 3D, generates programmatically) | **upgrade to `reproducible_plot`**. Move script → `REPO/scripts/reproduce_figures/plot_bcc_planes.py`, output → `results/figures/planes/bcc_111.pdf` |
-| `bcc_103.pdf` | `PAPER/figs/Fe/FM_sqa_103/bcc_103.pdf` | **`PAPER/figs/Fe/FM_sqa_103/bcc_103.py`** (matplotlib 3D) | **upgrade to `reproducible_plot`** (same script as `bcc_111`) |
+| `bcc_111.pdf` | `PAPER/figs/Fe/FM_sqa_111/bcc_111.pdf` | `PAPER/figs/Fe/FM_sqa_111/bcc_111.py` (matplotlib 3D, generates programmatically) | now `reproducible_plot`. Public config → `REPO/data/processed/definitions/bcc_planes.json`, public script → `REPO/scripts/reproduce_figures/plot_bcc_planes.py`, output → `REPO/results/figures/definitions/bcc_111.pdf` |
+| `bcc_103.pdf` | `PAPER/figs/Fe/FM_sqa_103/bcc_103.pdf` | `PAPER/figs/Fe/FM_sqa_103/bcc_103.py` (matplotlib 3D) | now `reproducible_plot` via the same public JSON/script pair |
 | `structure.pdf` | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/structures/structure.pdf` | Keynote (`structure.key`) over `qe2cif.py` + VESTA | stays `not_included` |
 | `MP86479.pdf`, `MP86701.pdf`, `MP86672.pdf`, `MP87119.pdf` | `PAPER/figs/Fe/FM_sqa_z/multipole/` | QtDraw (external tool) over MultiPie outputs in `out_trs_ed/` | stays `not_included` (QtDraw drawings) |
 | `structure_p20.pdf`, `structure_m20.pdf` | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/structures/` | Keynote (`structure.key`) + VESTA over `scf_p20percent.cif`, `scf_m20percent.cif` | stays `not_included` |
@@ -134,7 +134,7 @@ variants exist locally as exploratory analyses.
 | Generating script | `PAPER/figs/Fe/FM_sqa_111/anisotropy/fit_ahc.py` (also `fit_angle_dep.py`, `plot_ahc.py`, `plot_angle_dep.py`) |
 | Input data | `PAPER/figs/Fe/FM_sqa_111/anisotropy/angle_dep_ahc.xml` (301 lines); per-method variants `angle_dep_{ed,pd,tb}_{70,80,90}.xml`; k-mesh study `kmesh_dep_{ed,pd,tb}.xml` |
 | Driver scripts | `ahc.py` (WannierBerri runner), `rotate_mag.py` (magnetization rotation), `calc_energy.py`, `submit_ahc_all.py` (batch submission), `time.py` |
-| Destination | XML + scripts → `REPO/inputs/wannierberri/fe_bcc_rotation/111/`, processed CSV (already present) → `REPO/data/processed/ahc_111/`, plot script (already present) → `REPO/scripts/reproduce_figures/plot_ahc_111.py` |
+| Destination | archived settings summarized in `REPO/inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json`, processed CSV (already present) → `REPO/data/processed/ahc_111/`, plot script (already present) → `REPO/scripts/reproduce_figures/plot_ahc_111.py` |
 
 ### `fit_ahc_para_103`, `fit_ahc_perp_103`, `fit_ahc_axis_103` ((103) plane)
 
@@ -144,7 +144,7 @@ variants exist locally as exploratory analyses.
 | Generating script | `PAPER/figs/Fe/FM_sqa_103/anisotropy/fit_ahc.py` |
 | Input data | `PAPER/figs/Fe/FM_sqa_103/anisotropy/angle_dep_ahc.xml` (301 lines) + variants |
 | Driver scripts | same family as (111): `ahc.py`, `rotate_mag.py`, `calc_energy.py`, `submit_ahc_all.py`, `plot_ahc.py`, `fit_ahc.py`, `plot_angle_dep.py`, `time.py` |
-| Destination | XML + scripts → `REPO/inputs/wannierberri/fe_bcc_rotation/103/`, processed CSV (already) → `REPO/data/processed/ahc_103/`, plot script (already) → `REPO/scripts/reproduce_figures/plot_ahc_103.py` |
+| Destination | archived settings summarized in `REPO/inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json`, processed CSV (already) → `REPO/data/processed/ahc_103/`, plot script (already) → `REPO/scripts/reproduce_figures/plot_ahc_103.py` |
 
 ### `sigma_para_group{1,2,3}`, `sigma_perp_group{1,2,3}`, `sigma_axis_group{1,2,3}` (rank-cumulative (103))
 
@@ -153,7 +153,7 @@ variants exist locally as exploratory analyses.
 | Local PDFs | `PAPER/figs/Fe/FM_sqa_103/anisotropy_w_rank3/sigma_{para,perp,axis}_group{1,2,3,4}.pdf` (group4 also exists locally but is not in the manuscript inventory) |
 | Generating script | `PAPER/figs/Fe/FM_sqa_103/anisotropy_w_rank3/plot_ahc.py` (group definition embedded; verify exact assignment) |
 | Input data | `PAPER/figs/Fe/FM_sqa_103/anisotropy_w_rank3/angle_dep_w_rank{1, 1_2, 1_2_3, 1_2_3_4, 1_2_3_4_5, 1_2_3_4_5_6, 1_2_3_4_5_6_7, 1_2_3_4_5_6_7_8}.xml` + reference `angle_dep_ahc.xml` |
-| Destination | XML + scripts → `REPO/inputs/wannierberri/fe_bcc_rotation/103_rank_resolved/`, processed CSV (already) → `REPO/data/processed/rank_resolved_103/`, plot script (already) → `REPO/scripts/reproduce_figures/plot_rank_resolved_103.py` |
+| Destination | archived settings summarized in `REPO/inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json`, processed CSV (already) → `REPO/data/processed/rank_resolved_103/`, plot script (already) → `REPO/scripts/reproduce_figures/plot_rank_resolved_103.py` |
 
 ### `sigma_para`, `sigma_perp`, `sigma_axis` (single-rank (103))
 
@@ -171,17 +171,17 @@ variants exist locally as exploratory analyses.
 | Local PDFs | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/sigma_plus_strain_sigma_axis.pdf`, `sigma_minus_strain_sigma_axis.pdf` (and `_para`, `_perp`, `_xy`, `_yz`, `_zx` variants) |
 | Generating script | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/strain_103.py` |
 | Structure inputs | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/structures/{scf.cif, scf_20percent.cif, scf_m20percent.cif, scf.in, strain.py, qe2cif.py}` |
-| Destination | `strain_103.py` + structure scripts → `REPO/inputs/dft/fe_bcc_strain_103/structures/`, processed CSV (already) → `REPO/data/processed/strain_103/`, plot script (already) → `REPO/scripts/reproduce_figures/plot_strain_103.py` |
+| Destination | archived strain workflow summarized in `REPO/inputs/wannierberri/fe_bcc_strain_103/strain_manifest.json`, public deformation helper → `REPO/scripts/workflow/strain_103_cell.py`, DFT template → `REPO/inputs/dft/fe_bcc_strain_103/`, processed CSV (already) → `REPO/data/processed/strain_103/`, plot script (already) → `REPO/scripts/reproduce_figures/plot_strain_103.py` |
 
 ### `sigma_axis_model_1st_nn`, `sigma_axis_model_2nd_nn` (minimal p_z-d_xy model)
 
 | Item | Path / value |
 | --- | --- |
 | Manuscript references | `PAPER/body/arXiv/main_all.tex` lines ~1275, 1281; same in CPC/PRB |
-| Local PDFs | **not located** in `PAPER/figs/` — the minimal-model PDFs are referenced from the manuscript but the generator is not in the figure tree |
-| Generator | unknown / not preserved — possibly a separate notebook |
-| Current public-repo provenance | PDF-vector fallback in `REPO/data/source/pdf_vector/minimal_model/` + processed CSV under `REPO/data/processed/minimal_model/` |
-| Destination | keep PDF-vector fallback as labeled provenance until the original model script is recovered. **Open question** — does the user have the original minimal-model code in another workspace? |
+| Archived generator | `2025/発表/defense/figs/model.py` |
+| Archived direct outputs | `2025/doctoral_thesis/hirotosaito/tests/bcc_model/{1st_nn_t2_0,2nd_nn_t1_0.2}/t_T_*/psi_*/sigma_ahc_eta1.00meV.txt` |
+| Current public-repo provenance | direct compact export in `REPO/data/source/production_exports/minimal_model/model_sigma_axis.csv` + archived example in `REPO/examples/minimal_model/model.py` |
+| Destination | `model.py` → `REPO/examples/minimal_model/model.py`; compact export helper → `REPO/scripts/workflow/export_minimal_model_source.py`; processed CSV → `REPO/data/processed/minimal_model/` |
 
 ## DFT / Wannier Input Files
 
@@ -262,9 +262,9 @@ These should be copied (deduplicated where identical) into:
 
 | Source | Destination |
 | --- | --- |
-| `PAPER/figs/Fe/FM_sqa_111/anisotropy/` | `REPO/inputs/wannierberri/fe_bcc_rotation/111/` (XML + drivers) |
-| `PAPER/figs/Fe/FM_sqa_103/anisotropy/` | `REPO/inputs/wannierberri/fe_bcc_rotation/103/` |
-| `PAPER/figs/Fe/FM_sqa_103/anisotropy_w_rank3/` | `REPO/inputs/wannierberri/fe_bcc_rotation/103_rank_resolved/` |
+| `PAPER/figs/Fe/FM_sqa_111/anisotropy/` | summarized in `REPO/inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json` |
+| `PAPER/figs/Fe/FM_sqa_103/anisotropy/` | summarized in `REPO/inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json` |
+| `PAPER/figs/Fe/FM_sqa_{111,103}/anisotropy_w_rank{2,3}/` | summarized in `REPO/inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json` |
 | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/` (driver `strain_103.py`) | `REPO/inputs/wannierberri/fe_bcc_strain_103/` |
 
 > Many of these scripts have hard-coded absolute paths to private Hamiltonian
@@ -369,17 +369,17 @@ The hard-coded `pseudo_dir = /home/koretsune/PWSCF/pseudo_psl031` in all
 | Stage | Local source (PAPER + SYMWAN) | Destination in `REPO/` |
 | --- | --- | --- |
 | DFT (unstrained SOC) | `PAPER/figs/Fe/FM_sqa_z/hamiltonian_hdf5_trs/energy_diff{1,2}/symwannier/{scf,nscf,pw2wan}.in` + `pwscf.win` | `inputs/dft/fe_bcc_unstrained/` + `inputs/wannier/fe_bcc_unstrained/` |
-| DFT (strain) | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/structures/{scf.in, strain.py, qe2cif.py, scf*.cif}` | `inputs/dft/fe_bcc_strain_103/structures/` |
+| DFT (strain) | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/structures/{scf.in, strain.py, qe2cif.py, scf*.cif}` | `inputs/dft/fe_bcc_strain_103/` + `scripts/workflow/strain_103_cell.py` |
 | DFT (non-SOC reference) | `SYMWAN/tests/Fe/num_iter_0/FM_wo_soc_*/` | `examples/fe_bcc_non_soc/{SW,PD,SW_PD}/` |
 | Wannier90 | `PAPER/.../symwannier/pwscf.win, pw2wan.in` | `inputs/wannier/fe_bcc_unstrained/` |
 | SymWannier / TRS-Wannier | `PAPER/figs/Fe/FM_sqa_z/hamiltonian_hdf5_trs/energy_diff/{energy_diff_fe.py, submit_energy_diff.sh}` | `inputs/symwannier/fe_bcc/` |
 | MultiPie / SAMB | `SYMWAN/tests/Fe/num_iter_0/multipie/Fe_all_35/{Fe.py, Fe_model.py, submit_samb.sh}` | `inputs/multipie/fe_bcc/` |
-| Magnetization rotation + WannierBerri (111) | `PAPER/figs/Fe/FM_sqa_111/anisotropy/{ahc.py, rotate_mag.py, calc_energy.py, submit_ahc_all.py, angle_dep_*.xml, kmesh_dep_*.xml}` | `inputs/wannierberri/fe_bcc_rotation/111/` |
-| Magnetization rotation + WannierBerri (103) | `PAPER/figs/Fe/FM_sqa_103/anisotropy/` (same set) | `inputs/wannierberri/fe_bcc_rotation/103/` |
-| Rank-resolved (103) | `PAPER/figs/Fe/FM_sqa_103/anisotropy_w_rank3/{plot_ahc.py, angle_dep_w_rank*.xml, ahc.py, ...}` | `inputs/wannierberri/fe_bcc_rotation/103_rank_resolved/` |
-| Strain workflow | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/strain_103.py` + `structures/` | `inputs/wannierberri/fe_bcc_strain_103/` + `inputs/dft/fe_bcc_strain_103/structures/` |
+| Magnetization rotation + WannierBerri (111) | `PAPER/figs/Fe/FM_sqa_111/anisotropy/{ahc.py, rotate_mag.py, calc_energy.py, submit_ahc_all.py, angle_dep_*.xml, kmesh_dep_*.xml}` | `inputs/wannierberri/fe_bcc_rotation/` + `inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json` |
+| Magnetization rotation + WannierBerri (103) | `PAPER/figs/Fe/FM_sqa_103/anisotropy/` (same set) | `inputs/wannierberri/fe_bcc_rotation/` + `inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json` |
+| Rank-resolved (103) | `PAPER/figs/Fe/FM_sqa_103/anisotropy_w_rank3/{plot_ahc.py, angle_dep_w_rank*.xml, ahc.py, ...}` | `inputs/wannierberri/fe_bcc_rotation/workflow_snapshots.json` |
+| Strain workflow | `PAPER/figs/Fe/FM_sqa_103_strained_along_103/strain_103.py` + `structures/` | `inputs/wannierberri/fe_bcc_strain_103/` + `inputs/dft/fe_bcc_strain_103/` + `scripts/workflow/strain_103_cell.py` |
 | Extract (CSV) | (existing) `scripts/workflow/extract_*.py` + new ones to read local XML | `scripts/workflow/` (extend) |
-| Figures | (existing) `scripts/reproduce_figures/plot_*.py` + new `plot_bcc_planes.py`, `plot_band_bond.py` | `scripts/reproduce_figures/` (extend) |
+| Figures | (existing) `scripts/reproduce_figures/plot_*.py` + `plot_bcc_planes.py`, `plot_band_bond.py` | `scripts/reproduce_figures/` |
 
 ## Large Files (>100 MB) — Document Only
 
@@ -398,18 +398,11 @@ These four classes are the only ones expected to exceed the 100 MB limit.
    `hamiltonian_hdf5_trs/energy_diff{1,2}/` use `nspin = 2` (collinear).
    Verify whether the production runs that fed the manuscript AHC were
    `nspin = 4` + `lspinorb = .true.`, and if so locate those inputs.
-2. **Minimal `p_z`-`d_xy` model script**: Not in `PAPER/figs/`. Is the
-   original Python source preserved elsewhere?
-3. **Disambiguation between `theta0_qe-7.2/z_coefficients/` and
+2. **Disambiguation between `theta0_qe-7.2/z_coefficients/` and
    `hamiltonian_hdf5_trs/z_coefficients/`**: both contain identical-looking
    `bar_ed_all_35.pdf` and `plot_bar.py`. Which is canonical for the
    manuscript?
-4. **`bcc_111.py` / `bcc_103.py` `not_included` → `reproducible_plot`**: confirm
-   that the scripts in `figs/Fe/FM_sqa_111/bcc_111.py` and
-   `figs/Fe/FM_sqa_103/bcc_103.py` cover the manuscript figures
-   `bcc_111.pdf` and `bcc_103.pdf` end-to-end and we are happy to upgrade
-   them to `reproducible_plot` in `figure_inventory.csv`.
-5. **`SYMWAN/src/wannier_utils/{band,hamiltonian}.py` vs current public-repo
+3. **`SYMWAN/src/wannier_utils/{band,hamiltonian}.py` vs current public-repo
    versions**: take a unified diff before overwriting.
 
 ## Hard-Coded Paths To Rewrite During Copy

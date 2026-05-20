@@ -14,6 +14,9 @@ with WannierBerri on a dense k mesh.
 
 - `rotation_grid.json`: rotation-plane vectors, angle grids, filters, and AHC
   settings used by the Fe workflows.
+- `workflow_snapshots.json`: archived `(111)`, `(103)`, rank-resolved, and
+  plane-specific fit forms that were unique to the manuscript source tree and
+  are not obvious from the generic public drivers alone.
 - `rotate_mag.py`: cleaned rotation driver that reads a decomposed HDF5 file
   plus a reference `tb.dat` and writes `*_phi{deg}_tb.dat` files for the
   selected rotation plane.
@@ -44,6 +47,11 @@ with WannierBerri on a dense k mesh.
 4. Use `make_ahc_jobs.py` to create per-angle AHC folders.
 5. Run `ahc_template.py` in each folder.
 6. Extract compact CSV/XML summaries under `data/processed/`.
+
+The per-plane and rank-resolved variants in `workflow_snapshots.json` are
+there so a reader can recover which archived source tree used which analytic
+fit, XML naming convention, and rank labeling scheme without reopening the
+private manuscript workspace.
 
 ## Typical Command Order
 

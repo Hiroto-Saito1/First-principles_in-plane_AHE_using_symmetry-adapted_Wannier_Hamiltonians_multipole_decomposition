@@ -24,10 +24,10 @@ python scripts/workflow/rebuild_processed_data.py
 ```
 
 The command rebuilds all committed processed CSV files from this directory and
-from the tracked vector PDFs used for the recovered band/bond,
-multipole-coefficient, and minimal-model data. Multipole coefficients now
-rebuild from a committed recovered source snapshot under `data/source/pdf_vector/`,
-while `band_bond` and the minimal model are still re-extracted from vector PDFs.
+from the tracked vector PDFs used for the recovered band/bond data.
+Multipole coefficients rebuild from a committed recovered source snapshot under
+`data/source/pdf_vector/`, while the minimal-model scans now rebuild from a
+direct compact export under `data/source/production_exports/minimal_model/`.
 
 When the original workflow HDF5 is available, the direct coefficient route is:
 

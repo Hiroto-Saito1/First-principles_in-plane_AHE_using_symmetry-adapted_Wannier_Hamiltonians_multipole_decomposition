@@ -1,0 +1,34 @@
+{
+  "workflow_id": "strain_103",
+  "archived_relative_path": "figs/Fe/FM_sqa_103_strained_along_103",
+  "archived_driver": "strain_103.py",
+  "strain_axis_hkl": [1.0, 0.0, 3.0],
+  "engineering_strain_percent": {
+    "tensile": [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+    "compressive": [0.0, -0.2, -0.4, -0.6, -0.8, -1.0]
+  },
+  "volume_preserving_deformation": {
+    "lambda_expression": "1 + percent / 100",
+    "mu_expression": "lambda**(-0.5)",
+    "deformation_gradient": "mu * I + (lambda - mu) * outer(n_hat, n_hat)",
+    "direction_unit_vector": "[1, 0, 3] / sqrt(10)"
+  },
+  "public_replacements": {
+    "cell_generator": "scripts/workflow/strain_103_cell.py",
+    "dft_template_directory": "inputs/dft/fe_bcc_strain_103",
+    "generic_rotation_driver_directory": "inputs/wannierberri/fe_bcc_rotation",
+    "processed_outputs": [
+      "data/processed/strain_103/strain_plus_ahc.csv",
+      "data/processed/strain_103/strain_minus_ahc.csv"
+    ],
+    "plot_script": "scripts/reproduce_figures/plot_strain_103.py"
+  },
+  "observed_manuscript_outputs": [
+    "sigma_plus_strain_sigma_axis.pdf",
+    "sigma_minus_strain_sigma_axis.pdf",
+    "sigma_plus_strain_sigma_para.pdf",
+    "sigma_minus_strain_sigma_para.pdf",
+    "sigma_plus_strain_sigma_perp.pdf",
+    "sigma_minus_strain_sigma_perp.pdf"
+  ]
+}

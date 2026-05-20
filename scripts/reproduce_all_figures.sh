@@ -12,6 +12,7 @@ if [[ "${1:-}" == "--check" ]]; then
 fi
 
 required_inputs=(
+  "$ROOT/data/processed/definitions/bcc_planes.json"
   "$ROOT/data/processed/band_bond/band_bond_curves.csv"
   "$ROOT/data/processed/ahc_111/ahc_angle_dependence.csv"
   "$ROOT/data/processed/ahc_103/ahc_angle_dependence.csv"
@@ -45,6 +46,8 @@ required_sources=(
   "$ROOT/data/source/pdf_vector/band_bond/band_10.pdf"
   "$ROOT/data/source/pdf_vector/band_bond/band_20.pdf"
   "$ROOT/data/source/pdf_vector/band_bond/band_35.pdf"
+  "$ROOT/figures/paper/bcc_111.pdf"
+  "$ROOT/figures/paper/bcc_103.pdf"
   "$ROOT/figures/paper/band_bond.pdf"
   "$ROOT/figures/paper/bar_ed_all_35.pdf"
   "$ROOT/figures/paper/bar_ed_wo_q_35.pdf"
@@ -53,6 +56,7 @@ required_sources=(
 )
 
 required_scripts=(
+  "$ROOT/scripts/reproduce_figures/plot_bcc_planes.py"
   "$ROOT/scripts/reproduce_figures/plot_band_bond.py"
   "$ROOT/scripts/reproduce_figures/plot_ahc_111.py"
   "$ROOT/scripts/reproduce_figures/plot_ahc_103.py"
@@ -81,6 +85,8 @@ fi
 
 mkdir -p "$OUTPUT_ROOT"
 
+"$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_bcc_planes.py" \
+  --output-dir "$OUTPUT_ROOT/definitions"
 "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_ahc_111.py" \
   --output-dir "$OUTPUT_ROOT/ahc_111"
 "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_band_bond.py" \

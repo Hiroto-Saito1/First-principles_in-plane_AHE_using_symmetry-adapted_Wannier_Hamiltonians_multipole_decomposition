@@ -9,4 +9,5 @@ Planned examples:
   Hamiltonian reconstruction tests.
 - `fe_bcc/`: lightweight processed data and commands corresponding to the bcc
   Fe manuscript workflow.
-
+- `minimal_model/`: archived two-orbital BCC `p_z`-`d_xy` model used for the
+  manuscript `(103)` minimal-model figure.

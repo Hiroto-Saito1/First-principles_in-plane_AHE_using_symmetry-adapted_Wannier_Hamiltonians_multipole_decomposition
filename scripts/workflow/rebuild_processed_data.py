@@ -52,6 +52,10 @@ PRODUCTION_EXPORTS = [
         SOURCE / "production_exports/strain_103/strain_minus_ahc.csv",
         PROCESSED / "strain_103/strain_minus_ahc.csv",
     ),
+    (
+        SOURCE / "production_exports/minimal_model/model_sigma_axis.csv",
+        PROCESSED / "minimal_model/model_sigma_axis.csv",
+    ),
 ]
 
 PDF_VECTOR_SNAPSHOTS = [
@@ -76,7 +80,7 @@ def main() -> None:
     parser.add_argument(
         "--skip-pdf-vector",
         action="store_true",
-        help="Skip CSV recovery from tracked manuscript vector PDFs.",
+        help="Skip CSV recovery from tracked manuscript vector PDFs (currently band/bond only).",
     )
     args = parser.parse_args()
 
@@ -88,7 +92,6 @@ def main() -> None:
 
     if not args.skip_pdf_vector:
         extract_pdf_vector_data.write_band_bond()
-        extract_pdf_vector_data.write_minimal_model()
 
     print("Rebuilt processed CSV files from committed source data.")
 

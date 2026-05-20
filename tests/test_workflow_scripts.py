@@ -99,3 +99,59 @@ def test_export_multipole_coefficients_script_creates_bar_snapshot(
     assert by_index["001"]["source_hdf5"] == "trs_py_ed_tb.hdf5"
     assert by_index["001"]["source_samb"] == "fixture_samb.py"
     assert abs(float(by_index["001"]["coefficient_ev"]) + 0.5) < 1e-8
+
+
+def test_export_minimal_model_source_script_collects_sigma_axis_rows(
+    tmp_path: Path,
+) -> None:
+    """The minimal-model export helper should condense archived AHC text outputs."""
+    source_root = tmp_path / "bcc_model"
+    layouts = [
+        ("1st_nn_t2_0", "t_T_0.0", "psi_0", 0.0),
+        ("1st_nn_t2_0", "t_T_0.0", "psi_90", 1.0),
+        ("2nd_nn_t1_0.2", "t_T_0.1", "psi_0", 2.0),
+        ("2nd_nn_t1_0.2", "t_T_0.1", "psi_90", 3.0),
+    ]
+    for tree, parameter, angle, yz_value in layouts:
+        target = source_root / tree / parameter / angle / "sigma_ahc_eta1.00meV.txt"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(
+            "# header\n"
+            "-1.0 0.0 0.0 0.0\n"
+            f"0.0 4.0 {yz_value:.1f} 2.0\n"
+            "1.0 0.0 0.0 0.0\n",
+            encoding="utf-8",
+        )
+
+    output = tmp_path / "model_sigma_axis.csv"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "workflow" / "export_minimal_model_source.py"),
+            "--source-root",
+            str(source_root),
+            "--output",
+            str(output),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert output.is_file()
+    assert "Wrote 4 rows" in result.stdout
+    with output.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 4
+    row = next(
+        item
+        for item in rows
+        if item["scan"] == "second_nn"
+        and item["parameter_value"] == "0.1"
+        and item["phi_deg"] == "90"
+    )
+    assert row["source_tree"] == "2nd_nn_t1_0.2"
+    assert row["source_file"] == "t_T_0.1/psi_90/sigma_ahc_eta1.00meV.txt"
+    expected = (3.0 + 12.0) / (10.0 ** 0.5)
+    assert abs(float(row["sigma_axis"]) - expected) < 1e-8

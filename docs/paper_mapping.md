@@ -27,6 +27,7 @@ data/processed/figure_inventory.csv
 | --- | --- | --- | --- |
 | SAMB reconstruction accuracy table | small fixture and future Fe summary | `tests/test_decomposition.py`, future processed table | workflow/data follow-up |
 | Reproducible manuscript plots | `figures/paper/`, `data/processed/`, `data/source/` | `scripts/reproduce_all_figures.sh`, `tests/test_paper_figures.py` | `reproducible_plot` |
+| `(111)` / `(103)` plane definitions | `data/processed/definitions/bcc_planes.json` | `scripts/reproduce_figures/plot_bcc_planes.py` | `reproducible_plot` |
 | Static schematics and structure figures | `data/processed/static_schematics/README.md` | inventory checks | `not_included` |
 | Band/bond convergence figure | `data/processed/band_bond/band_bond_curves.csv` | `scripts/reproduce_figures/plot_band_bond.py` | `reproducible_plot` |
 | Leading multipole coefficients | `data/processed/multipole_coefficients/multipole_coefficients.csv` | `scripts/reproduce_figures/plot_multipole_coefficients.py` | `reproducible_plot` |
@@ -35,7 +36,7 @@ data/processed/figure_inventory.csv
 | Rank-cumulative AHC contributions | `data/processed/rank_resolved_103/rank_resolved_ahc.csv` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | `reproducible_plot` |
 | Single-rank AHC contributions | `data/processed/rank_resolved_103/single_rank_ahc.csv` | `scripts/reproduce_figures/plot_rank_resolved_103.py` | `reproducible_plot` |
 | `[103]` strain effect | `data/processed/strain_103/` | `scripts/reproduce_figures/plot_strain_103.py` | `reproducible_plot` |
-| Minimal `p_z`-`d_xy` model | `data/processed/minimal_model/model_sigma_axis.csv` | `scripts/reproduce_figures/plot_minimal_model.py` | `reproducible_plot` |
+| Minimal `p_z`-`d_xy` model | `data/processed/minimal_model/model_sigma_axis.csv` | `scripts/reproduce_figures/plot_minimal_model.py`, `scripts/workflow/export_minimal_model_source.py`, `examples/minimal_model/model.py` | `reproducible_plot` |
 
 ## Code-Level Mapping
 

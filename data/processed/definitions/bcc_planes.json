@@ -1,0 +1,26 @@
+{
+  "planes": [
+    {
+      "id": "111",
+      "title": "Definition of the (111) magnetization-rotation plane",
+      "output_file": "bcc_111.pdf",
+      "psi_deg": 25.0,
+      "plane_normal": [1.0, 1.0, 1.0],
+      "reference_vector": [-1.0, -1.0, 2.0],
+      "reference_label": "[$\\bar{1}\\bar{1}2$]",
+      "perpendicular_vector": [1.0, -1.0, 0.0],
+      "perpendicular_label": "[1$\\bar{1}$0]"
+    },
+    {
+      "id": "103",
+      "title": "Definition of the (103) magnetization-rotation plane",
+      "output_file": "bcc_103.pdf",
+      "psi_deg": 25.0,
+      "plane_normal": [1.0, 0.0, 3.0],
+      "reference_vector": [0.0, -1.0, 0.0],
+      "reference_label": "[0$\\bar{1}$0]",
+      "perpendicular_vector": [3.0, 0.0, -1.0],
+      "perpendicular_label": "[30$\\bar{1}$]"
+    }
+  ]
+}

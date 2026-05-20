@@ -215,7 +215,9 @@ Based on Phase A:
 - Add MultiPie `Fe.py`, `Fe_model.py`, and `submit_samb.sh` from the
   original `tests/Fe/num_iter_0/multipie/Fe_all_35/`.
 - Add WannierBerri per-angle drivers for `(111)`, `(103)`, rank-resolved,
-  and `[103]` strain.
+  and `[103]` strain, plus reader-facing workflow snapshots when the public
+  repo keeps a cleaned generic driver instead of copying the original private
+  source tree verbatim.
 - Add `inputs/dft/README.md` with pseudopotential references (no UPF
   redistribution).
 
@@ -244,9 +246,11 @@ Based on Phase A:
   preserved `z_coefficients.dat` text file. The public scripts for
   `matrix -> multi_matrix.hdf5 -> decomposition HDF5 -> compact CSV` are now
   committed, but the original manuscript compact export is still missing.
-- Minimal `p_z`-`d_xy` model: recover the original model script as
-  `examples/minimal_model/` and route through `scripts/workflow/` rather
-  than PDF-vector recovery.
+- Minimal `p_z`-`d_xy` model: archived `model.py` has now been recovered into
+  `examples/minimal_model/`, and the processed scan CSV now rebuilds from a
+  direct compact export of archived `sigma_ahc_eta1.00meV.txt` outputs via
+  `scripts/workflow/export_minimal_model_source.py` rather than PDF-vector
+  recovery.
 
 ### Phase E: Document the heavyweight workflow
 
@@ -281,18 +285,21 @@ workspaces.
 
 ## Current Known Gaps
 
-- The unstrained SOC-aware DFT/Wannier templates and the cleaned generic
-  SymWannier/WannierBerri drivers are now committed, but the rank-resolved,
-  strain-specific, and original per-plane workflow snapshots from
-  `FM_sqa_{103,111}` still need to be transferred or summarized where they
-  carry unique settings not captured by the generic public drivers.
-- Multipole-coefficient and minimal-model CSV currently use PDF-vector
-  fallback. Multipole coefficients now have a tracked recovered source
-  snapshot under `data/source/pdf_vector/multipole_coefficients/`, but the
+- The unstrained SOC-aware DFT/Wannier templates, the cleaned generic
+  SymWannier/WannierBerri drivers, the `(111)` / `(103)` plane-definition
+  scripts, and the archived per-plane/rank/strain WannierBerri workflow
+  snapshots are now committed. Remaining gaps are no longer about where those
+  workflows lived, but about whether additional private helper scripts are
+  worth copying once their unique settings have already been preserved by the
+  public manifests.
+- Multipole coefficients still use a PDF-vector-backed recovered source
+  snapshot under `data/source/pdf_vector/multipole_coefficients/`. The
   original compact coefficient source is still missing locally even though the
   public HDF5-generation route is now documented and scripted. Archived
   workflow evidence for the original HDF5 path now lives under
-  `data/source/workflow_manifests/multipole_coefficients/`.
+  `data/source/workflow_manifests/multipole_coefficients/`. The minimal model
+  has been moved off PDF-vector fallback onto a direct compact export from
+  archived AHC outputs.
 - Pseudopotentials are intentionally not redistributed.
 
 ## Completion Definition

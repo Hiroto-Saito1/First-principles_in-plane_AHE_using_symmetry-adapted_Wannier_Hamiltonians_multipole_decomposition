@@ -1,0 +1,142 @@
+{
+  "archive_root_hint": "figs/Fe",
+  "public_driver_directory": "inputs/wannierberri/fe_bcc_rotation",
+  "rotation_grid_manifest": "inputs/wannierberri/fe_bcc_rotation/rotation_grid.json",
+  "workflow_variants": [
+    {
+      "id": "111_base",
+      "plane": "111",
+      "workflow_kind": "base",
+      "archived_relative_path": "figs/Fe/FM_sqa_111/anisotropy",
+      "rotation_axis2": [1.0, 1.0, 1.0],
+      "initial_vector": [-1.0, -1.0, 2.0],
+      "phi_step_degrees": 5,
+      "ahc_job_targets": ["ed_phi", "pd_phi", "tb_phi"],
+      "expected_energy_xml": ["angle_dep_ed_90.xml"],
+      "expected_ahc_xml": ["angle_dep_ahc.xml"],
+      "fit_models": {
+        "ahc_sigma_para": "alpha + 0.5 * beta",
+        "ahc_sigma_perp": "0",
+        "ahc_sigma_axis": "sqrt(6) / 6 * beta * cos(3 * psi)",
+        "anisotropy_energy": "K1 / 4 + K2 / 54 * cos(psi)^2 * (cos(psi)^2 - 3 * sin(psi)^2)^2 + K3 / 16"
+      },
+      "archived_scripts": [
+        "ahc.py",
+        "rotate_mag.py",
+        "calc_energy.py",
+        "submit_ahc_all.py",
+        "fit_ahc.py",
+        "fit_angle_dep.py",
+        "plot_ahc.py",
+        "plot_angle_dep.py",
+        "plot_kmesh_dep.py",
+        "time.py"
+      ]
+    },
+    {
+      "id": "103_base",
+      "plane": "103",
+      "workflow_kind": "base",
+      "archived_relative_path": "figs/Fe/FM_sqa_103/anisotropy",
+      "rotation_axis2": [1.0, 0.0, 3.0],
+      "initial_vector": [0.0, -1.0, 0.0],
+      "phi_step_degrees": 5,
+      "ahc_job_targets": ["ed_phi", "pd_phi", "tb_phi"],
+      "expected_energy_xml": ["angle_dep_ed_90.xml"],
+      "expected_ahc_xml": ["angle_dep_ahc.xml"],
+      "fit_models": {
+        "ahc_sigma_para": "alpha + beta * (273 / 400 + 9 / 100 * cos(2 * psi) + 91 / 400 * cos(4 * psi))",
+        "ahc_sigma_perp": "-beta / 400 * (18 * sin(2 * psi) + 91 * sin(4 * psi))",
+        "ahc_sigma_axis": "6 * beta / 25 * sin(psi)^3",
+        "anisotropy_energy": "K1 * (1 / 4 * sin(2 * psi)^2 + 9 / 100 * sin(psi)^4) + K2 * (9 / 100 * sin(psi)^4 * cos(psi)^2) + K3 * (1 / 16 * sin(2 * psi)^4 + 9 / 200 * sin(2 * psi)^2 * sin(psi)^4 + 81 / 10000 * sin(psi)^8)"
+      },
+      "archived_scripts": [
+        "ahc.py",
+        "rotate_mag.py",
+        "calc_energy.py",
+        "submit_ahc_all.py",
+        "fit_ahc.py",
+        "fit_angle_dep.py",
+        "plot_ahc.py",
+        "plot_angle_dep.py",
+        "plot_kmesh_dep.py",
+        "time.py"
+      ]
+    },
+    {
+      "id": "111_rank_resolved",
+      "plane": "111",
+      "workflow_kind": "rank_resolved",
+      "archived_relative_paths": [
+        "figs/Fe/FM_sqa_111/anisotropy_w_rank2",
+        "figs/Fe/FM_sqa_111/anisotropy_w_rank3"
+      ],
+      "rank_scan_modes": [
+        {
+          "mode": "isolated_rank_or_all",
+          "labels": ["w_rank1", "w_rank3", "w_rank4", "w_rank5", "w_all"],
+          "expected_ahc_xml": [
+            "angle_dep_w_rank1.xml",
+            "angle_dep_w_rank3.xml",
+            "angle_dep_w_rank4.xml",
+            "angle_dep_w_rank5.xml",
+            "angle_dep_w_rank_all.xml"
+          ],
+          "observed_aliases": ["angle_dep_w_all.xml"]
+        },
+        {
+          "mode": "cumulative_rank_groups",
+          "labels": [
+            "w_rank1",
+            "w_rank1_2",
+            "w_rank1_2_3",
+            "w_rank1_2_3_4",
+            "w_rank1_2_3_4_5",
+            "w_rank1_2_3_4_5_6",
+            "w_rank1_2_3_4_5_6_7",
+            "w_rank1_2_3_4_5_6_7_8"
+          ],
+          "group_size": 2,
+          "dft_reference_xml": "../anisotropy/angle_dep_ahc.xml"
+        }
+      ]
+    },
+    {
+      "id": "103_rank_resolved",
+      "plane": "103",
+      "workflow_kind": "rank_resolved",
+      "archived_relative_paths": [
+        "figs/Fe/FM_sqa_103/anisotropy_w_rank2",
+        "figs/Fe/FM_sqa_103/anisotropy_w_rank3"
+      ],
+      "rank_scan_modes": [
+        {
+          "mode": "isolated_rank_or_all",
+          "labels": ["w_rank1", "w_rank3", "w_rank4", "w_rank5", "w_all"],
+          "expected_ahc_xml": [
+            "angle_dep_w_rank1.xml",
+            "angle_dep_w_rank3.xml",
+            "angle_dep_w_rank4.xml",
+            "angle_dep_w_rank5.xml",
+            "angle_dep_w_rank_all.xml"
+          ]
+        },
+        {
+          "mode": "cumulative_rank_groups",
+          "labels": [
+            "w_rank1",
+            "w_rank1_2",
+            "w_rank1_2_3",
+            "w_rank1_2_3_4",
+            "w_rank1_2_3_4_5",
+            "w_rank1_2_3_4_5_6",
+            "w_rank1_2_3_4_5_6_7",
+            "w_rank1_2_3_4_5_6_7_8"
+          ],
+          "group_size": 2,
+          "dft_reference_xml": "../anisotropy/angle_dep_ahc.xml"
+        }
+      ]
+    }
+  ]
+}

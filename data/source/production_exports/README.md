@@ -19,6 +19,7 @@ endpoints.
 | `ahc_103/ahc_angle_dependence.csv`, `ahc_103/energy_angle_dependence.csv` | `data/processed/ahc_103/*.csv` | AHC values are in S/cm; angles are in degrees; tensor and projected components follow the manuscript `(103)` basis. |
 | `rank_resolved_103/rank_resolved_ahc.csv`, `rank_resolved_103/rank_cumulative_energy.csv`, `rank_resolved_103/single_rank_ahc.csv` | `data/processed/rank_resolved_103/*.csv` | Rank-cumulative and single-rank AHC values are in S/cm; energy summaries are in eV. |
 | `strain_103/strain_plus_ahc.csv`, `strain_103/strain_minus_ahc.csv` | `data/processed/strain_103/*.csv` | Strain is engineering strain in percent; AHC values are in S/cm. |
+| `minimal_model/model_sigma_axis.csv` | `data/processed/minimal_model/model_sigma_axis.csv` | Compact direct export from archived minimal-model AHC text outputs; `sigma_axis` is the projection onto the `(103)` plane normal in S/cm. |
 
 Rebuild command:
 

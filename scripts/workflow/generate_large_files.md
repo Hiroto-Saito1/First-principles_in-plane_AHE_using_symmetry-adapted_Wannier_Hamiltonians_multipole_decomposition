@@ -114,17 +114,20 @@ Purpose: regenerate `sigma_axis_model_1st_nn.pdf` and
 `sigma_axis_model_2nd_nn.pdf`.
 
 The manuscript records the model Hamiltonian and parameter scans. The original
-compact model CSV was not preserved, so this repository currently commits
-`data/processed/minimal_model/model_sigma_axis.csv`, recovered from the vector
-paths embedded in the exact manuscript PDFs. The recovery command is:
+compact model CSV is now rebuilt from archived direct AHC text outputs under
+the maintainer's `bcc_model/` workspace. The export command is:
 
 ```bash
-python scripts/workflow/extract_pdf_vector_data.py --target minimal-model
+python scripts/workflow/export_minimal_model_source.py \
+  --source-root /path/to/bcc_model \
+  --output data/source/production_exports/minimal_model/model_sigma_axis.csv
 ```
 
-A future improvement can replace the recovered CSV with a standalone
-Hamiltonian/AHC recalculation script that directly evaluates the model from
-the manuscript equations.
+The archived Hamiltonian generator itself is committed as
+`examples/minimal_model/model.py`. Running that script alone produces the
+model `hr.dat`; the full model-to-AHC stage that created the archived
+`sigma_ahc_eta1.00meV.txt` files is still documented by provenance rather than
+wrapped as a single public command.
 
 ## Band/Bond Convergence Figure
 

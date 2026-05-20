@@ -1,9 +1,9 @@
 # PDF Vector Recovery Sources
 
-The band/bond, multipole-coefficient, and minimal-model compact CSV files are
-recovered from Matplotlib vector paths embedded in tracked manuscript PDFs or
-tracked per-panel source PDFs because the original compact source exports were
-not preserved.
+The band/bond and multipole-coefficient compact CSV files are recovered from
+Matplotlib vector paths embedded in tracked manuscript PDFs or tracked
+per-panel source PDFs because the original compact source exports were not
+preserved.
 
 Recovery command:
 
@@ -17,8 +17,10 @@ Current layout:
   curve CSV.
 - `multipole_coefficients/`: committed recovered CSV snapshot so routine
   processed-data rebuilds do not need to reparse the manuscript bar PDFs.
-- root README only: the minimal-model recovered CSV is still regenerated
-  directly from the tracked manuscript PDFs.
+
+The minimal-model figure is no longer part of this fallback tree: it now
+rebuilds from a direct compact source export under
+`data/source/production_exports/minimal_model/`.
 
 This is a fallback provenance path, not a substitute for first-principles
 regeneration. The full desired regeneration path is documented in

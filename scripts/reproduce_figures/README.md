@@ -15,6 +15,7 @@ attempt byte-identical reproduction of the final manuscript PDFs.
 
 Available scripts:
 
+- `plot_bcc_planes.py`
 - `plot_band_bond.py`
 - `plot_ahc_111.py`
 - `plot_ahc_103.py`
@@ -23,9 +24,9 @@ Available scripts:
 - `plot_multipole_coefficients.py`
 - `plot_minimal_model.py`
 
-The band/bond, multipole-coefficient, and minimal-model CSV files were
-recovered from vector data embedded in tracked manuscript or source PDFs
-because the original compact CSV tables were not preserved. The full
-first-principles regeneration path still starts from the large outputs
-documented in
+The plane-definition figures read from committed JSON, while the band/bond and
+multipole-coefficient fallbacks still rely on tracked vector
+data embedded in manuscript or source PDFs. The minimal-model figure now reads
+from a direct compact export of archived model AHC outputs. The full
+first-principles regeneration path for each case is documented in
 `scripts/workflow/generate_large_files.md`.

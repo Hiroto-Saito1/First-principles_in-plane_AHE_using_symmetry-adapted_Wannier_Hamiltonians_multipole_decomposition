@@ -18,11 +18,15 @@ Current processed data include:
 
 - `processed/figure_inventory.csv`: complete list of figure files referenced
   by `main_all.tex`.
+- `processed/definitions/`: compact JSON configuration for the `(111)` and
+  `(103)` plane-definition figures.
 - `processed/ahc_111/`: compact Fe `(111)` AHC and energy-angle data.
 - `processed/ahc_103/`: compact Fe `(103)` AHC and energy-angle data.
 - `processed/rank_resolved_103/`: compact rank-cumulative Fe `(103)` AHC and
   energy data.
 - `processed/strain_103/`: compact tensile and compressive `[103]` strain AHC
   data.
-- `processed/multipole_coefficients/` and `processed/minimal_model/`: tracked
-  generation targets for data that still need compact CSV extraction.
+- `processed/multipole_coefficients/`: tracked generation target backed by a
+  recovered compact snapshot.
+- `processed/minimal_model/`: direct compact export of archived minimal-model
+  AHC outputs.

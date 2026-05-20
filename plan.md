@@ -290,7 +290,9 @@ workspaces.
   fallback. Multipole coefficients now have a tracked recovered source
   snapshot under `data/source/pdf_vector/multipole_coefficients/`, but the
   original compact coefficient source is still missing locally even though the
-  public HDF5-generation route is now documented and scripted.
+  public HDF5-generation route is now documented and scripted. Archived
+  workflow evidence for the original HDF5 path now lives under
+  `data/source/workflow_manifests/multipole_coefficients/`.
 - Pseudopotentials are intentionally not redistributed.
 
 ## Completion Definition

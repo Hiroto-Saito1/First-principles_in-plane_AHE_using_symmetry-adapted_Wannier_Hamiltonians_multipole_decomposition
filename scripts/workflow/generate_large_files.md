@@ -103,6 +103,11 @@ recovered from the vector data embedded in the exact manuscript PDFs because
 the original compact HDF5-derived CSV was not preserved in the currently
 available local workspaces.
 
+The archive-side evidence for how that HDF5 was generated is preserved in
+`data/source/workflow_manifests/multipole_coefficients/`, including the
+MultiPie `Fe.py` settings, the `Fe.out` generation log summary, the
+matrix-to-HDF5 step, and the selected `z_i` labels from `out_trs_ed`.
+
 ## Minimal Two-Orbital Model Figures
 
 Purpose: regenerate `sigma_axis_model_1st_nn.pdf` and

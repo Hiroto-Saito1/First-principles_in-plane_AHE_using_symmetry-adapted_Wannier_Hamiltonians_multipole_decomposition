@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 import re
 import subprocess
@@ -92,6 +93,21 @@ def test_reproduce_all_figures_check_mode() -> None:
     assert "processed and source inputs" in result.stdout
 
 
+def test_multipole_workflow_manifest_records_archived_hdf5_route() -> None:
+    """Keep the archived HDF5-generation provenance for multipole bars explicit."""
+    manifest = json.loads(
+        (
+            ROOT
+            / "data/source/workflow_manifests/multipole_coefficients/workflow_manifest.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert manifest["source_status"]["direct_hdf5_present"] is False
+    assert manifest["source_status"]["vector_snapshot_present"] is True
+    assert manifest["archived_workflows"][0]["decomposition_output"] == "trs_py_ed_tb.hdf5"
+    assert manifest["archived_workflows"][1]["decomposition_output"] == "trs_py_ed_hr.hdf5"
+    assert manifest["label_selection"]["selected_z_count"] == 10
+
+
 def test_processed_csv_files_have_source_chain() -> None:
     """Require every processed CSV to have a committed source or fallback provenance."""
     processed_csvs = {
@@ -130,6 +146,14 @@ def test_processed_csv_files_have_source_chain() -> None:
     ).is_file()
     assert (
         ROOT / "data/source/pdf_vector/multipole_coefficients/README.md"
+    ).is_file()
+    assert (
+        ROOT
+        / "data/source/workflow_manifests/multipole_coefficients/workflow_manifest.json"
+    ).is_file()
+    assert (
+        ROOT
+        / "data/source/workflow_manifests/multipole_coefficients/selected_z_ids.csv"
     ).is_file()
     assert (ROOT / "data/source/pdf_vector/band_bond/README.md").is_file()
     for source_pdf in [

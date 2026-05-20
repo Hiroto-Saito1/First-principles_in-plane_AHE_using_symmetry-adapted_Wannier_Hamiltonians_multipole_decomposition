@@ -123,6 +123,7 @@ variants exist locally as exploratory analyses.
 | Input data | `plot_bar.py` reads the `z_coefficients` dataset from a decomposition HDF5 (the archived defense copy points to `trs_py_ed_tb.hdf5`) plus `Fe_samb.py`; `energy_diff_35_*.out` is present in `theta0_qe-7.2/`, but the compact coefficient HDF5/CSV export is not preserved in the current local figure directories |
 | Other exploratory variants | `bar_ed_wo_a1g_t1g_35`, `bar_ed_wo_a1g_t1g_eg_35`, `bar_ed_wo_a1g_t1g_eg_t2g_35`, `bar_ed_wo_q_t1g_35`; `bar_pd_*`, `bar_tb_*`, `bar_diff_*` |
 | Current public-repo provenance | `REPO/data/source/pdf_vector/multipole_coefficients/multipole_coefficients.csv` + processed CSV under `REPO/data/processed/multipole_coefficients/`; rebuild no longer needs to reparse the manuscript PDFs. |
+| Archived workflow manifest | `REPO/data/source/workflow_manifests/multipole_coefficients/` preserves the recovered source chain, including the `Fe.py` -> `Fe_samb.py` / `Fe_matrix.pkl` -> `Fe_matrix.hdf5` -> `trs_py_ed_tb.hdf5` route and the selected `z_i` labels from `out_trs_ed`. |
 | Desired upgrade | recover the original compact coefficient source HDF5/CSV export and replace the PDF-vector provenance path. The public repo now documents the generation route as `Fe_all_35_matrix.py/.pkl -> multi_matrix.hdf5 -> trs_py_ed_tb.hdf5 -> compact coefficient CSV`. |
 
 ### `fit_ahc_para`, `fit_ahc_perp`, `fit_ahc_axis` ((111) plane)

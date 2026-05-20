@@ -9,6 +9,9 @@ WannierBerri.
 - `production_exports/`: compact CSV exports from the production workflow.
   These are small summaries of expensive calculations. The full path from DFT
   inputs to these exports is documented in `scripts/workflow/generate_large_files.md`.
+- `workflow_manifests/`: archived workflow summaries that preserve how missing
+  large intermediates were generated when the direct compact source export is
+  no longer available locally.
 - `pdf_vector/`: metadata for CSV files recovered from the vector data embedded
   in manuscript PDFs or committed per-panel source PDFs when the original
   compact source export was not preserved. This tree can contain both the
@@ -39,3 +42,6 @@ The public wrappers for those steps are
 `scripts/workflow/build_multipole_hdf5.py`,
 `inputs/symwannier/fe_bcc/decompose_ham.py`, and
 `scripts/workflow/export_multipole_coefficients.py`.
+
+The archived manuscript-side evidence for that route is summarized under
+`data/source/workflow_manifests/multipole_coefficients/`.

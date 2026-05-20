@@ -1,0 +1,72 @@
+{
+  "manuscript_figures": [
+    "bar_ed_all_35.pdf",
+    "bar_ed_wo_q_35.pdf"
+  ],
+  "source_status": {
+    "direct_compact_csv_present": false,
+    "direct_hdf5_present": false,
+    "vector_snapshot_present": true
+  },
+  "public_repo_route": {
+    "matrix_to_hdf5_script": "scripts/workflow/build_multipole_hdf5.py",
+    "decomposition_script": "inputs/symwannier/fe_bcc/decompose_ham.py",
+    "compact_export_script": "scripts/workflow/export_multipole_coefficients.py"
+  },
+  "archived_workflows": [
+    {
+      "label": "2025_defense_tb_branch",
+      "description": "Archive-side workflow used in the defense figure workspace with tb.dat inputs.",
+      "multipie_config_relative_path": "2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_35/Fe.py",
+      "multipie_generation_log_relative_path": "2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_35/Fe.out",
+      "matrix_products": [
+        "Fe_samb.py",
+        "Fe_matrix.pkl",
+        "Fe_matrix.hdf5"
+      ],
+      "matrix_to_hdf5_command": "python src/multipole.py Fe_matrix.pkl",
+      "decomposition_script_relative_path": "2025/\u767a\u8868/defense/figs_orig/z_coefficients/decompose_ham.py",
+      "decomposition_input": "trs_py_ed_tb.dat",
+      "decomposition_output": "trs_py_ed_tb.hdf5",
+      "notes": "The archived decompose_ham.py points to Fe_matrix.hdf5 under Fe_all_35 and writes trs_py_ed_tb.hdf5 for the ED branch."
+    },
+    {
+      "label": "2024_theta0_hr_branch",
+      "description": "Older archive-side workflow that used hr.dat inputs and hr.hdf5 outputs for the same figure family.",
+      "decomposition_script_relative_path": "2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/hamiltonian_hdf5_trs/decompose_ham.py",
+      "decomposition_input": "trs_py_ed_hr.dat",
+      "decomposition_output": "trs_py_ed_hr.hdf5",
+      "notes": "The archived plot_bar.py in this branch reads trs_py_ed_hr.hdf5 together with Fe_samb.py."
+    }
+  ],
+  "multipie_generation_evidence": {
+    "config_summary": {
+      "group": 229,
+      "spinful": true,
+      "bond_shells": [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+        31, 32, 33, 34, 35
+      ],
+      "time_reversal_type": "both",
+      "irrep_filter": []
+    },
+    "observed_outputs_from_log": [
+      "Fe_model.py",
+      "Fe_samb.py",
+      "Fe_matrix.pkl"
+    ],
+    "log_excerpt": [
+      "creating SAMB ...",
+      "  * wrote 'Fe_samb.py'.",
+      "creating SAMB matrix (real space) ...",
+      "  * wrote 'Fe_matrix.pkl'."
+    ]
+  },
+  "label_selection": {
+    "selection_script_relative_path": "2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_35/submit_samb.sh",
+    "selection_output_relative_path": "2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_35/out_trs_ed",
+    "selected_z_count": 10
+  }
+}

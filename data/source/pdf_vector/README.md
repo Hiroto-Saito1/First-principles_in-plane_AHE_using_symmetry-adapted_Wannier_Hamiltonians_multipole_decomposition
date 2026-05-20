@@ -32,3 +32,7 @@ python scripts/workflow/build_multipole_hdf5.py --matrix-path Fe_all_35_matrix.p
 python inputs/symwannier/fe_bcc/decompose_ham.py --matrix-path multi_matrix.hdf5 --trs-py-ed
 python scripts/workflow/export_multipole_coefficients.py --multi-path trs_py_ed_tb.hdf5 --samb-path Fe_samb.py --output coefficients.csv --mode bar-merged
 ```
+
+The archived workflow evidence for how the original HDF5 was generated is
+captured separately under
+`data/source/workflow_manifests/multipole_coefficients/`.

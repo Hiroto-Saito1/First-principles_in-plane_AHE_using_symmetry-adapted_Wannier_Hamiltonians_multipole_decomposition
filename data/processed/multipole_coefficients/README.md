@@ -20,8 +20,10 @@ table, but those generated files were not preserved in a Git-suitable compact
 form.
 
 Fallback source metadata is recorded in `data/source/pdf_vector/README.md` and
-`data/source/pdf_vector/multipole_coefficients/README.md`. This is explicitly
-a recovered manuscript-vector provenance path, not a first-principles
+`data/source/pdf_vector/multipole_coefficients/README.md`. Archived evidence for
+the original HDF5-generation workflow is recorded in
+`data/source/workflow_manifests/multipole_coefficients/`. This is explicitly a
+recovered manuscript-vector provenance path, not a first-principles
 regeneration path.
 
 Columns:

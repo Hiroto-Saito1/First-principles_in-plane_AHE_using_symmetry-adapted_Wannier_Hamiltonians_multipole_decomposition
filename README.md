@@ -96,6 +96,11 @@ python -m pip install -e ".[test]"
 pytest
 ```
 
+The test suite includes light figure-generation smoke checks for the
+repository-backed plotting scripts, while excluding the intentionally heavier
+`bcc` 3D plane plots and the large `band_bond` redraw from the default smoke
+path.
+
 To rebuild the processed CSV files from committed small sources and regenerate
 the repository-backed figures, install the plotting dependencies:
 

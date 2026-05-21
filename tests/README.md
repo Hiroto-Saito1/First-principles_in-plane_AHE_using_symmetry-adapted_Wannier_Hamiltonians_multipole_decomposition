@@ -20,8 +20,9 @@ WannierBerri, MPI, or cluster calculation directories.
 - `test_energy_diff.py`: verifies that reconstruction-based band-energy
   differences vanish for the complete synthetic fixture.
 - `test_paper_figures.py`: ensures every PDF referenced by `main_all.tex` is
-  committed under `figures/paper/`, represented in the figure inventory, and
-  kept below the 100 MB Git policy threshold.
+  committed under `figures/paper/`, represented in the figure inventory, kept
+  below the 100 MB Git policy threshold, and that the lighter repository plot
+  scripts can emit non-empty PDFs in a smoke-test environment.
 - `test_processed_figure_data.py`: validates compact processed CSV data for
   the band/bond convergence curves, `(111)` and `(103)` AHC curves,
   rank-cumulative `(103)` data, tensile/compressive `[103]` strain series,

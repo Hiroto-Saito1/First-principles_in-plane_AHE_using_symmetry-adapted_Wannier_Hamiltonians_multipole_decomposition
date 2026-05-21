@@ -3,8 +3,15 @@
 All notable repository-facing updates to this public reproducibility package
 are recorded here.
 
-## Unreleased
+## v0.1.1 - 2026-05-21
 
+- marked the public reproducibility reorganization as complete on `main`;
+- added release-facing documentation, including this changelog and
+  `docs/README.md`;
+- fixed `HamK.get_minus_d_fermi` so it stores eigenvalues rather than the tuple
+  returned by `numpy.linalg.eigh`;
+- clarified the package dependency boundary between the lightweight public API
+  and `.[workflow]` optional dependencies;
 - clarified the public mixed-license policy: repository-authored code under
   MIT, documentation/data/figure artifacts under CC BY 4.0, and copied
   archived module trees temporarily excluded pending upstream confirmation;

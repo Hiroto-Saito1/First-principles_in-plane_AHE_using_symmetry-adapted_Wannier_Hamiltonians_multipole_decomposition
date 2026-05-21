@@ -16,8 +16,9 @@ large intermediate artifacts that are intentionally left out of Git.
 
 ## Release Status
 
-The current `main` branch corresponds to the first public reproducibility
-release, `v0.1.0`. At this point the repository contains:
+The current `main` branch corresponds to the polished public reproducibility
+release, `v0.1.1`. The initial public baseline is preserved as `v0.1.0`.
+At this point the repository contains:
 
 - committed compact data for every repository-backed manuscript plot;
 - repository scripts for regenerating the tracked plot set;

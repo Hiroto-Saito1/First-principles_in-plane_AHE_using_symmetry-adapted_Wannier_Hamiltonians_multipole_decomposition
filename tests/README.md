@@ -38,5 +38,9 @@ WannierBerri, MPI, or cluster calculation directories.
 
 ```bash
 python -m pip install -e ".[test]"
-pytest
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
 ```
+
+The default suite matches the lightweight CI path. It includes figure smoke
+tests for the non-heavy plotting scripts and excludes the intentionally heavier
+`bcc` 3D plane plots and `band_bond` redraw from the default smoke route.

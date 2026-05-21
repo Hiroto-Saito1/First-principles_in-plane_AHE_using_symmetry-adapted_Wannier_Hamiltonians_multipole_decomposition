@@ -5,6 +5,11 @@ repository. The current implementation now includes the lightweight Python
 core, processed figure data, repository-backed plotting scripts, and archived
 recipe notes for the large intermediates that are intentionally not committed.
 
+The `v0.1.0` release is the first repository state where the public
+reorganization goals are treated as complete. In that release and later,
+remaining work is optional follow-on curation rather than a blocker for the
+documented reproducibility path.
+
 ## 1. First-Principles Calculation
 
 The manuscript uses Quantum ESPRESSO to calculate the electronic structure of
@@ -22,8 +27,10 @@ SymWannier/TRS-Wannier is used to construct a symmetry-adapted Wannier
 Hamiltonian. The Hamiltonian is represented as real-space matrices
 `H(R)`, stored in `wannier_hr.dat`, `wannier_tb.dat`, or HDF5-derived formats.
 
-The package currently provides a minimal `HamR` reader under
-`symwan_multipie.wannier_utils`.
+The public package now includes the archived `symwannier/` modules and the
+main `wannier_utils/` module set under `src/symwan_multipie/`, including the
+lightweight `HamR` / `HamK` readers and helper utilities used by the public
+workflow scripts and tests.
 
 ## 3. MultiPie SAMB Generation
 
@@ -105,12 +112,16 @@ The implemented entry point is `symwan_multipie.MagRotation`.
 ## 6. AHC Calculation
 
 Production AHC calculations are performed with WannierBerri. The repository
-will store lightweight processed outputs for manuscript figure reproduction.
-Full WannierBerri calculations should be documented as integration workflows
-because they can be computationally expensive.
+stores lightweight processed outputs for manuscript figure reproduction, while
+the heavier WannierBerri runs are represented by committed inputs, manifests,
+and archived workflow notes because the full calculation trees can be
+computationally expensive.
 
 ## 7. Figure Reproduction
 
 Figure scripts should read from `data/processed/` and write to a dedicated
 output directory. Each script must be mapped to a manuscript figure in
 `docs/paper_mapping.md`.
+
+For the reader-facing entry points, see `../README.md`, `README.md`, and
+`../CHANGELOG.md`.

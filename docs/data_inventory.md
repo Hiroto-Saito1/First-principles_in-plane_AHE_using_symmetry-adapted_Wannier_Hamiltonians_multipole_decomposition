@@ -41,17 +41,17 @@ described in the manuscript. They are not raw DFT, HDF5, or full
 WannierBerri outputs. Full production working directories are not stored in
 Git.
 
-## Data To Curate
+## Data Curation Status
 
-| Manuscript item | Candidate source | Planned repository form |
+| Manuscript item | Current status | Repository form |
 | --- | --- | --- |
-| SAMB decomposition accuracy | production CH4 and Fe decomposition outputs | small fixture tests plus a compact table |
-| Leading multipole coefficients | Fe `z_coefficients` outputs | CSV/JSON table under `data/processed/` |
-| `(111)` AHC angular dependence | Fe `(111)` AHC summary data | processed CSV and figure script |
-| `(103)` AHC angular dependence | Fe `(103)` AHC summary data | processed CSV and figure script |
-| Rank-resolved AHC | Fe rank-filtered AHC summary data | compact summary data and filter metadata |
-| `[103]` strain effect | Fe `[103]` strain AHC summary data | strain-resolved processed data |
-| Minimal `p_z`-`d_xy` model | manuscript/model scripts | standalone Python model and output CSV |
+| Leading multipole coefficients | included as compact processed CSV with documented archival rebuild route | `data/processed/multipole_coefficients/` plus `data/source/workflow_manifests/multipole_coefficients/` |
+| `(111)` AHC angular dependence | included | `data/processed/ahc_111/` plus repository plotting script |
+| `(103)` AHC angular dependence | included | `data/processed/ahc_103/` plus repository plotting script |
+| Rank-resolved AHC | included | `data/processed/rank_resolved_103/` plus repository plotting scripts |
+| `[103]` strain effect | included | `data/processed/strain_103/` plus repository plotting script |
+| Minimal `p_z`-`d_xy` model | included | `examples/minimal_model/` and `data/processed/minimal_model/` |
+| SAMB decomposition accuracy table | not yet packaged as a dedicated manuscript-facing compact table | currently covered by synthetic fixture tests and decomposition regression checks |
 
 ## Included Input Manifests
 

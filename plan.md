@@ -336,8 +336,8 @@ What remains is optional follow-on work rather than a blocker:
 
 The repository was re-audited on 2026-05-21 after the v0.1.1 fixes. The core
 checks passed (`pytest`, `compileall`, `pip check`, figure-input check, and full
-figure generation). The remaining follow-up items are documentation hygiene and
-test guardrails rather than functional blockers.
+figure generation). No functional blockers remain on `main`; the follow-up
+items below are optional maintenance or provenance upgrades.
 
 ### Resolved In v0.1.1
 
@@ -351,32 +351,26 @@ test guardrails rather than functional blockers.
   upstream clarification.
 - `docs/source_inventory.md` and the extra `Yourmanuscript BN15047 Saito.pdf`
   artifact have been removed from the public release set.
+- `Fe_all_35_recipe.md` now uses repository-relative links, reader-facing docs
+  use symbolic workspace names (`PAPER_ROOT`, `SYMWAN_ROOT`), and historical
+  archived excerpts are handled as provenance evidence rather than public
+  instructions.
+- Private-path hygiene checks now extend beyond `inputs/` to the reader-facing
+  public docs and source-manifest set, with a narrow allowlist for curated
+  archived excerpts and command-shape assertions that avoid private workstation
+  prefixes.
 
-### Remaining Public Documentation Hygiene
+### Remaining Optional Follow-up
 
-- Replace the absolute local Markdown link targets in
-  `data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md`
-  with repository-relative links or plain repository paths. The recipe should
-  remain usable without exposing a maintainer workstation path.
-- Keep `plan.md` and reader-facing docs on symbolic workspace names such as
-  `PAPER_ROOT` and `SYMWAN_ROOT`, not concrete local paths.
-- Treat historical command/path strings inside curated archived log excerpts as
-  provenance data only. If they remain committed, document and test them as an
-  explicit allowlist rather than as general public documentation.
-
-### Remaining Test Guardrails
-
-- Extend the private-path check beyond `inputs/` so it covers reader-facing
-  Markdown, JSON, CSV, TXT, TOML, YAML, Python, and shell files under the public
-  documentation and source-manifest paths.
-- Add a narrow allowlist for raw archived excerpts such as
-  `Fe_all_35_generation_excerpt.txt` and
-  `Fe_all_35_matrix_shape_excerpt.txt`, where historical home-directory commands
-  are preserved as evidence.
-- Avoid assertions that require private absolute paths in public tests. For
-  example, archived workflow tests should assert the meaningful command shape
-  (`python .../multipole.py Fe_matrix.pkl`) without hard-coding a private
-  workstation prefix.
+- Obtain upstream clarification for the copied archived code under
+  `src/symwan_multipie/symwannier/` and
+  `src/symwan_multipie/wannier_utils/`, then update `LICENSE` / `README.md`
+  if those trees can move into the permissive grant.
+- Recover a direct archived compact export for the multipole coefficients if a
+  later backup search turns one up, so the current recovered snapshot under
+  `data/source/pdf_vector/multipole_coefficients/` can be retired.
+- Continue to cut small release notes and tags as the reproducibility package
+  evolves.
 
 ### Local Workspace Hygiene
 

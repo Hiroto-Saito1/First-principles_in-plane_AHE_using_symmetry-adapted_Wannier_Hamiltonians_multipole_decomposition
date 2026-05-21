@@ -44,3 +44,9 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
 The default suite matches the lightweight CI path. It includes figure smoke
 tests for the non-heavy plotting scripts and excludes the intentionally heavier
 `bcc` 3D plane plots and `band_bond` redraw from the default smoke route.
+
+The package-layout tests also enforce the current dependency boundary:
+top-level imports and the lightweight `wannier_utils` surface must work
+without the workflow-only dependencies, while modules such as
+`symwan_multipie.wannier_utils.win` are allowed to require
+`pip install -e ".[workflow]"`.

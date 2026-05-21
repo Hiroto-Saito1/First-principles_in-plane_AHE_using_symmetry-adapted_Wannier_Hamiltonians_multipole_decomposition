@@ -125,6 +125,14 @@ repository-backed plotting scripts, while excluding the intentionally heavier
 `bcc` 3D plane plots and the large `band_bond` redraw from the default smoke
 path.
 
+The lightweight public API is expected to work with this base install.
+Expanded archived workflow modules under `symwan_multipie.symwannier` and
+parts of `symwan_multipie.wannier_utils` may require:
+
+```bash
+python -m pip install -e ".[workflow]"
+```
+
 To rebuild the processed CSV files from committed small sources and regenerate
 the repository-backed figures, install the plotting dependencies:
 
@@ -193,6 +201,10 @@ The Python package currently provides:
 The default tests use synthetic fixtures and processed CSV files. They do not
 require Quantum ESPRESSO, SymWannier, MultiPie, WannierBerri, MPI, or the full
 Fe production data.
+
+For the expanded archived workflow modules copied into `src/symwan_multipie/`,
+use the `workflow` extra when importing code paths that depend on packages such
+as `scipy`, `pymatgen`, `sparse-ir`, `tomli`, or `tomli-w`.
 
 ## Environment Notes
 

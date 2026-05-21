@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 from pathlib import Path
+import subprocess
+import sys
+import textwrap
 
 import numpy as np
 
@@ -13,6 +16,44 @@ from symwan_multipie.wannier_utils.logger import get_logger
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src" / "symwan_multipie"
+WORKFLOW_OPTIONAL_IMPORTS = (
+    "pymatgen",
+    "scipy",
+    "seekpath",
+    "sparse_ir",
+    "tomli",
+    "tomli_w",
+    "wannierberri",
+)
+
+
+def run_with_blocked_optional_imports(code: str) -> subprocess.CompletedProcess[str]:
+    """Run Python in a subprocess that refuses workflow-only dependency imports."""
+
+    script = "\n".join(
+        [
+            "import importlib.abc",
+            "import sys",
+            f"blocked = {WORKFLOW_OPTIONAL_IMPORTS!r}",
+            "",
+            "class Blocker(importlib.abc.MetaPathFinder):",
+            "    def find_spec(self, fullname, path=None, target=None):",
+            "        for name in blocked:",
+            '            if fullname == name or fullname.startswith(name + "."):',
+            '                raise ImportError(f"blocked optional dependency: {fullname}")',
+            "        return None",
+            "",
+            "sys.meta_path.insert(0, Blocker())",
+            textwrap.dedent(code).strip(),
+            "",
+        ]
+    )
+    return subprocess.run(
+        [sys.executable, "-c", script],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
 
 
 def test_expanded_module_sets_are_present() -> None:
@@ -90,3 +131,50 @@ def test_lightweight_imports_and_hamk_still_work(fixture_ham) -> None:
     ham_k = HamK(fixture_ham, np.zeros(3), diagonalize=True)
     assert np.allclose(ham_k.hk, fixture_ham.hrs[0])
     assert np.allclose(ham_k.ek, np.linalg.eigvalsh(fixture_ham.hrs[0]))
+
+
+def test_hamk_minus_d_fermi_uses_eigenvalues_when_not_pre_diagonalized(fixture_ham) -> None:
+    """The Fermi-derivative helper should populate eigenvalues without storing tuples."""
+
+    ham_k = HamK(fixture_ham, np.zeros(3), diagonalize=False)
+    mu_range = np.array([0.0, 0.2])
+    tmpr_range = np.array([300.0])
+
+    minus_df = ham_k.get_minus_d_fermi(mu_range, tmpr_range)
+
+    eigenvalues = np.linalg.eigvalsh(fixture_ham.hrs[0])
+    kbt = tmpr_range * 8.617333262145e-5
+    x = (eigenvalues[:, None, None] - mu_range[None, :, None]) / kbt[None, None, :]
+    expected = 1.0 / (np.exp(x) + 2.0 + np.exp(-x)) / kbt[None, None, :]
+
+    assert np.allclose(ham_k.ek, eigenvalues)
+    assert minus_df.shape == (2, 2, 1)
+    assert np.allclose(minus_df, expected)
+
+
+def test_base_public_imports_do_not_require_workflow_optional_dependencies() -> None:
+    """The lightweight public import surface should work without workflow extras."""
+
+    result = run_with_blocked_optional_imports(
+        """
+from symwan_multipie import EnergyDiff, MagRotation, Multipole, MultipoleDecomposition
+from symwan_multipie.wannier_utils import BandStructure, HamK, HamR, WanBand
+print("base-ok")
+"""
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == "base-ok"
+
+
+def test_workflow_only_module_still_requires_optional_dependencies() -> None:
+    """A workflow-facing module should fail cleanly when blocked extras are absent."""
+
+    result = run_with_blocked_optional_imports(
+        """
+import symwan_multipie.wannier_utils.win
+"""
+    )
+
+    assert result.returncode != 0
+    assert "blocked optional dependency" in result.stderr

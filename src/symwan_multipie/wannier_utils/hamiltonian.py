@@ -621,7 +621,7 @@ class HamK:
             (e.size, mu_range.size, tmpr_range.size) numpy array.
         """
         if not hasattr(self, "ek"):
-            self.ek = np.linalg.eigh(self.hk)
+            self.ek = np.linalg.eigvalsh(self.hk)
         tmpr_range_eV = tmpr_range * _BOLTZMANN_OVER_EV
         x = (self.ek[:, None, None] - mu_range[None, :, None]) / tmpr_range_eV[
             None, None, :

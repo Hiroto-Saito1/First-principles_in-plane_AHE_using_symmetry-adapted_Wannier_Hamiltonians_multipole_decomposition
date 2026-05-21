@@ -78,6 +78,7 @@ note_stage() {
   local stage="$1"
   local readme="$2"
   local summary="$3"
+  local extra_note="${4:-}"
   if [[ ! -e "$ROOT/$readme" ]]; then
     echo "Missing recipe file for $stage: $readme" >&2
     exit 1
@@ -90,6 +91,9 @@ This stage depends on external first-principles/HPC software and is not run
 by the default public workflow. Use the documented inputs, pseudopotentials,
 software versions, and cluster commands in the recipe file.
 EOF
+  if [[ -n "$extra_note" ]]; then
+    printf '%s\n' "$extra_note"
+  fi
 }
 
 run_stage() {
@@ -109,7 +113,8 @@ run_stage() {
       ;;
     multipie)
       note_stage "multipie" "inputs/multipie/fe_bcc/README.md" \
-        "Generate the Fe SAMB/MultiPie basis and coefficient labels."
+        "Generate the Fe SAMB/MultiPie basis and coefficient labels." \
+        "Fe_all_35 pickle/HDF5 recipe: data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md"
       ;;
     rotate)
       note_stage "rotate" "inputs/wannierberri/fe_bcc_rotation/README.md" \

@@ -4,12 +4,18 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
+HEAVY_SMOKE_EXCLUSIONS = {
+    "scripts/reproduce_figures/plot_bcc_planes.py",
+    "scripts/reproduce_figures/plot_band_bond.py",
+}
 
 
 def manuscript_figure_files() -> list[str]:
@@ -24,6 +30,15 @@ def inventory_rows() -> list[dict[str, str]]:
         newline="", encoding="utf-8"
     ) as handle:
         return list(csv.DictReader(handle))
+
+
+def reproducible_plot_rows() -> list[dict[str, str]]:
+    """Return only figures that must be emitted by repository plotting scripts."""
+    return [
+        row
+        for row in inventory_rows()
+        if row["reproduction_category"] == "reproducible_plot"
+    ]
 
 
 def test_figure_inventory_matches_manuscript() -> None:
@@ -91,6 +106,55 @@ def test_reproduce_all_figures_check_mode() -> None:
         text=True,
     )
     assert "processed and source inputs" in result.stdout
+
+
+def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
+    tmp_path: Path,
+) -> None:
+    """Run reproducible plotting scripts, excluding the known heavy plot jobs."""
+
+    env = os.environ.copy()
+    env["MPLBACKEND"] = "Agg"
+    env.setdefault("PYTHONHASHSEED", "0")
+    env["MPLCONFIGDIR"] = str(tmp_path / "mplconfig")
+    env["PYTHON"] = sys.executable
+    grouped_rows: dict[str, list[dict[str, str]]] = {}
+    for row in reproducible_plot_rows():
+        if row["plotting_script"] in HEAVY_SMOKE_EXCLUSIONS:
+            continue
+        grouped_rows.setdefault(row["plotting_script"], []).append(row)
+
+    for script_rel, rows in grouped_rows.items():
+        output_dir = tmp_path / Path(script_rel).stem
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / script_rel),
+                "--output-dir",
+                str(output_dir),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=120,
+        )
+        assert result.returncode == 0
+
+        expected_names = sorted(Path(row["generated_output"]).name for row in rows)
+        generated_names = sorted(path.name for path in output_dir.glob("*.pdf"))
+        assert generated_names == expected_names
+
+        for row in rows:
+            generated = output_dir / Path(row["generated_output"]).name
+            reference = ROOT / row["included_pdf"]
+            assert generated.is_file()
+            data = generated.read_bytes()
+            assert data.startswith(b"%PDF-")
+            size = generated.stat().st_size
+            reference_size = reference.stat().st_size
+            assert size >= 1500
+            assert size >= int(reference_size * 0.05)
 
 
 def test_multipole_workflow_manifest_records_archived_hdf5_route() -> None:

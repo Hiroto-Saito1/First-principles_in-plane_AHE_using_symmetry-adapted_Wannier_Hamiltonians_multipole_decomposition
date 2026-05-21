@@ -10,7 +10,8 @@ Manuscript: [arXiv:2601.05689](https://arxiv.org/abs/2601.05689)
 It is intended for readers who want to inspect, reuse, or verify the numerical
 data behind the paper. The repository contains compact source snapshots,
 processed figure data, lightweight tests, calculation input manifests, and
-scripts for regenerating the repository-backed plots.
+scripts for regenerating the repository-backed plots, plus recipe notes for
+large intermediate artifacts that are intentionally left out of Git.
 
 ## What This Repository Contains
 
@@ -106,6 +107,9 @@ python -m pip install -e ".[test,plot]"
 The default `reproduce_from_inputs.sh` path runs only lightweight stages:
 `extract` and `figures`. Expensive DFT, Wannier, SymWannier, MultiPie,
 rotation, and WannierBerri stages are documented but not executed by default.
+For the archived `Fe_all_35` MultiPie basis that feeds the manuscript
+multipole-coefficient bar plots, the dedicated large-artifact rebuild note is
+`data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md`.
 
 To regenerate only the figures from existing processed CSV files:
 
@@ -128,7 +132,9 @@ ignored by Git.
 The PDFs in `figures/paper/` are reference artifacts for reproducible plots.
 Repository-local scripts generate equivalent data figures under
 `results/figures/`; they are not expected to reproduce PDF files
-byte-for-byte.
+byte-for-byte. For large upstream intermediates such as `Fe_matrix.pkl`,
+`Fe_matrix.hdf5`, or `trs_py_ed_tb.hdf5`, the repository records exact
+rebuild recipes instead of tracking the files themselves.
 
 ## Figure Mapping
 

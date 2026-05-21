@@ -1,9 +1,9 @@
 # Workflow
 
-This document describes the intended computational workflow represented by the
-repository. The current implementation contains the lightweight Python core and
-test fixtures; production data and full figure scripts will be added as the
-repository is reconstructed.
+This document describes the computational workflow represented by the
+repository. The current implementation now includes the lightweight Python
+core, processed figure data, repository-backed plotting scripts, and archived
+recipe notes for the large intermediates that are intentionally not committed.
 
 ## 1. First-Principles Calculation
 
@@ -85,12 +85,13 @@ python scripts/workflow/export_multipole_coefficients.py --multi-path trs_py_ed_
 ```
 
 The original compact coefficient HDF5/CSV used for the manuscript is still
-missing from the currently available local workspaces, so the committed
-processed CSV remains a tracked recovered snapshot rather than a direct export.
-The archive-side evidence for the original HDF5-creation route is preserved in
-`data/source/workflow_manifests/multipole_coefficients/`. The step-by-step
-public rebuild note for the `Fe_all_35` pickle/HDF5 chain is
-`data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md`.
+not present in the currently available local workspaces, so the committed
+processed CSV remains a tracked recovered snapshot rather than a recovered
+direct export. The important point for repository completeness is that the
+archive-side evidence and rebuild recipe for the original HDF5-creation route
+are now preserved under
+`data/source/workflow_manifests/multipole_coefficients/`, especially
+`Fe_all_35_recipe.md`.
 
 ## 5. Magnetization Rotation
 

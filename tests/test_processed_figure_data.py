@@ -203,7 +203,8 @@ def test_archived_multipole_log_excerpts_capture_generation_and_hdf5_shape() -> 
 
     assert "wrote 'Fe_samb.py'." in generation_excerpt
     assert "wrote 'Fe_matrix.pkl'." in generation_excerpt
-    assert "python /home/hirotosaito/github_projects/symwan_multipie/src/multipole.py Fe_matrix.pkl" in shape_excerpt
+    assert "python " in shape_excerpt
+    assert "multipole.py Fe_matrix.pkl" in shape_excerpt
     assert "(0): 345708, 1067, 18, 18" in shape_excerpt
 
 

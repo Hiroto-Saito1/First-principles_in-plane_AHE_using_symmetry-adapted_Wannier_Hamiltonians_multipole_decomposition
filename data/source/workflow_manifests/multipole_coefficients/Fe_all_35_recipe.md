@@ -22,15 +22,15 @@ Fe.py
 ## Inputs
 
 - MultiPie configuration:
-  [inputs/multipie/fe_bcc/Fe.py](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/inputs/multipie/fe_bcc/Fe.py)
+  [inputs/multipie/fe_bcc/Fe.py](../../../../inputs/multipie/fe_bcc/Fe.py)
 - Public matrix-to-HDF5 wrapper:
-  [scripts/workflow/build_multipole_hdf5.py](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/scripts/workflow/build_multipole_hdf5.py)
+  [scripts/workflow/build_multipole_hdf5.py](../../../../scripts/workflow/build_multipole_hdf5.py)
 - Archived-compatible matrix-to-HDF5 entry point:
-  [src/symwan_multipie/multipole.py](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/src/symwan_multipie/multipole.py)
+  [src/symwan_multipie/multipole.py](../../../../src/symwan_multipie/multipole.py)
 - Public decomposition driver:
-  [inputs/symwannier/fe_bcc/decompose_ham.py](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/inputs/symwannier/fe_bcc/decompose_ham.py)
+  [inputs/symwannier/fe_bcc/decompose_ham.py](../../../../inputs/symwannier/fe_bcc/decompose_ham.py)
 - Public compact export:
-  [scripts/workflow/export_multipole_coefficients.py](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/scripts/workflow/export_multipole_coefficients.py)
+  [scripts/workflow/export_multipole_coefficients.py](../../../../scripts/workflow/export_multipole_coefficients.py)
 
 ## Step 1: Run MultiPie on `Fe.py`
 
@@ -56,7 +56,7 @@ The archived `Fe_all_35/Fe.out` log confirms that this stage wrote:
 - `Fe_matrix.pkl`
 
 The public repo keeps a curated copy of that evidence in
-[Fe_all_35_generation_excerpt.txt](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/data/source/workflow_manifests/multipole_coefficients/Fe_all_35_generation_excerpt.txt).
+[Fe_all_35_generation_excerpt.txt](Fe_all_35_generation_excerpt.txt).
 
 ## Step 2: Convert the matrix dictionary to HDF5
 
@@ -99,7 +99,7 @@ The surviving stdout log shows the archived shape:
 ```
 
 That evidence is preserved in
-[Fe_all_35_matrix_shape_excerpt.txt](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/data/source/workflow_manifests/multipole_coefficients/Fe_all_35_matrix_shape_excerpt.txt).
+[Fe_all_35_matrix_shape_excerpt.txt](Fe_all_35_matrix_shape_excerpt.txt).
 
 ## Step 4: Build the decomposition HDF5
 
@@ -145,7 +145,7 @@ python scripts/workflow/export_multipole_coefficients.py \
 
 That compact CSV is the natural replacement for the current PDF-vector-backed
 fallback under
-[data/source/pdf_vector/multipole_coefficients/](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/data/source/pdf_vector/multipole_coefficients).
+[data/source/pdf_vector/multipole_coefficients/](../../pdf_vector/multipole_coefficients).
 
 ## Practical Notes
 
@@ -153,7 +153,7 @@ fallback under
   to be hand-written.
 - The repository currently preserves supporting evidence for the selected
   manuscript `z_i` labels in
-  [Fe_all_20_supporting_samb.py.gz](/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition/data/source/workflow_manifests/multipole_coefficients/Fe_all_20_supporting_samb.py.gz),
+  [Fe_all_20_supporting_samb.py.gz](Fe_all_20_supporting_samb.py.gz),
   but that file is not a drop-in replacement for the missing direct
   `Fe_all_35` source.
 - The public repo is intentionally documenting the expensive generation steps

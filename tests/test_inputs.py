@@ -13,6 +13,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INPUTS = ROOT / "inputs"
+PUBLIC_PATH_SCAN_ALLOWLIST = {
+    ROOT
+    / "data/source/workflow_manifests/multipole_coefficients/Fe_all_35_generation_excerpt.txt",
+    ROOT
+    / "data/source/workflow_manifests/multipole_coefficients/Fe_all_35_matrix_shape_excerpt.txt",
+}
 
 
 def test_expected_input_groups_have_readmes() -> None:
@@ -161,7 +167,7 @@ def test_qe_patch_artifacts_are_present() -> None:
 
 def test_inputs_do_not_embed_private_absolute_paths() -> None:
     """Public inputs should not depend on a private workstation directory."""
-    forbidden = ["/Users/", "/home/", "CloudStorage", "Dropbox"]
+    forbidden = ["/Users/", "/home/", "/misc/home/", "CloudStorage", "Dropbox"]
     text_suffixes = {".in", ".win", ".py", ".json", ".md"}
     for path in INPUTS.rglob("*"):
         if not path.is_file() or path.suffix not in text_suffixes:
@@ -169,3 +175,29 @@ def test_inputs_do_not_embed_private_absolute_paths() -> None:
         text = path.read_text(encoding="utf-8")
         for needle in forbidden:
             assert needle not in text, f"{path} contains private path token {needle}"
+
+
+def test_public_docs_and_source_manifests_do_not_embed_private_paths() -> None:
+    """Reader-facing docs should use symbolic or repo-relative paths."""
+    forbidden = ["/Users/", "/home/", "/misc/home/", "CloudStorage", "Dropbox"]
+    text_suffixes = {".md", ".json", ".csv", ".txt", ".toml", ".yaml", ".yml", ".py", ".sh", ".cff"}
+    roots = [
+        ROOT / "README.md",
+        ROOT / "CHANGELOG.md",
+        ROOT / "CITATION.cff",
+        ROOT / "plan.md",
+        ROOT / "docs",
+        ROOT / "data" / "source",
+        ROOT / "scripts" / "workflow",
+    ]
+
+    for root in roots:
+        paths = [root] if root.is_file() else list(root.rglob("*"))
+        for path in paths:
+            if path in PUBLIC_PATH_SCAN_ALLOWLIST:
+                continue
+            if not path.is_file() or path.suffix not in text_suffixes:
+                continue
+            text = path.read_text(encoding="utf-8")
+            for needle in forbidden:
+                assert needle not in text, f"{path} contains private path token {needle}"

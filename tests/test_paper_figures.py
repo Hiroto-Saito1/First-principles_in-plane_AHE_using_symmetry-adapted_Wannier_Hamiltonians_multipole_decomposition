@@ -118,6 +118,18 @@ def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
     env.setdefault("PYTHONHASHSEED", "0")
     env["MPLCONFIGDIR"] = str(tmp_path / "mplconfig")
     env["PYTHON"] = sys.executable
+
+    # Warm the shared Matplotlib cache once so the per-script subprocess
+    # timeout tracks plotting work rather than first-import font discovery.
+    subprocess.run(
+        [sys.executable, "-c", "import matplotlib; import matplotlib.pyplot"],
+        check=True,
+        capture_output=True,
+        text=True,
+        env=env,
+        timeout=180,
+    )
+
     grouped_rows: dict[str, list[dict[str, str]]] = {}
     for row in reproducible_plot_rows():
         if row["plotting_script"] in HEAVY_SMOKE_EXCLUSIONS:
@@ -137,7 +149,7 @@ def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
             capture_output=True,
             text=True,
             env=env,
-            timeout=120,
+            timeout=180,
         )
         assert result.returncode == 0
 

@@ -371,7 +371,7 @@ test guardrails rather than functional blockers.
   documentation and source-manifest paths.
 - Add a narrow allowlist for raw archived excerpts such as
   `Fe_all_35_generation_excerpt.txt` and
-  `Fe_all_35_matrix_shape_excerpt.txt`, where historical `/home/...` commands
+  `Fe_all_35_matrix_shape_excerpt.txt`, where historical home-directory commands
   are preserved as evidence.
 - Avoid assertions that require private absolute paths in public tests. For
   example, archived workflow tests should assert the meaningful command shape

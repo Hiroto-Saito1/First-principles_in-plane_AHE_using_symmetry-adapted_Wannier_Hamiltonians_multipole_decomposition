@@ -8,7 +8,7 @@
     "direct_hdf5_present": false,
     "vector_snapshot_present": true,
     "archive_search_last_verified": "2026-05-21",
-    "archive_search_notes": "Searched the local 2025 workspaces plus broader archived Dropbox/AnacondaProjects trees for Fe_matrix.pkl, Fe_matrix.hdf5, trs_py_ed_tb.hdf5, trs_py_ed_hr.hdf5, and compact coefficient exports. The direct Fe_all_35 artifacts remain missing locally even though Fe_all_35/Fe.out still proves that Fe_samb.py and Fe_matrix.pkl were generated there.",
+    "archive_search_notes": "Searched the local PAPER_ROOT and SYMWAN_ROOT workspaces plus broader private archive trees for Fe_matrix.pkl, Fe_matrix.hdf5, trs_py_ed_tb.hdf5, trs_py_ed_hr.hdf5, and compact coefficient exports. The direct Fe_all_35 artifacts remain missing locally even though Fe_all_35/Fe.out still proves that Fe_samb.py and Fe_matrix.pkl were generated there.",
     "generation_log_excerpt_relative_path": "data/source/workflow_manifests/multipole_coefficients/Fe_all_35_generation_excerpt.txt",
     "matrix_shape_excerpt_relative_path": "data/source/workflow_manifests/multipole_coefficients/Fe_all_35_matrix_shape_excerpt.txt",
     "supporting_archived_samb_relative_path": "data/source/workflow_manifests/multipole_coefficients/Fe_all_20_supporting_samb.py.gz",

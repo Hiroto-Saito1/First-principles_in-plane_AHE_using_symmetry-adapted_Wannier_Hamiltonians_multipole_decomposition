@@ -29,6 +29,9 @@ WannierBerri, MPI, or cluster calculation directories.
 - `test_inputs.py`: checks that curated first-principles input groups have
   reader-facing README files, preserve the key rotation/AHC settings in JSON
   manifests, and do not embed private absolute paths.
+- `test_package_layout.py`: verifies that the copied `symwannier/` and
+  `wannier_utils/` module sets are present under `src/`, use repo-local
+  imports, and preserve the lightweight `HamK` / helper import surface.
 
 ## Running
 

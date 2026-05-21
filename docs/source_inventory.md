@@ -317,12 +317,13 @@ Total: 11 files, ~92 KB. All <100 MB. Move verbatim; adjust imports
 | `logger.py` | 1.0 KB | logging |
 | `__init__.py` | 90 B | logging setup |
 
-Archive subdir (skip unless needed): `ham_kmesh.py`, `temperature_ir2.py`,
-`Jij.py`.
+Archive subdir (still skipped unless needed): `ham_kmesh.py`,
+`temperature_ir2.py`, `Jij.py`.
 
-The current `REPO/src/symwan_multipie/wannier_utils/` has only `band.py` and
-`hamiltonian.py`. **Diff against the symwan_proj versions before overwriting**
-— the public-repo copy may have local fixes worth preserving.
+The public repo now contains the main `symwannier/` and `wannier_utils/`
+module sets under `src/symwan_multipie/`. The copied files were adjusted to
+use repo-local imports, while `band.py` and `hamiltonian.py` preserve the
+lightweight helper API used by the public tests and workflow scripts.
 
 ### Already in `REPO/src/symwan_multipie/` (do not overwrite)
 

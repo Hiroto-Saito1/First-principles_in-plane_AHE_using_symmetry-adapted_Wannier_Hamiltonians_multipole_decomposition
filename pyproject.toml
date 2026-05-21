@@ -26,6 +26,14 @@ plot = [
   "matplotlib>=3.7",
   "pandas>=2.0",
 ]
+workflow = [
+  "pymatgen>=2024.5",
+  "scipy>=1.10",
+  "seekpath>=2.1",
+  "sparse-ir>=1.1",
+  "tomli>=2.0",
+  "tomli-w>=1.0",
+]
 wannierberri = [
   "wannierberri>=1.1",
 ]
@@ -36,4 +44,3 @@ where = ["src"]
 [tool.pytest.ini_options]
 addopts = "-ra"
 testpaths = ["tests"]
-

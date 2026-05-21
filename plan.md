@@ -292,6 +292,12 @@ workspaces.
   workflows lived, but about whether additional private helper scripts are
   worth copying once their unique settings have already been preserved by the
   public manifests.
+- The public package now includes the archived `symwannier/` and main
+  `wannier_utils/` module sets under `src/symwan_multipie/`, with local
+  import-path rewrites, lightweight tests, and an optional `workflow` extra
+  for the heavier scientific Python stack. The `archive/` subdirectory from
+  the original `wannier_utils` tree is still intentionally omitted unless a
+  later workflow needs it.
 - Multipole coefficients still use a PDF-vector-backed recovered source
   snapshot under `data/source/pdf_vector/multipole_coefficients/`. The
   original compact coefficient source is still missing locally even though the

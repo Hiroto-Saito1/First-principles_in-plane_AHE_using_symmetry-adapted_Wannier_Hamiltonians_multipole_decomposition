@@ -334,6 +334,74 @@ What remains is optional follow-on work rather than a blocker:
   that is not already represented by the public manifests;
 - add future release notes or tags as the package evolves.
 
+## Post-Audit Improvement Queue
+
+The following items were found during a repository audit on 2026-05-21. They do
+not invalidate the current lightweight checks, but they should be resolved
+before the next public-facing release or packaging pass.
+
+### Correctness
+
+- Fix `HamK.get_minus_d_fermi` in
+  `src/symwan_multipie/wannier_utils/hamiltonian.py`. The method currently
+  assigns the tuple returned by `np.linalg.eigh(self.hk)` to `self.ek`, then
+  treats `self.ek` as an eigenvalue array. Use either
+  `np.linalg.eigvalsh(self.hk)` or unpack as `self.ek, self.uk =
+  np.linalg.eigh(self.hk)`, and add a focused regression test.
+- Keep the current lightweight test suite, but add coverage for numerical
+  helpers that are shipped in the expanded `wannier_utils/` surface and are not
+  exercised by the default synthetic fixtures.
+
+### Packaging And Dependencies
+
+- Reconcile `pyproject.toml` dependency metadata with the expanded package
+  surface. The base installation can import the top-level API, but modules such
+  as `symwan_multipie.symwannier.eig` and
+  `symwan_multipie.wannier_utils.win` require optional packages including
+  `scipy` and `pymatgen`. Either move the required packages into base
+  dependencies or clearly document that these modules require
+  `pip install -e ".[workflow]"`.
+- Consider adding a small optional-import test matrix that checks base
+  imports separately from `workflow` imports, so packaging failures are easier
+  to diagnose.
+
+### Licensing And Public Reuse
+
+- Resolve the mismatch between `README.md`, which says readers can inspect,
+  reuse, or verify the data, and `LICENSE`, which currently grants no reuse,
+  copy, modification, or distribution permission. Either choose an explicit
+  public license for code/data/figures, or revise the README wording so it
+  matches the all-rights-reserved status.
+- Confirm the license handling for the copied `symwannier/` and
+  `wannier_utils/` code with the original authors before publishing a more
+  permissive license.
+
+### Public Documentation Hygiene
+
+- Decide whether `docs/source_inventory.md` is public documentation or an
+  internal maintainer note. It intentionally contains private absolute
+  provenance paths; if the repository is made reader-facing, either move this
+  file under an internal-only path, remove it from the public documentation
+  guide, or replace private paths with symbolic placeholders such as
+  `PAPER_ROOT` and `SYMWAN_ROOT`.
+- Review root-level manuscript artifacts. `main_all.tex` / `main_all.pdf` are
+  part of the current figure-inventory checks, but
+  `Yourmanuscript BN15047 Saito.pdf` is tracked without a clear role in the
+  README or inventories. Either document its purpose or remove it from the
+  public release set.
+
+### Local Workspace Hygiene
+
+- Keep `.venv`, `.pytest_cache`, `__pycache__/`, `.DS_Store`,
+  `src/symwan_multipie.egg-info/`, and `results/` out of Git. They are already
+  ignored, but the local Dropbox workspace currently contains these generated
+  directories and files; periodically remove them or place the virtual
+  environment outside the repository to reduce sync noise.
+- The full figure-generation command succeeds, but `plot_bcc_planes.py` emits a
+  Matplotlib `tight_layout` warning. Treat this as a polish item: use an
+  explicit 3D layout/margin strategy if the warning becomes visible in rendered
+  output.
+
 ## Completion Definition
 
 The reorganization is considered complete when:

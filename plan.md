@@ -34,15 +34,14 @@ the target: same data, curves, labels, units, and physical interpretation.
 
 ## Local Reconstruction References
 
-These private workspaces are used while reconstructing this public repository.
-They must not appear in reader-facing instructions. Keep any detailed
-workspace-to-repository mapping in private maintainer notes rather than in the
-public release set.
+Private workspaces were used while reconstructing this public repository.
+They must not appear as absolute paths in reader-facing instructions. Keep any
+detailed workspace-to-repository mapping in private maintainer notes rather
+than in the public release set.
 
-- Paper, figure, and processed-data reference:
-  `/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/論文/Multipole-decomposition-of-symmetry-adapted-Wannier-Hamiltonian-using-projectability-disentanglement`
-- Code reference (SymWannier, wannier_utils, QE patch):
-  `/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/symwan_proj`
+- `PAPER_ROOT`: private paper, figure, and processed-data reference workspace.
+- `SYMWAN_ROOT`: private SymWannier, wannier_utils, and QE patch reference
+  workspace.
 
 ## Repository Policy
 
@@ -335,65 +334,57 @@ What remains is optional follow-on work rather than a blocker:
 
 ## Post-Audit Improvement Queue
 
-The following items were found during a repository audit on 2026-05-21. They do
-not invalidate the current lightweight checks, but they should be resolved
-before the next public-facing release or packaging pass.
+The repository was re-audited on 2026-05-21 after the v0.1.1 fixes. The core
+checks passed (`pytest`, `compileall`, `pip check`, figure-input check, and full
+figure generation). The remaining follow-up items are documentation hygiene and
+test guardrails rather than functional blockers.
 
-### Correctness
+### Resolved In v0.1.1
 
-- Fix `HamK.get_minus_d_fermi` in
-  `src/symwan_multipie/wannier_utils/hamiltonian.py`. The method currently
-  assigns the tuple returned by `np.linalg.eigh(self.hk)` to `self.ek`, then
-  treats `self.ek` as an eigenvalue array. Use either
-  `np.linalg.eigvalsh(self.hk)` or unpack as `self.ek, self.uk =
-  np.linalg.eigh(self.hk)`, and add a focused regression test.
-- Keep the current lightweight test suite, but add coverage for numerical
-  helpers that are shipped in the expanded `wannier_utils/` surface and are not
-  exercised by the default synthetic fixtures.
+- `HamK.get_minus_d_fermi` now stores eigenvalues rather than the tuple returned
+  by `np.linalg.eigh`.
+- The lightweight public API and workflow-only dependency boundary are now
+  documented in `README.md`, with focused import tests.
+- The public reuse policy is now explicit: repository-authored code is MIT,
+  documentation/data/figure artifacts are CC BY 4.0, and the copied archived
+  `symwannier/` / `wannier_utils/` module trees remain excluded pending
+  upstream clarification.
+- `docs/source_inventory.md` and the extra `Yourmanuscript BN15047 Saito.pdf`
+  artifact have been removed from the public release set.
 
-### Packaging And Dependencies
+### Remaining Public Documentation Hygiene
 
-- Reconcile `pyproject.toml` dependency metadata with the expanded package
-  surface. The base installation can import the top-level API, but modules such
-  as `symwan_multipie.symwannier.eig` and
-  `symwan_multipie.wannier_utils.win` require optional packages including
-  `scipy` and `pymatgen`. Either move the required packages into base
-  dependencies or clearly document that these modules require
-  `pip install -e ".[workflow]"`.
-- Consider adding a small optional-import test matrix that checks base
-  imports separately from `workflow` imports, so packaging failures are easier
-  to diagnose.
+- Replace the absolute local Markdown link targets in
+  `data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md`
+  with repository-relative links or plain repository paths. The recipe should
+  remain usable without exposing a maintainer workstation path.
+- Keep `plan.md` and reader-facing docs on symbolic workspace names such as
+  `PAPER_ROOT` and `SYMWAN_ROOT`, not concrete local paths.
+- Treat historical command/path strings inside curated archived log excerpts as
+  provenance data only. If they remain committed, document and test them as an
+  explicit allowlist rather than as general public documentation.
 
-### Licensing And Public Reuse
+### Remaining Test Guardrails
 
-- The repository now uses a mixed-license policy: repository-authored code is
-  released under MIT, documentation/data/figure artifacts under CC BY 4.0, and
-  the copied archived `symwannier/` / `wannier_utils/` module trees are
-  temporarily excluded pending upstream clarification.
-- The remaining licensing follow-up is to confirm the redistribution handling
-  for the copied `symwannier/` and `wannier_utils` code with the original
-  authors before publishing a more permissive license for those paths.
-
-### Public Documentation Hygiene
-
-- Keep private absolute provenance paths out of the public documentation set.
-  `docs/source_inventory.md` should remain removed from the reader-facing repo
-  unless it is rewritten with symbolic placeholders such as `PAPER_ROOT` and
-  `SYMWAN_ROOT`.
-- Keep root-level manuscript artifacts limited to files with a clear public
-  role in the repository workflow and tests.
+- Extend the private-path check beyond `inputs/` so it covers reader-facing
+  Markdown, JSON, CSV, TXT, TOML, YAML, Python, and shell files under the public
+  documentation and source-manifest paths.
+- Add a narrow allowlist for raw archived excerpts such as
+  `Fe_all_35_generation_excerpt.txt` and
+  `Fe_all_35_matrix_shape_excerpt.txt`, where historical `/home/...` commands
+  are preserved as evidence.
+- Avoid assertions that require private absolute paths in public tests. For
+  example, archived workflow tests should assert the meaningful command shape
+  (`python .../multipole.py Fe_matrix.pkl`) without hard-coding a private
+  workstation prefix.
 
 ### Local Workspace Hygiene
 
 - Keep `.venv`, `.pytest_cache`, `__pycache__/`, `.DS_Store`,
   `src/symwan_multipie.egg-info/`, and `results/` out of Git. They are already
-  ignored, but the local Dropbox workspace currently contains these generated
+  ignored, but the local synced workspace can still contain these generated
   directories and files; periodically remove them or place the virtual
   environment outside the repository to reduce sync noise.
-- The full figure-generation command succeeds, but `plot_bcc_planes.py` emits a
-  Matplotlib `tight_layout` warning. Treat this as a polish item: use an
-  explicit 3D layout/margin strategy if the warning becomes visible in rendered
-  output.
 
 ## Completion Definition
 

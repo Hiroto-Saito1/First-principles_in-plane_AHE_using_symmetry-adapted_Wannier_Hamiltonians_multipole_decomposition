@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -41,6 +42,32 @@ def reproducible_plot_rows() -> list[dict[str, str]]:
     ]
 
 
+def pdf_strings(path: Path) -> str:
+    """Extract plain strings from a generated PDF for lightweight label checks."""
+    result = subprocess.run(
+        ["strings", str(path)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout
+
+
+def load_script_module(script_rel: str, module_name: str):
+    """Load a standalone plotting script as a module for config-level assertions."""
+    script_path = ROOT / script_rel
+    sys.path.insert(0, str(script_path.parent))
+    try:
+        spec = importlib.util.spec_from_file_location(module_name, script_path)
+        assert spec is not None
+        assert spec.loader is not None
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        sys.path.pop(0)
+
+
 def test_figure_inventory_matches_manuscript() -> None:
     """Verify that every manuscript figure has an explicit repository policy row."""
     figures = set(manuscript_figure_files())
@@ -64,7 +91,7 @@ def test_inventory_has_no_included_static_assets() -> None:
         if row["reproduction_category"] == "reproducible_plot":
             assert row["included_pdf"]
             assert (ROOT / row["included_pdf"]).is_file()
-            assert row["generated_output"].startswith("results/figures/")
+            assert row["generated_output"].startswith("results/figures_paper/")
             assert row["plotting_script"].endswith(".py")
         else:
             assert row["included_pdf"] == ""
@@ -167,6 +194,33 @@ def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
             reference_size = reference.stat().st_size
             assert size >= 1500
             assert size >= int(reference_size * 0.05)
+
+        if script_rel in {
+            "scripts/reproduce_figures/plot_ahc_111.py",
+            "scripts/reproduce_figures/plot_ahc_103.py",
+        }:
+            sample_pdf = output_dir / expected_names[0]
+            text = pdf_strings(sample_pdf)
+            assert "SW+ED" not in text
+            assert "SW+PD" not in text
+            assert "cubic fit" not in text
+
+
+def test_ahc_paper_configs_use_manuscript_series_roles() -> None:
+    """Paper-mode AHC plots should expose manuscript-facing labels, not internal ones."""
+    for module_name, script_rel in [
+        ("plot_ahc_111_module", "scripts/reproduce_figures/plot_ahc_111.py"),
+        ("plot_ahc_103_module", "scripts/reproduce_figures/plot_ahc_103.py"),
+    ]:
+        module = load_script_module(script_rel, module_name)
+        config = module.paper_plot_config("para")
+        assert config["methods"] == ["Wan90", "SW+ED"]
+        assert config["label_map"]["Wan90"] == "DFT"
+        assert config["label_map"]["SW+ED"] == "model"
+        assert config["label_map"]["fitting"] == "fitting"
+        assert config["style_map"]["Wan90"]["linestyle"] == "None"
+        assert config["style_map"]["SW+ED"]["linestyle"] == "None"
+        assert "results/figures_paper/" in str(module.output_dir_for("paper"))
 
 
 def test_multipole_workflow_manifest_records_archived_hdf5_route() -> None:

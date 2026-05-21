@@ -7,11 +7,34 @@ import argparse
 import math
 from pathlib import Path
 
-from _common import DEFAULT_OUTPUT, PROCESSED, plot_methods, read_csv, require_file
+from _common import (
+    DEFAULT_OUTPUT_DIAGNOSTICS,
+    DEFAULT_OUTPUT_PAPER,
+    PROCESSED,
+    plot_methods,
+    read_csv,
+    require_file,
+)
 
 
 ALPHA = -894.308
 BETA = 105.758
+
+PAPER_METHODS = ["Wan90", "SW+ED"]
+PAPER_LABELS = {
+    "Wan90": "DFT",
+    "SW+ED": "model",
+    "fitting": "fitting",
+}
+PAPER_STYLES = {
+    "Wan90": {"marker": "o", "linestyle": "None", "color": "black"},
+    "SW+ED": {"marker": "s", "linestyle": "None", "color": "tab:blue"},
+}
+PAPER_YLABELS = {
+    "para": r"$\sigma_{\parallel}\ [\mathrm{S/cm}]$",
+    "perp": r"$\sigma_{\perp}\ [\mathrm{S/cm}]$",
+    "axis": r"$\sigma_{n}\ [\mathrm{S/cm}]$",
+}
 
 
 def theory(component: str) -> tuple[list[float], list[float]]:
@@ -28,12 +51,33 @@ def theory(component: str) -> tuple[list[float], list[float]]:
     return angles, values
 
 
+def output_dir_for(style: str) -> Path:
+    if style == "paper":
+        return DEFAULT_OUTPUT_PAPER / "ahc_111"
+    if style == "diagnostic":
+        return DEFAULT_OUTPUT_DIAGNOSTICS / "ahc_111"
+    raise ValueError(style)
+
+
+def paper_plot_config(component: str) -> dict[str, object]:
+    return {
+        "methods": PAPER_METHODS,
+        "label_map": PAPER_LABELS,
+        "style_map": PAPER_STYLES,
+        "title": None,
+        "xlabel": r"$\psi\ [\mathrm{deg}]$",
+        "ylabel": PAPER_YLABELS[component],
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT / "ahc_111")
+    parser.add_argument("--style", choices=("paper", "diagnostic"), default="paper")
+    parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
 
     rows = read_csv(require_file(PROCESSED / "ahc_111" / "ahc_angle_dependence.csv"))
+    output_dir = args.output_dir or output_dir_for(args.style)
     outputs = {
         "para": "fit_ahc_para.pdf",
         "perp": "fit_ahc_perp.pdf",
@@ -41,13 +85,24 @@ def main() -> None:
     }
     for component, filename in outputs.items():
         x, y = theory(component)
-        plot_methods(
-            rows,
-            component=component,
-            output=args.output_dir / filename,
-            title=f"Fe (111) sigma_{component}",
-            extra_curves=[("cubic fit", x, y)],
-        )
+        if args.style == "paper":
+            plot_methods(
+                rows,
+                component=component,
+                output=output_dir / filename,
+                extra_curves=[
+                    ("fitting", x, y, {"color": "black", "linewidth": 1.6})
+                ],
+                **paper_plot_config(component),
+            )
+        else:
+            plot_methods(
+                rows,
+                component=component,
+                output=output_dir / filename,
+                title=f"Fe (111) sigma_{component}",
+                extra_curves=[("cubic fit", x, y)],
+            )
 
 
 if __name__ == "__main__":

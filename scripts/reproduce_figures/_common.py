@@ -7,7 +7,9 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PROCESSED = REPO_ROOT / "data" / "processed"
-DEFAULT_OUTPUT = REPO_ROOT / "results" / "figures"
+DEFAULT_OUTPUT_PAPER = REPO_ROOT / "results" / "figures_paper"
+DEFAULT_OUTPUT_DIAGNOSTICS = REPO_ROOT / "results" / "figures_diagnostics"
+DEFAULT_OUTPUT = DEFAULT_OUTPUT_PAPER
 
 
 def parse_float(value: str) -> float:
@@ -60,9 +62,17 @@ def plot_methods(
     *,
     component: str,
     output: Path,
-    title: str,
+    title: str | None,
     methods: list[str] | None = None,
-    extra_curves: list[tuple[str, list[float], list[float]]] | None = None,
+    extra_curves: list[
+        tuple[str, list[float], list[float]]
+        | tuple[str, list[float], list[float], dict[str, object]]
+    ]
+    | None = None,
+    label_map: dict[str, str] | None = None,
+    style_map: dict[str, dict[str, object]] | None = None,
+    xlabel: str = "psi [deg]",
+    ylabel: str | None = None,
 ) -> None:
     plt = get_pyplot()
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -71,6 +81,7 @@ def plot_methods(
         "SW+ED": {"marker": "s", "linestyle": "-"},
         "SW+PD": {"marker": "^", "linestyle": "--"},
     }
+    style.update(style_map or {})
 
     by_method = grouped(rows, "method")
     selected = methods or list(by_method)
@@ -80,13 +91,22 @@ def plot_methods(
             continue
         x, y = sorted_xy(by_method[method], component)
         kwargs = style.get(method, {"marker": "o", "linestyle": "-"})
-        plt.plot(x, y, label=method, markersize=4, linewidth=1.4, **kwargs)
+        label = (label_map or {}).get(method, method)
+        plt.plot(x, y, label=label, markersize=4, linewidth=1.4, **kwargs)
     if extra_curves:
-        for label, x, y in extra_curves:
-            plt.plot(x, y, label=label, color="black", linewidth=1.2)
-    plt.xlabel("psi [deg]")
-    plt.ylabel(f"sigma_{component} at E_F [S/cm]")
-    plt.title(title)
+        for curve in extra_curves:
+            if len(curve) == 3:
+                label, x, y = curve
+                kwargs = {"color": "black", "linewidth": 1.2}
+            else:
+                label, x, y, kwargs = curve
+                kwargs = {"color": "black", "linewidth": 1.2, **kwargs}
+            label = (label_map or {}).get(label, label)
+            plt.plot(x, y, label=label, **kwargs)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel or f"sigma_{component} at E_F [S/cm]")
+    if title:
+        plt.title(title)
     plt.xlim(0, 180)
     plt.xticks(range(0, 181, 30))
     plt.grid(True, linewidth=0.4)

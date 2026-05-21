@@ -156,24 +156,33 @@ To regenerate only the figures from existing processed CSV files:
 ./scripts/reproduce_all_figures.sh
 ```
 
+This now writes two output trees:
+
+- `results/figures_paper/`: manuscript-style outputs intended to match the
+  paper's series membership, labels, and panel structure.
+- `results/figures_diagnostics/`: repository-local diagnostic comparisons,
+  currently used for the implementation-heavy AHC angular-dependence plots.
+
 Individual figure groups can also be regenerated directly:
 
 ```bash
-python scripts/reproduce_figures/plot_ahc_111.py
-python scripts/reproduce_figures/plot_ahc_103.py
+python scripts/reproduce_figures/plot_ahc_111.py --style paper
+python scripts/reproduce_figures/plot_ahc_103.py --style diagnostic
 python scripts/reproduce_figures/plot_rank_resolved_103.py
 python scripts/reproduce_figures/plot_strain_103.py
 ```
 
-Generated figures are written to `results/figures/`, which is intentionally
-ignored by Git.
+Generated figures are written under `results/`, which is intentionally ignored
+by Git.
 
 The PDFs in `figures/paper/` are reference artifacts for reproducible plots.
 Repository-local scripts generate equivalent data figures under
-`results/figures/`; they are not expected to reproduce PDF files
-byte-for-byte. For large upstream intermediates such as `Fe_matrix.pkl`,
-`Fe_matrix.hdf5`, or `trs_py_ed_tb.hdf5`, the repository records exact
-rebuild recipes instead of tracking the files themselves.
+`results/figures_paper/`; they are not expected to reproduce PDF files
+byte-for-byte. The diagnostic outputs under `results/figures_diagnostics/`
+remain useful for implementation comparisons even when their labels or series
+choices are not manuscript-facing. For large upstream intermediates such as
+`Fe_matrix.pkl`, `Fe_matrix.hdf5`, or `trs_py_ed_tb.hdf5`, the repository
+records exact rebuild recipes instead of tracking the files themselves.
 
 ## Figure Mapping
 

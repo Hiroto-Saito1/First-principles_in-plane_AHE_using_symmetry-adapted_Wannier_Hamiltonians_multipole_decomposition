@@ -3,7 +3,8 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PYTHON_BIN="${PYTHON:-python}"
-OUTPUT_ROOT="$ROOT/results/figures"
+PAPER_OUTPUT_ROOT="$ROOT/results/figures_paper"
+DIAGNOSTIC_OUTPUT_ROOT="$ROOT/results/figures_diagnostics"
 EXECUTE_EXPENSIVE=0
 STAGES=()
 
@@ -19,7 +20,13 @@ Options:
   --stage NAME          Run one stage. May be repeated.
                         Known stages: dft, wannier, symwannier, multipie,
                         rotate, ahc, extract, figures
-  --output-root PATH    Figure output directory for the figures stage.
+  --output-root PATH    Backward-compatible alias for --paper-output-root.
+  --paper-output-root PATH
+                        Manuscript-style figure output directory for the
+                        figures stage.
+  --diagnostic-output-root PATH
+                        Diagnostic figure output directory for the figures
+                        stage.
   --python PATH         Python executable.
   --execute-expensive   Reserved for future cleaned HPC launch wrappers.
                         The current public driver still prints HPC recipes
@@ -43,7 +50,23 @@ while [[ $# -gt 0 ]]; do
         echo "--output-root requires a value" >&2
         exit 2
       fi
-      OUTPUT_ROOT="$2"
+      PAPER_OUTPUT_ROOT="$2"
+      shift 2
+      ;;
+    --paper-output-root)
+      if [[ $# -lt 2 ]]; then
+        echo "--paper-output-root requires a value" >&2
+        exit 2
+      fi
+      PAPER_OUTPUT_ROOT="$2"
+      shift 2
+      ;;
+    --diagnostic-output-root)
+      if [[ $# -lt 2 ]]; then
+        echo "--diagnostic-output-root requires a value" >&2
+        exit 2
+      fi
+      DIAGNOSTIC_OUTPUT_ROOT="$2"
       shift 2
       ;;
     --python)
@@ -128,7 +151,9 @@ run_stage() {
       "$PYTHON_BIN" "$ROOT/scripts/workflow/rebuild_processed_data.py"
       ;;
     figures)
-      PYTHON="$PYTHON_BIN" bash "$ROOT/scripts/reproduce_all_figures.sh" "$OUTPUT_ROOT"
+      PYTHON="$PYTHON_BIN" bash "$ROOT/scripts/reproduce_all_figures.sh" \
+        --paper-root "$PAPER_OUTPUT_ROOT" \
+        --diagnostics-root "$DIAGNOSTIC_OUTPUT_ROOT"
       ;;
     *)
       echo "Unknown stage: $stage" >&2

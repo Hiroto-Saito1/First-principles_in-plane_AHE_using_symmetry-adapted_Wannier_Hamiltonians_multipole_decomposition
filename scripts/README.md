@@ -7,8 +7,9 @@ scripts.
   processed data.
 - `reproduce_from_inputs.sh`: top-level lightweight driver. By default it
   rebuilds processed CSV files from committed source snapshots and regenerates
-  repository-backed figures.
+  repository-backed figures, splitting manuscript-style and diagnostic outputs.
 - `reproduce_all_figures.sh`: figure-only driver that reads existing
-  `data/processed/` files.
+  `data/processed/` files and writes to `results/figures_paper/` plus the
+  current AHC-specific `results/figures_diagnostics/` outputs.
 - `workflow/`: scripts that prepare or transform Hamiltonian and multipole
   data.

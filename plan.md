@@ -30,7 +30,10 @@ Concretely:
   command sequence to regenerate them from committed inputs is documented.
 
 Byte-identical PDF reproduction is not required. Scientific reproduction is
-the target: same data, curves, labels, units, and physical interpretation.
+the target: same data, curves, labels, units, and physical interpretation. For
+figures, this requires two distinct outputs: manuscript-style plots that match
+the final paper's series, labels, and panel design, and diagnostic plots that
+are allowed to expose extra implementation comparisons.
 
 ## Local Reconstruction References
 
@@ -55,6 +58,20 @@ stay in the inventory but are not tracked PDFs. Categories:
 - `not_included`: static or manually composed asset;
 - `workflow_required`: numerical figure whose compact data still requires
   large generated files; recipe lives in `scripts/workflow/`.
+
+Generated plots should be split by purpose:
+
+- `results/figures_paper/`: manuscript-style plots intended to match
+  `figures/paper/` in scientific content and visual semantics. These plots
+  should use the paper's public series names, axis labels, units, legend
+  entries, component symbols, and panel proportions.
+- `results/figures_diagnostics/`: repository-local verification plots. These
+  may show implementation-specific series such as `Wan90`, `SW+ED`, `SW+PD`,
+  rank filters, recovered-data provenance, or fit residuals.
+
+The current `results/figures/` output is useful as a diagnostic baseline, but
+it must not be treated as manuscript-ready when it shows extra implementation
+series or internal labels that do not appear in the paper.
 
 ### Code Policy
 
@@ -142,7 +159,8 @@ The active list is `scripts/workflow/generate_large_files.md`.
 ├── figures/
 │   └── paper/
 ├── results/
-│   └── figures/                 # generated locally, ignored by Git
+│   ├── figures_paper/           # manuscript-style generated plots, ignored by Git
+│   └── figures_diagnostics/     # verification plots, ignored by Git
 ├── scripts/
 │   ├── reproduce_from_inputs.sh
 │   ├── reproduce_all_figures.sh
@@ -260,6 +278,52 @@ Based on Phase A:
   `symwan_proj/tests/Fe/num_iter_0/FM_wo_soc_*/`, kept distinct from the
   production SOC workflow.
 
+### Phase F: Align generated plots with the manuscript
+
+The current plotting scripts generate scientifically useful repository-local
+plots, but several outputs are diagnostic rather than manuscript-style. The
+alignment work should keep both roles instead of forcing one plot family to
+serve both purposes.
+
+1. Add a manuscript-style plotting layer.
+   - Keep existing diagnostic comparisons available under
+     `results/figures_diagnostics/`.
+   - Add paper-facing output under `results/figures_paper/`.
+   - Keep common data readers shared, but separate paper styling and
+     diagnostic styling so labels and series choices cannot drift together.
+
+2. Establish a per-figure series map before changing appearance.
+   - For AHC figures, explicitly document which committed data columns
+     correspond to the paper's `model`, `DFT`, and `fitting` curves.
+   - Do not rename `Wan90`, `SW+ED`, or `SW+PD` into paper labels unless the
+     provenance is confirmed.
+   - If an implementation-specific series has no paper counterpart, leave it
+     in diagnostics only.
+
+3. Prioritize the AHC angular-dependence figures.
+   - `fig:ahc_103` and `fig:ahc_111` currently differ most visibly from the
+     manuscript because the generated plots show `Wan90`, `SW+ED`, `SW+PD`,
+     and `cubic fit`, while the paper panels show `model`, `DFT`, and
+     `fitting`.
+   - Paper-style AHC plots should use the paper's component notation
+     (`sigma_1`, `sigma_perp`, `sigma_n` in rendered Greek form), legend text,
+     marker/line roles, axis limits, tick spacing, and units.
+
+4. Then align rank-resolved and coefficient plots.
+   - Rank-resolved `(103)` plots appear closer in curve content, so focus on
+     legend names, component labels, panel sizing, and line/marker semantics.
+   - Multipole-coefficient plots need a stronger layout revision: readable
+     labels, paper-like bar grouping, and clear `Q` / `M` / `T` / `G`
+     classification treatment.
+
+5. Validate with both data checks and visual contact sheets.
+   - Data checks should confirm row counts, angle grids, units, component
+     signs, and selected reference values.
+   - Visual checks should compare `figures/paper/` against
+     `results/figures_paper/` using contact sheets. Pixel identity is not the
+     target, but series membership, label semantics, scale, and panel structure
+     should match the paper.
+
 ## Tests And Acceptance Criteria
 
 Default tests remain lightweight. Required default checks:
@@ -276,6 +340,9 @@ Default tests remain lightweight. Required default checks:
   source files;
 - `pytest` validates compact numerical invariants (row counts, angle grids,
   method labels, signs, representative reference values).
+- manuscript-style plot checks validate that paper-facing outputs do not
+  contain diagnostic-only series labels (`Wan90`, `SW+ED`, `SW+PD`) unless the
+  corresponding manuscript panel explicitly uses them.
 
 Tests must not require Quantum ESPRESSO, Wannier90, SymWannier, MultiPie,
 WannierBerri, MPI, HDF5 generation, cluster access, or the private
@@ -313,6 +380,12 @@ workspaces.
   off PDF-vector fallback onto a direct compact export from archived AHC
   outputs.
 - Pseudopotentials are intentionally not redistributed.
+- The generated figure count matches the repository inventory, but the current
+  `results/figures/` plots are not all manuscript-style. In particular, the
+  AHC angular-dependence plots expose diagnostic series and internal component
+  labels that differ from the final paper's `model` / `DFT` / `fitting`
+  presentation. Treat this as the next figure-quality task rather than a
+  data-availability blocker.
 
 ## Current Status
 
@@ -324,8 +397,11 @@ workflow manifests for large regenerated artifacts, lightweight regression
 tests, figure smoke tests for the non-heavy plotting scripts, and CI coverage
 for the default reproducibility checks.
 
-What remains is optional follow-on work rather than a blocker:
+What remains is follow-on work rather than a blocker for data availability:
 
+- split generated figures into manuscript-style and diagnostic outputs, then
+  align the AHC, rank-resolved, and multipole-coefficient plots with the paper
+  as described in Phase F;
 - recover a direct archived compact export for the multipole coefficients if a
   later backup search turns one up;
 - copy additional private helper scripts only if they carry unique behavior
@@ -336,8 +412,9 @@ What remains is optional follow-on work rather than a blocker:
 
 The repository was re-audited on 2026-05-21 after the v0.1.1 fixes. The core
 checks passed (`pytest`, `compileall`, `pip check`, figure-input check, and full
-figure generation). No functional blockers remain on `main`; the follow-up
-items below are optional maintenance or provenance upgrades.
+figure generation). No data-availability blockers remain on `main`; the
+follow-up items below are maintenance, provenance, or manuscript-figure
+presentation upgrades.
 
 ### Resolved In v0.1.1
 
@@ -362,6 +439,10 @@ items below are optional maintenance or provenance upgrades.
 
 ### Remaining Optional Follow-up
 
+- Split generated plots into `results/figures_paper/` and
+  `results/figures_diagnostics/`. Move implementation-comparison series into
+  diagnostics, and make the paper-facing AHC plots match the manuscript's
+  `model` / `DFT` / `fitting` semantics before tuning visual styling.
 - Obtain upstream clarification for the copied archived code under
   `src/symwan_multipie/symwannier/` and
   `src/symwan_multipie/wannier_utils/`, then update `LICENSE` / `README.md`
@@ -394,10 +475,14 @@ The reorganization is considered complete when:
 - a reader can run `./scripts/reproduce_from_inputs.sh` to rebuild all
   committed processed CSV files and regenerate every repository-backed plot;
 - every repository-backed figure PDF is generated by a repository script;
+- every paper-facing generated figure has a defined diagnostic/paper role,
+  and manuscript-style outputs match the paper's series membership, labels,
+  units, and panel structure;
 - expensive single artifacts above 100 MB are not tracked, but have an
   exact regeneration recipe and required-input list.
 
-Status on `main`: satisfied.
+Status on `main`: satisfied for the public data-availability package; still
+open for manuscript-style plot alignment.
 
 The remaining optional upgrade after those conditions are met is to replace
 the recovered multipole-coefficient compact snapshot with a recovered direct

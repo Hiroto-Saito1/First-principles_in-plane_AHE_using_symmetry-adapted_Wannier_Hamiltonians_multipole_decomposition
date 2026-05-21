@@ -53,7 +53,21 @@ basis HDF5 used by the public decomposition workflow:
 python scripts/workflow/build_multipole_hdf5.py --matrix-path Fe_all_35_matrix.py --output multi_matrix.hdf5
 ```
 
+For compatibility with the archived production job scripts, the package also
+supports the original direct module entry point:
+
+```bash
+python src/symwan_multipie/multipole.py Fe_matrix.pkl
+```
+
+When `--output` is omitted, this writes `Fe_matrix.hdf5` next to the input
+matrix dictionary, matching the archived `submit.sh` workflow.
+
 That file is then consumed by
 `inputs/symwannier/fe_bcc/decompose_ham.py` to generate decomposition HDF5
 files with the `z_coefficients` dataset. The archived manuscript bar-plot
 workflow reads those decomposition HDF5 files together with `Fe_samb.py`.
+
+For the full `Fe_all_35` rebuild path from `Fe.py` through
+`Fe_matrix.pkl`, `Fe_matrix.hdf5`, and `trs_py_ed_tb.hdf5`, see
+`data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md`.

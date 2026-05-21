@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass
 import gzip
 import pickle
@@ -208,3 +209,41 @@ class Multipole:
         pointers[num_multipole] = len(indices)
         return pointers
 
+
+def _default_output_path(matrix_path: Path) -> Path:
+    name = matrix_path.name
+    for suffix in (".pkl.gz", ".py.gz", ".pkl", ".py"):
+        if name.endswith(suffix):
+            return matrix_path.with_name(name[: -len(suffix)] + ".hdf5")
+    return matrix_path.with_suffix(".hdf5")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "matrix_path",
+        type=Path,
+        help="Path to a MultiPie matrix dictionary such as Fe_matrix.pkl or Fe_all_35_matrix.py.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Optional output HDF5 path. Defaults to <matrix_path>.hdf5.",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    output = args.output or _default_output_path(args.matrix_path)
+    multipole = Multipole(args.matrix_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    multipole.write_hdf5(output)
+    print(
+        f"Wrote {output} "
+        f"(num_multipole={multipole.num_multipole}, nrpts={multipole.nrpts}, num_wann={multipole.num_wann})"
+    )
+
+
+if __name__ == "__main__":
+    main()

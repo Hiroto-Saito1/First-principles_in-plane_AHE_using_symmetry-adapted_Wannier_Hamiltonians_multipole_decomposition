@@ -1,0 +1,25 @@
+Archived source:
+2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_35/submit.sh.o3507
+
+Curated excerpt showing that the archived `python src/multipole.py Fe_matrix.pkl`
+step produced `Fe_matrix.hdf5` and that the HDF5 shape was inspected
+immediately afterward:
+
+python /home/hirotosaito/github_projects/symwan_multipie/src/multipole.py Fe_matrix.pkl
+h5dump -d multipole_matrix/shape Fe_matrix.hdf5
+h5ls Fe_matrix.hdf5/multipole_matrix
+
+HDF5 "Fe_matrix.hdf5" {
+DATASET "multipole_matrix/shape" {
+   DATATYPE  H5T_STD_I64LE
+   DATASPACE  SIMPLE { ( 4 ) / ( 4 ) }
+   DATA {
+   (0): 345708, 1067, 18, 18
+   }
+}
+}
+coords                   Dataset {4, 545754620}
+data                     Dataset {545754620}
+irvec                    Dataset {1067, 3}
+multipole_index          Dataset {345709}
+shape                    Dataset {4}

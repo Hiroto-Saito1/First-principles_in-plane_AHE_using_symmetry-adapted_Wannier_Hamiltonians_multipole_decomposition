@@ -44,4 +44,11 @@ The public wrappers for those steps are
 `scripts/workflow/export_multipole_coefficients.py`.
 
 The archived manuscript-side evidence for that route is summarized under
-`data/source/workflow_manifests/multipole_coefficients/`.
+`data/source/workflow_manifests/multipole_coefficients/`. That manifest now
+also includes a supporting archived `Fe_all_20_supporting_samb.py.gz` file
+whose `z_i` entries cover the manuscript-selected labels, even though the
+direct `Fe_all_35` source artifacts are still missing locally, plus curated
+log excerpts that show the archived `Fe_all_35` workflow writing
+`Fe_samb.py`, `Fe_matrix.pkl`, and inspecting the resulting
+`Fe_matrix.hdf5` shape. The practical step-by-step rebuild note is
+`data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md`.

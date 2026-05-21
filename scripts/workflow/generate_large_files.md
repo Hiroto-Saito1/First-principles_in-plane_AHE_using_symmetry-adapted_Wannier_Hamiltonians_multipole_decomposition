@@ -70,6 +70,8 @@ Procedure:
 
 1. Run MultiPie and keep the emitted matrix dictionary such as
    `Fe_all_35_matrix.py` or `Fe_all_35_matrix.pkl`, along with `Fe_samb.py`.
+   The dedicated rebuild note for the archived `Fe_all_35` branch lives at
+   `data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md`.
 2. Convert the matrix dictionary to the compact basis HDF5:
 
    ```bash
@@ -106,7 +108,8 @@ available local workspaces.
 The archive-side evidence for how that HDF5 was generated is preserved in
 `data/source/workflow_manifests/multipole_coefficients/`, including the
 MultiPie `Fe.py` settings, the `Fe.out` generation log summary, the
-matrix-to-HDF5 step, and the selected `z_i` labels from `out_trs_ed`.
+matrix-to-HDF5 step, the `Fe_all_35` rebuild recipe, and the selected `z_i`
+labels from `out_trs_ed`.
 
 ## Minimal Two-Orbital Model Figures
 

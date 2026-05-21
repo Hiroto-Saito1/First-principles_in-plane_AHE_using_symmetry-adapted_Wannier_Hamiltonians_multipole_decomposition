@@ -88,7 +88,9 @@ The original compact coefficient HDF5/CSV used for the manuscript is still
 missing from the currently available local workspaces, so the committed
 processed CSV remains a tracked recovered snapshot rather than a direct export.
 The archive-side evidence for the original HDF5-creation route is preserved in
-`data/source/workflow_manifests/multipole_coefficients/`.
+`data/source/workflow_manifests/multipole_coefficients/`. The step-by-step
+public rebuild note for the `Fe_all_35` pickle/HDF5 chain is
+`data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md`.
 
 ## 5. Magnetization Rotation
 

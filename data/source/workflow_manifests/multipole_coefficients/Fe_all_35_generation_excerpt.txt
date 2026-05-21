@@ -1,0 +1,18 @@
+Archived source:
+2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_35/Fe.out
+
+Curated excerpt showing that the Fe_all_35 MultiPie run wrote the direct
+artifacts used by the later HDF5 workflow:
+
+  * read '/misc/home/hirotosaito/github_projects/symwan_multipie/tests/Fe/FM_sqa_x_qe-7.2/multipie_all/./Fe.py'.
+=== creating files for 'Fe' in /misc/home/hirotosaito/github_projects/symwan_multipie/tests/Fe/FM_sqa_x_qe-7.2/multipie_all/Fe ...
+creating model ...
+  * wrote 'Fe_model.py'.
+creating SAMB ...
+  * wrote 'Fe_samb.py'.
+creating SAMB matrix (real space) ...
+  * wrote 'Fe_matrix.pkl'.
+
+The archived log repeats this pattern across multiple retries and then ends in
+MPI termination, but the output lines above are the key provenance evidence
+preserved in the public repository.

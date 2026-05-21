@@ -6,10 +6,18 @@
   "source_status": {
     "direct_compact_csv_present": false,
     "direct_hdf5_present": false,
-    "vector_snapshot_present": true
+    "vector_snapshot_present": true,
+    "archive_search_last_verified": "2026-05-21",
+    "archive_search_notes": "Searched the local 2025 workspaces plus broader archived Dropbox/AnacondaProjects trees for Fe_matrix.pkl, Fe_matrix.hdf5, trs_py_ed_tb.hdf5, trs_py_ed_hr.hdf5, and compact coefficient exports. The direct Fe_all_35 artifacts remain missing locally even though Fe_all_35/Fe.out still proves that Fe_samb.py and Fe_matrix.pkl were generated there.",
+    "generation_log_excerpt_relative_path": "data/source/workflow_manifests/multipole_coefficients/Fe_all_35_generation_excerpt.txt",
+    "matrix_shape_excerpt_relative_path": "data/source/workflow_manifests/multipole_coefficients/Fe_all_35_matrix_shape_excerpt.txt",
+    "supporting_archived_samb_relative_path": "data/source/workflow_manifests/multipole_coefficients/Fe_all_20_supporting_samb.py.gz",
+    "supporting_archived_samb_notes": "Copied from 2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_20/Fe_samb.py because that surviving branch still contains all manuscript-selected z_i labels. It is a supporting provenance artifact, not a replacement for the missing direct Fe_all_35 source."
   },
   "public_repo_route": {
+    "recipe_relative_path": "data/source/workflow_manifests/multipole_coefficients/Fe_all_35_recipe.md",
     "matrix_to_hdf5_script": "scripts/workflow/build_multipole_hdf5.py",
+    "archived_cli_compatible_entrypoint": "src/symwan_multipie/multipole.py",
     "decomposition_script": "inputs/symwannier/fe_bcc/decompose_ham.py",
     "compact_export_script": "scripts/workflow/export_multipole_coefficients.py"
   },
@@ -25,10 +33,16 @@
         "Fe_matrix.hdf5"
       ],
       "matrix_to_hdf5_command": "python src/multipole.py Fe_matrix.pkl",
+      "matrix_hdf5_shape_from_submit_log": [
+        345708,
+        1067,
+        18,
+        18
+      ],
       "decomposition_script_relative_path": "2025/\u767a\u8868/defense/figs_orig/z_coefficients/decompose_ham.py",
       "decomposition_input": "trs_py_ed_tb.dat",
       "decomposition_output": "trs_py_ed_tb.hdf5",
-      "notes": "The archived decompose_ham.py points to Fe_matrix.hdf5 under Fe_all_35 and writes trs_py_ed_tb.hdf5 for the ED branch."
+      "notes": "The archived decompose_ham.py points to Fe_matrix.hdf5 under Fe_all_35 and writes trs_py_ed_tb.hdf5 for the ED branch. The matching submit.sh stdout still records the Fe_matrix.hdf5 shape even though the HDF5 file itself is no longer present."
     },
     {
       "label": "2024_theta0_hr_branch",
@@ -67,6 +81,7 @@
   "label_selection": {
     "selection_script_relative_path": "2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_35/submit_samb.sh",
     "selection_output_relative_path": "2024/github_projects/symwan_multipie/tests/Fe/FM_sqa_z/theta0_qe-7.2/multipie_all/Fe_all_35/out_trs_ed",
-    "selected_z_count": 10
+    "selected_z_count": 10,
+    "selected_z_ids_are_present_in_supporting_samb": true
   }
 }

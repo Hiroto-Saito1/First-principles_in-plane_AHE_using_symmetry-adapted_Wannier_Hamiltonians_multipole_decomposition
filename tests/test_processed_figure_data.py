@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import csv
+import gzip
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PROCESSED = ROOT / "data" / "processed"
+SOURCE = ROOT / "data" / "source"
 
 
 def rows(path: Path) -> list[dict[str, str]]:
@@ -159,6 +161,65 @@ def test_recovered_multipole_coefficients_cover_paper_bar_inputs() -> None:
     assert strongest["name"].startswith("Q(")
     assert abs(as_float(strongest["coefficient_ev"]) - 80.0) < 1e-8
     assert any(row["name"].startswith("T(") for row in data)
+
+
+def test_supporting_archived_samb_contains_selected_multipole_ids() -> None:
+    """Check the supporting archived SAMB file still covers the selected manuscript ids."""
+    manifest_dir = SOURCE / "workflow_manifests" / "multipole_coefficients"
+    supporting_samb = manifest_dir / "Fe_all_20_supporting_samb.py.gz"
+    assert supporting_samb.is_file()
+
+    with (manifest_dir / "selected_z_ids.csv").open(
+        newline="", encoding="utf-8"
+    ) as handle:
+        selected_rows = list(csv.DictReader(handle))
+
+    selected_ids = sorted(
+        {
+            value.strip()
+            for row in selected_rows
+            for value in row.values()
+            if isinstance(value, str) and value.strip().startswith("z_")
+        }
+    )
+    assert len(selected_ids) == 10
+
+    with gzip.open(supporting_samb, "rt", encoding="utf-8") as handle:
+        content = handle.read()
+
+    for multipole_id in selected_ids:
+        assert multipole_id in content
+
+
+def test_archived_multipole_log_excerpts_capture_generation_and_hdf5_shape() -> None:
+    """Check curated archived log excerpts for the missing Fe_all_35 direct artifacts."""
+    manifest_dir = SOURCE / "workflow_manifests" / "multipole_coefficients"
+    generation_excerpt = (manifest_dir / "Fe_all_35_generation_excerpt.txt").read_text(
+        encoding="utf-8"
+    )
+    shape_excerpt = (manifest_dir / "Fe_all_35_matrix_shape_excerpt.txt").read_text(
+        encoding="utf-8"
+    )
+
+    assert "wrote 'Fe_samb.py'." in generation_excerpt
+    assert "wrote 'Fe_matrix.pkl'." in generation_excerpt
+    assert "python /home/hirotosaito/github_projects/symwan_multipie/src/multipole.py Fe_matrix.pkl" in shape_excerpt
+    assert "(0): 345708, 1067, 18, 18" in shape_excerpt
+
+
+def test_fe_all_35_recipe_documents_pickle_and_hdf5_build_steps() -> None:
+    """Check the dedicated Fe_all_35 recipe covers the archived pickle/HDF5 chain."""
+    recipe = (
+        SOURCE
+        / "workflow_manifests"
+        / "multipole_coefficients"
+        / "Fe_all_35_recipe.md"
+    ).read_text(encoding="utf-8")
+    assert "Fe_matrix.pkl" in recipe
+    assert "Fe_matrix.hdf5" in recipe
+    assert "trs_py_ed_tb.hdf5" in recipe
+    assert "python src/symwan_multipie/multipole.py Fe_matrix.pkl" in recipe
+    assert "--matrix-path Fe_all_35_matrix.py" in recipe
 
 
 def test_recovered_minimal_model_scans_cover_expected_parameters() -> None:

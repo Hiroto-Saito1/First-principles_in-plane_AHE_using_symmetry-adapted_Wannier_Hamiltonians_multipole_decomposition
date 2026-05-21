@@ -47,6 +47,32 @@ def test_build_multipole_hdf5_script_creates_expected_basis(
         assert names == ["z_000", "z_001", "z_002", "z_003"]
 
 
+def test_multipole_module_cli_matches_archived_pickle_to_hdf5_workflow(
+    tmp_path: Path, multipie_pickle: Path
+) -> None:
+    """The module should support the archived `python src/.../multipole.py Fe_matrix.pkl` entry point."""
+    copied_pickle = tmp_path / "Fe_matrix.pkl"
+    copied_pickle.write_bytes(multipie_pickle.read_bytes())
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "src" / "symwan_multipie" / "multipole.py"),
+            str(copied_pickle),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    output = tmp_path / "Fe_matrix.hdf5"
+    assert output.is_file()
+    assert "Wrote" in result.stdout
+    with h5py.File(output, "r") as h5:
+        grp = h5["multipole_matrix"]
+        assert tuple(int(x) for x in grp["shape"][:]) == (4, 1, 2, 2)
+
+
 def test_export_multipole_coefficients_script_creates_bar_snapshot(
     tmp_path: Path,
     multipie_pickle: Path,

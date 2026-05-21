@@ -301,11 +301,19 @@ workspaces.
 - Multipole coefficients still use a PDF-vector-backed recovered source
   snapshot under `data/source/pdf_vector/multipole_coefficients/`. The
   original compact coefficient source is still missing locally even though the
-  public HDF5-generation route is now documented and scripted. Archived
-  workflow evidence for the original HDF5 path now lives under
-  `data/source/workflow_manifests/multipole_coefficients/`. The minimal model
-  has been moved off PDF-vector fallback onto a direct compact export from
-  archived AHC outputs.
+  public HDF5-generation route is now documented and scripted. The archive-
+  side `Fe_matrix.pkl -> Fe_matrix.hdf5 -> trs_py_ed_tb.hdf5` chain has now
+  been confirmed from surviving scripts and submit logs, and the public
+  package supports the original `python src/symwan_multipie/multipole.py
+  Fe_matrix.pkl` entrypoint in addition to the cleaner helper scripts.
+  Archived workflow evidence for the original HDF5 path now lives under
+  `data/source/workflow_manifests/multipole_coefficients/`, including a
+  supporting archived `Fe_all_20_supporting_samb.py.gz` file whose `z_i`
+  entries cover the manuscript-selected labels and curated `Fe_all_35` log
+  excerpts that show `Fe_samb.py`, `Fe_matrix.pkl`, and the archived
+  `Fe_matrix.hdf5` shape even though the direct `Fe_all_35` products are
+  still missing locally. The minimal model has been moved off PDF-vector
+  fallback onto a direct compact export from archived AHC outputs.
 - Pseudopotentials are intentionally not redistributed.
 
 ## Completion Definition

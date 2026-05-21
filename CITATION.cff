@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this repository, please cite the accompanying manuscript."
+message: "If you use this repository, please cite the accompanying manuscript and consult LICENSE for reuse terms."
 title: "First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition"
 authors:
   - family-names: Saito

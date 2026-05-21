@@ -8,7 +8,8 @@ This repository accompanies the manuscript:
 Manuscript: [arXiv:2601.05689](https://arxiv.org/abs/2601.05689)
 
 It is intended for readers who want to inspect, reuse, or verify the numerical
-data behind the paper. The repository contains compact source snapshots,
+data behind the paper under the mixed-license policy described in `LICENSE`.
+The repository contains compact source snapshots,
 processed figure data, lightweight tests, calculation input manifests, and
 scripts for regenerating the repository-backed plots, plus recipe notes for
 large intermediate artifacts that are intentionally left out of Git.
@@ -222,3 +223,18 @@ These environments are not needed for the default test suite.
 If this repository helps your work, please cite the associated manuscript and
 use the metadata in `CITATION.cff` when citing the repository. The manuscript
 preprint is available as [arXiv:2601.05689](https://arxiv.org/abs/2601.05689).
+
+## License
+
+This repository uses a mixed-license policy:
+
+- repository-authored code is available under the MIT License;
+- documentation, compact datasets, input manifests, and repository-backed
+  figure PDFs are available under CC BY 4.0;
+- the copied archived module trees under
+  `src/symwan_multipie/symwannier/` and
+  `src/symwan_multipie/wannier_utils/` are temporarily excluded from the
+  permissive grant until their redistribution status is confirmed.
+
+See [LICENSE](LICENSE), [LICENSES/MIT.txt](LICENSES/MIT.txt), and
+[LICENSES/CC-BY-4.0.txt](LICENSES/CC-BY-4.0.txt) for the exact scope.

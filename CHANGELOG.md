@@ -3,6 +3,16 @@
 All notable repository-facing updates to this public reproducibility package
 are recorded here.
 
+## Unreleased
+
+- clarified the public mixed-license policy: repository-authored code under
+  MIT, documentation/data/figure artifacts under CC BY 4.0, and copied
+  archived module trees temporarily excluded pending upstream confirmation;
+- removed `docs/source_inventory.md` and the extra
+  `Yourmanuscript BN15047 Saito.pdf` artifact from the public release set;
+- updated `README.md`, `CITATION.cff`, and `plan.md` so the public reuse scope
+  matches the current repository policy.
+
 ## v0.1.0 - 2026-05-21
 
 Initial public reproducibility package for the manuscript

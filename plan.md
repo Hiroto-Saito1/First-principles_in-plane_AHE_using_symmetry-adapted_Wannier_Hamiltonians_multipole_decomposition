@@ -35,16 +35,14 @@ the target: same data, curves, labels, units, and physical interpretation.
 ## Local Reconstruction References
 
 These private workspaces are used while reconstructing this public repository.
-They must not appear in reader-facing instructions except as local provenance
-in `docs/source_inventory.md`.
+They must not appear in reader-facing instructions. Keep any detailed
+workspace-to-repository mapping in private maintainer notes rather than in the
+public release set.
 
 - Paper, figure, and processed-data reference:
   `/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/論文/Multipole-decomposition-of-symmetry-adapted-Wannier-Hamiltonian-using-projectability-disentanglement`
 - Code reference (SymWannier, wannier_utils, QE patch):
   `/Users/hirotosaito/Library/CloudStorage/Dropbox/AnacondaProjects/是常研究室/2025/github_projects/symwan_proj`
-
-The map from these workspaces to the public repository lives in
-`docs/source_inventory.md`.
 
 ## Repository Policy
 
@@ -128,7 +126,7 @@ The active list is `scripts/workflow/generate_large_files.md`.
 ├── CITATION.cff
 ├── pyproject.toml
 ├── docs/
-│   ├── source_inventory.md      # local workspace -> repository map
+│   ├── README.md
 │   ├── data_inventory.md
 │   ├── paper_mapping.md
 │   ├── workflow.md
@@ -184,10 +182,10 @@ required input location.
 
 ## Implementation Phases
 
-### Phase A: Build the source inventory
+### Phase A: Build the local source inventory
 
-Create `docs/source_inventory.md`. For every manuscript figure and table,
-list:
+Maintain a private maintainer note while reorganizing the public repository.
+For every manuscript figure and table, list:
 
 - manuscript label (`fig:bcc_planes`, `fig:rank103_all`, …);
 - local production directory (under the two reference workspaces);
@@ -197,10 +195,11 @@ list:
   `inputs/` and `data/source/`;
 - planned destination in the public repository.
 
-The same document also lists, per workflow stage (DFT / Wannier / SymWannier
-/ MultiPie / WannierBerri / rotate / extract / figures), the local source
-directory and the planned repository destination. This is the single source
-of truth for the reorganization.
+The same maintainer note also lists, per workflow stage (DFT / Wannier /
+SymWannier / MultiPie / WannierBerri / rotate / extract / figures), the local
+source directory and the planned repository destination. The public-facing
+deliverables are the inventories under `data/processed/` and `docs/`, not the
+private path map itself.
 
 ### Phase B: Expand `inputs/` to full production inputs
 
@@ -367,28 +366,22 @@ before the next public-facing release or packaging pass.
 
 ### Licensing And Public Reuse
 
-- Resolve the mismatch between `README.md`, which says readers can inspect,
-  reuse, or verify the data, and `LICENSE`, which currently grants no reuse,
-  copy, modification, or distribution permission. Either choose an explicit
-  public license for code/data/figures, or revise the README wording so it
-  matches the all-rights-reserved status.
-- Confirm the license handling for the copied `symwannier/` and
-  `wannier_utils/` code with the original authors before publishing a more
-  permissive license.
+- The repository now uses a mixed-license policy: repository-authored code is
+  released under MIT, documentation/data/figure artifacts under CC BY 4.0, and
+  the copied archived `symwannier/` / `wannier_utils/` module trees are
+  temporarily excluded pending upstream clarification.
+- The remaining licensing follow-up is to confirm the redistribution handling
+  for the copied `symwannier/` and `wannier_utils` code with the original
+  authors before publishing a more permissive license for those paths.
 
 ### Public Documentation Hygiene
 
-- Decide whether `docs/source_inventory.md` is public documentation or an
-  internal maintainer note. It intentionally contains private absolute
-  provenance paths; if the repository is made reader-facing, either move this
-  file under an internal-only path, remove it from the public documentation
-  guide, or replace private paths with symbolic placeholders such as
-  `PAPER_ROOT` and `SYMWAN_ROOT`.
-- Review root-level manuscript artifacts. `main_all.tex` / `main_all.pdf` are
-  part of the current figure-inventory checks, but
-  `Yourmanuscript BN15047 Saito.pdf` is tracked without a clear role in the
-  README or inventories. Either document its purpose or remove it from the
-  public release set.
+- Keep private absolute provenance paths out of the public documentation set.
+  `docs/source_inventory.md` should remain removed from the reader-facing repo
+  unless it is rewritten with symbolic placeholders such as `PAPER_ROOT` and
+  `SYMWAN_ROOT`.
+- Keep root-level manuscript artifacts limited to files with a clear public
+  role in the repository workflow and tests.
 
 ### Local Workspace Hygiene
 
@@ -406,8 +399,9 @@ before the next public-facing release or packaging pass.
 
 The reorganization is considered complete when:
 
-- `docs/source_inventory.md` lists every manuscript figure / table with
-  local source and repository destination;
+- `data/processed/figure_inventory.csv` and `docs/paper_mapping.md` together
+  list every repository-backed manuscript figure / table and its public
+  destination;
 - `inputs/` contains complete under-100-MB production inputs for the
   SOC + magnetization-rotation workflow used in the manuscript;
 - `src/symwan_multipie/` contains the full SymWannier and wannier_utils

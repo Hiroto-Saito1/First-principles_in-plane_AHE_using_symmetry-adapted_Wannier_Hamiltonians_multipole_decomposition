@@ -1,8 +1,36 @@
 Copyright (c) 2026 Hiroto Saito
 
-All rights reserved.
+This repository is distributed under a mixed-license policy.
 
-No license is granted yet. Permission to use, copy, modify, or distribute this
-repository must be obtained from the copyright holder unless a separate license
-is added later.
+1. Repository-authored code
+   Unless a file or directory is listed under "Excluded archived code" below or
+   carries its own notice, the repository-authored code in this project is made
+   available under the MIT License. See `LICENSES/MIT.txt`.
 
+   This includes, in particular:
+   - `scripts/`
+   - `tests/`
+   - `examples/`
+   - top-level modules under `src/symwan_multipie/` such as
+     `multipole.py`, `multipole_decomposition.py`, `mag_rotation.py`,
+     `energy_diff.py`, and `single_multipole_reader.py`
+
+2. Data, figures, and documentation
+   Unless a file carries its own notice, the repository's documentation,
+   compact processed/source datasets, input manifests, and repository-backed
+   figure PDFs are made available under the Creative Commons Attribution 4.0
+   International License (CC BY 4.0). See `LICENSES/CC-BY-4.0.txt`.
+
+3. Excluded archived code
+   The copied archived module trees listed below are NOT covered by the MIT
+   grant above at this time. Their upstream redistribution status has not yet
+   been confirmed, so they remain all rights reserved pending clarification
+   from the original authors.
+
+   - `src/symwan_multipie/symwannier/`
+   - `src/symwan_multipie/wannier_utils/`
+
+4. Future clarification
+   If the redistribution status of the excluded archived code is confirmed
+   later, this file can be updated to grant a more permissive license for those
+   paths as well.

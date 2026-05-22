@@ -161,6 +161,7 @@ if [[ "$generate_paper" -eq 1 ]]; then
   "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_strain_103.py" \
     --output-dir "$PAPER_OUTPUT_ROOT/strain_103"
   "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_multipole_coefficients.py" \
+    --style paper \
     --output-dir "$PAPER_OUTPUT_ROOT/multipole_coefficients"
   "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_minimal_model.py" \
     --output-dir "$PAPER_OUTPUT_ROOT/minimal_model"
@@ -177,6 +178,9 @@ if [[ "$generate_diagnostics" -eq 1 ]]; then
   "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_rank_resolved_103.py" \
     --style diagnostic \
     --output-dir "$DIAGNOSTIC_OUTPUT_ROOT/rank_resolved_103"
+  "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_multipole_coefficients.py" \
+    --style diagnostic \
+    --output-dir "$DIAGNOSTIC_OUTPUT_ROOT/multipole_coefficients"
 fi
 
 if [[ "$generate_paper" -eq 1 && "$generate_diagnostics" -eq 1 ]]; then

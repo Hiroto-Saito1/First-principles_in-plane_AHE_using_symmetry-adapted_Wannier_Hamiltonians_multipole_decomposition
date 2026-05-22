@@ -37,6 +37,13 @@ Columns:
 The full HDF5-based generation procedure remains documented in
 `scripts/workflow/generate_large_files.md`.
 
+The repository plotting script now supports two presentation modes:
+
+- paper mode: shorter manuscript-facing tick labels and a family legend under
+  `results/figures_paper/multipole_coefficients/`;
+- diagnostic mode: raw `z_i` + SAMB names under
+  `results/figures_diagnostics/multipole_coefficients/`.
+
 When the decomposition HDF5 is available, the direct compact-export command is:
 
 ```bash

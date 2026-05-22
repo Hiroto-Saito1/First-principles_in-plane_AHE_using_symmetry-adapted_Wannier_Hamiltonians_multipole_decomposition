@@ -313,9 +313,10 @@ serve both purposes.
    - Rank-resolved `(103)` plots now have a paper-facing plotting mode that
      maps cumulative and single-rank labels to manuscript-style multipole
      notation, while keeping raw `w_rank...` labels available in diagnostics.
-   - Multipole-coefficient plots remain the main paper-style layout task:
-     readable labels, paper-like bar grouping, and clear `Q` / `M` / `T` / `G`
-     classification treatment.
+   - Multipole-coefficient plots now also have separate paper and diagnostic
+     modes, with paper-facing short labels and explicit `Q` / `M` / `T` / `G`
+     family legend treatment. Any remaining work here is fine visual polish
+     rather than provenance or role separation.
 
 5. Validate with both data checks and visual contact sheets.
    - Data checks should confirm row counts, angle grids, units, component
@@ -383,10 +384,10 @@ workspaces.
 - Pseudopotentials are intentionally not redistributed.
 - The generated figure count matches the repository inventory, and the
   repository now splits manuscript-style outputs (`results/figures_paper/`)
-  from diagnostic outputs (`results/figures_diagnostics/`). The remaining
-  figure-quality gap is concentrated in the multipole-coefficient layout and
-  any smaller paper-facing styling differences that still remain after the AHC
-  and rank-resolved label alignment work.
+  from diagnostic outputs (`results/figures_diagnostics/`) for the AHC,
+  rank-resolved, and multipole-coefficient plots. The remaining figure-quality
+  work is mostly fine visual alignment and optional contact-sheet comparison
+  against `figures/paper/`.
 
 ## Current Status
 
@@ -400,9 +401,8 @@ for the default reproducibility checks.
 
 What remains is follow-on work rather than a blocker for data availability:
 
-- continue Phase F by improving the paper-facing multipole-coefficient plots
-  and, if useful, adding contact-sheet style visual comparisons for
-  `results/figures_paper/`;
+- continue Phase F with contact-sheet style visual comparisons for
+  `results/figures_paper/` and any remaining fine panel/layout polish;
 - recover a direct archived compact export for the multipole coefficients if a
   later backup search turns one up;
 - copy additional private helper scripts only if they carry unique behavior
@@ -440,9 +440,9 @@ presentation upgrades.
 
 ### Remaining Optional Follow-up
 
-- Continue the manuscript-style alignment work by revising the
-  multipole-coefficient plots and any remaining paper-facing labels or panel
-  sizing details that still differ from `figures/paper/`.
+- Continue the manuscript-style alignment work with contact-sheet comparisons
+  and any remaining paper-facing label or panel sizing details that still
+  differ from `figures/paper/`.
 - Obtain upstream clarification for the copied archived code under
   `src/symwan_multipie/symwannier/` and
   `src/symwan_multipie/wannier_utils/`, then update `LICENSE` / `README.md`

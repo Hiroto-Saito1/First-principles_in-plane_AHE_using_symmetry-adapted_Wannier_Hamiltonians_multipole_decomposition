@@ -174,6 +174,9 @@ if [[ "$generate_diagnostics" -eq 1 ]]; then
   "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_ahc_103.py" \
     --style diagnostic \
     --output-dir "$DIAGNOSTIC_OUTPUT_ROOT/ahc_103"
+  "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/plot_rank_resolved_103.py" \
+    --style diagnostic \
+    --output-dir "$DIAGNOSTIC_OUTPUT_ROOT/rank_resolved_103"
 fi
 
 if [[ "$generate_paper" -eq 1 && "$generate_diagnostics" -eq 1 ]]; then

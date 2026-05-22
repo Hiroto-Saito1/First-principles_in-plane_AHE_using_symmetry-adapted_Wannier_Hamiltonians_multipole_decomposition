@@ -7,7 +7,8 @@ import argparse
 from pathlib import Path
 
 from _common import (
-    DEFAULT_OUTPUT,
+    DEFAULT_OUTPUT_DIAGNOSTICS,
+    DEFAULT_OUTPUT_PAPER,
     PROCESSED,
     get_pyplot,
     read_csv,
@@ -23,7 +24,70 @@ GROUPS = [
 ]
 SINGLE_RANK_METHODS = ["w_rank1", "w_rank3", "w_rank4", "w_rank5"]
 
-def plot_component(rows, methods, component: str, output: Path) -> None:
+PAPER_COMPONENT_LABELS = {
+    "para": r"$\sigma_{\parallel}\ [\mathrm{S/cm}]$",
+    "perp": r"$\sigma_{\perp}\ [\mathrm{S/cm}]$",
+    "axis": r"$\sigma_{n}\ [\mathrm{S/cm}]$",
+}
+
+PAPER_CUMULATIVE_LABELS = {
+    "w_rank1": r"$\mathbb{M}_1$",
+    "w_rank1_2": r"$\mathbb{M}_1 + \mathbb{T}_2$",
+    "w_rank1_2_3": r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3$",
+    "w_rank1_2_3_4": r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3 + \mathbb{T}_4$",
+    "w_rank1_2_3_4_5": r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3 + \mathbb{T}_4 + \mathbb{M}_5$",
+    "w_rank1_2_3_4_5_6": r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3 + \mathbb{T}_4 + \mathbb{M}_5 + \mathbb{T}_6$",
+}
+
+PAPER_SINGLE_RANK_LABELS = {
+    "w_rank1": r"$\mathbb{M}_1$",
+    "w_rank3": r"$\mathbb{M}_3$",
+    "w_rank4": r"$\mathbb{T}_4$",
+    "w_rank5": r"$\mathbb{M}_5$",
+}
+
+PAPER_STYLE_MAP = {
+    "w_rank1": {"marker": "o", "linestyle": "-", "color": "tab:blue"},
+    "w_rank1_2": {"marker": "s", "linestyle": "--", "color": "tab:orange"},
+    "w_rank1_2_3": {"marker": "o", "linestyle": "-", "color": "tab:blue"},
+    "w_rank1_2_3_4": {"marker": "s", "linestyle": "--", "color": "tab:orange"},
+    "w_rank1_2_3_4_5": {"marker": "o", "linestyle": "-", "color": "tab:blue"},
+    "w_rank1_2_3_4_5_6": {"marker": "s", "linestyle": "--", "color": "tab:orange"},
+    "w_rank3": {"marker": "^", "linestyle": "-", "color": "tab:green"},
+    "w_rank4": {"marker": "D", "linestyle": "-", "color": "tab:red"},
+    "w_rank5": {"marker": "v", "linestyle": "-", "color": "tab:purple"},
+}
+
+
+def output_dir_for(style: str) -> Path:
+    if style == "paper":
+        return DEFAULT_OUTPUT_PAPER / "rank_resolved_103"
+    if style == "diagnostic":
+        return DEFAULT_OUTPUT_DIAGNOSTICS / "rank_resolved_103"
+    raise ValueError(style)
+
+
+def display_label(method: str, *, style: str, single_rank: bool) -> str:
+    if style == "paper":
+        if single_rank:
+            return PAPER_SINGLE_RANK_LABELS.get(method, method)
+        return PAPER_CUMULATIVE_LABELS.get(method, method)
+    if single_rank:
+        return method.replace("_", " ")
+    return method.replace("_", ",")
+
+
+def component_ylabel(component: str, *, style: str) -> str:
+    if style == "paper":
+        return PAPER_COMPONENT_LABELS[component]
+    return f"sigma_{component} at E_F [S/cm]"
+
+
+def reference_label(style: str) -> str:
+    return "all ranks" if style == "paper" else "all"
+
+
+def plot_component(rows, methods, component: str, output: Path, *, style: str) -> None:
     plt = get_pyplot()
     output.parent.mkdir(parents=True, exist_ok=True)
     by_key = {(row["series_group"], row["method"]): [] for row in rows}
@@ -36,13 +100,23 @@ def plot_component(rows, methods, component: str, output: Path) -> None:
         if not series:
             continue
         x, y = sorted_xy(series, component)
-        plt.plot(x, y, marker="o", markersize=3, linewidth=1.2, label=method.replace("_", ","))
+        kwargs = {"marker": "o", "markersize": 3, "linewidth": 1.2}
+        kwargs.update(PAPER_STYLE_MAP.get(method, {}) if style == "paper" else {})
+        plt.plot(x, y, label=display_label(method, style=style, single_rank=False), **kwargs)
     reference = by_key.get(("reference", "SW+ED"), [])
     if reference:
         x, y = sorted_xy(reference, component)
-        plt.plot(x, y, color="black", marker="*", markersize=5, linewidth=1.5, label="all")
-    plt.xlabel("psi [deg]")
-    plt.ylabel(f"sigma_{component} at E_F [S/cm]")
+        plt.plot(
+            x,
+            y,
+            color="black",
+            marker="*",
+            markersize=5,
+            linewidth=1.5,
+            label=reference_label(style),
+        )
+    plt.xlabel(r"$\psi\ [\mathrm{deg}]$" if style == "paper" else "psi [deg]")
+    plt.ylabel(component_ylabel(component, style=style))
     plt.xlim(0, 180)
     plt.xticks(range(0, 181, 30))
     plt.grid(True, linewidth=0.4)
@@ -52,7 +126,7 @@ def plot_component(rows, methods, component: str, output: Path) -> None:
     plt.close()
 
 
-def plot_single_rank(rows, component: str, output: Path) -> None:
+def plot_single_rank(rows, component: str, output: Path, *, style: str) -> None:
     plt = get_pyplot()
     output.parent.mkdir(parents=True, exist_ok=True)
     by_key = {(row["series_group"], row["method"]): [] for row in rows}
@@ -65,13 +139,23 @@ def plot_single_rank(rows, component: str, output: Path) -> None:
         if not series:
             continue
         x, y = sorted_xy(series, component)
-        plt.plot(x, y, marker="o", markersize=3, linewidth=1.2, label=method.replace("_", " "))
+        kwargs = {"marker": "o", "markersize": 3, "linewidth": 1.2}
+        kwargs.update(PAPER_STYLE_MAP.get(method, {}) if style == "paper" else {})
+        plt.plot(x, y, label=display_label(method, style=style, single_rank=True), **kwargs)
     reference = by_key.get(("reference", "SW+ED"), [])
     if reference:
         x, y = sorted_xy(reference, component)
-        plt.plot(x, y, color="black", marker="*", markersize=5, linewidth=1.5, label="all")
-    plt.xlabel("psi [deg]")
-    plt.ylabel(f"sigma_{component} at E_F [S/cm]")
+        plt.plot(
+            x,
+            y,
+            color="black",
+            marker="*",
+            markersize=5,
+            linewidth=1.5,
+            label=reference_label(style),
+        )
+    plt.xlabel(r"$\psi\ [\mathrm{deg}]$" if style == "paper" else "psi [deg]")
+    plt.ylabel(component_ylabel(component, style=style))
     plt.xlim(0, 180)
     plt.xticks(range(0, 181, 30))
     plt.grid(True, linewidth=0.4)
@@ -83,20 +167,33 @@ def plot_single_rank(rows, component: str, output: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT / "rank_resolved_103")
+    parser.add_argument("--style", choices=("paper", "diagnostic"), default="paper")
+    parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
 
+    output_dir = args.output_dir or output_dir_for(args.style)
     rows = read_csv(require_file(PROCESSED / "rank_resolved_103" / "rank_resolved_ahc.csv"))
     components = ["para", "perp", "axis"]
     for idx, methods in enumerate(GROUPS, start=1):
         for component in components:
-            plot_component(rows, methods, component, args.output_dir / f"sigma_{component}_group{idx}.pdf")
+            plot_component(
+                rows,
+                methods,
+                component,
+                output_dir / f"sigma_{component}_group{idx}.pdf",
+                style=args.style,
+            )
 
     single_rank_path = PROCESSED / "rank_resolved_103" / "single_rank_ahc.csv"
     if single_rank_path.is_file():
         single_rank_rows = read_csv(single_rank_path)
         for component in components:
-            plot_single_rank(single_rank_rows, component, args.output_dir / f"sigma_{component}.pdf")
+            plot_single_rank(
+                single_rank_rows,
+                component,
+                output_dir / f"sigma_{component}.pdf",
+                style=args.style,
+            )
 
 
 if __name__ == "__main__":

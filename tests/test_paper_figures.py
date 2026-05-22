@@ -204,6 +204,11 @@ def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
             assert "SW+ED" not in text
             assert "SW+PD" not in text
             assert "cubic fit" not in text
+        if script_rel == "scripts/reproduce_figures/plot_rank_resolved_103.py":
+            sample_pdf = output_dir / expected_names[0]
+            text = pdf_strings(sample_pdf)
+            assert "w_rank" not in text
+            assert "SW+ED" not in text
 
 
 def test_ahc_paper_configs_use_manuscript_series_roles() -> None:
@@ -221,6 +226,23 @@ def test_ahc_paper_configs_use_manuscript_series_roles() -> None:
         assert config["style_map"]["Wan90"]["linestyle"] == "None"
         assert config["style_map"]["SW+ED"]["linestyle"] == "None"
         assert "results/figures_paper/" in str(module.output_dir_for("paper"))
+
+
+def test_rank_resolved_paper_config_uses_manuscript_series_roles() -> None:
+    """Paper-mode rank-resolved plots should expose manuscript-facing multipole labels."""
+    module = load_script_module(
+        "scripts/reproduce_figures/plot_rank_resolved_103.py",
+        "plot_rank_resolved_103_module",
+    )
+    assert module.display_label("w_rank1", style="paper", single_rank=False) == r"$\mathbb{M}_1$"
+    assert (
+        module.display_label("w_rank1_2_3_4", style="paper", single_rank=False)
+        == r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3 + \mathbb{T}_4$"
+    )
+    assert module.display_label("w_rank4", style="paper", single_rank=True) == r"$\mathbb{T}_4$"
+    assert module.reference_label("paper") == "all ranks"
+    assert module.component_ylabel("axis", style="paper") == r"$\sigma_{n}\ [\mathrm{S/cm}]$"
+    assert "results/figures_paper/" in str(module.output_dir_for("paper"))
 
 
 def test_multipole_workflow_manifest_records_archived_hdf5_route() -> None:

@@ -161,14 +161,15 @@ This now writes two output trees:
 - `results/figures_paper/`: manuscript-style outputs intended to match the
   paper's series membership, labels, and panel structure.
 - `results/figures_diagnostics/`: repository-local diagnostic comparisons,
-  currently used for the implementation-heavy AHC angular-dependence plots.
+  currently used for the implementation-heavy AHC and rank-resolved
+  comparison plots.
 
 Individual figure groups can also be regenerated directly:
 
 ```bash
 python scripts/reproduce_figures/plot_ahc_111.py --style paper
 python scripts/reproduce_figures/plot_ahc_103.py --style diagnostic
-python scripts/reproduce_figures/plot_rank_resolved_103.py
+python scripts/reproduce_figures/plot_rank_resolved_103.py --style paper
 python scripts/reproduce_figures/plot_strain_103.py
 ```
 

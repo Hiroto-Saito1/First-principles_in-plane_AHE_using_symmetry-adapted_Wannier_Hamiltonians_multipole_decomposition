@@ -310,10 +310,11 @@ serve both purposes.
      marker/line roles, axis limits, tick spacing, and units.
 
 4. Then align rank-resolved and coefficient plots.
-   - Rank-resolved `(103)` plots appear closer in curve content, so focus on
-     legend names, component labels, panel sizing, and line/marker semantics.
-   - Multipole-coefficient plots need a stronger layout revision: readable
-     labels, paper-like bar grouping, and clear `Q` / `M` / `T` / `G`
+   - Rank-resolved `(103)` plots now have a paper-facing plotting mode that
+     maps cumulative and single-rank labels to manuscript-style multipole
+     notation, while keeping raw `w_rank...` labels available in diagnostics.
+   - Multipole-coefficient plots remain the main paper-style layout task:
+     readable labels, paper-like bar grouping, and clear `Q` / `M` / `T` / `G`
      classification treatment.
 
 5. Validate with both data checks and visual contact sheets.
@@ -380,12 +381,12 @@ workspaces.
   off PDF-vector fallback onto a direct compact export from archived AHC
   outputs.
 - Pseudopotentials are intentionally not redistributed.
-- The generated figure count matches the repository inventory, but the current
-  `results/figures/` plots are not all manuscript-style. In particular, the
-  AHC angular-dependence plots expose diagnostic series and internal component
-  labels that differ from the final paper's `model` / `DFT` / `fitting`
-  presentation. Treat this as the next figure-quality task rather than a
-  data-availability blocker.
+- The generated figure count matches the repository inventory, and the
+  repository now splits manuscript-style outputs (`results/figures_paper/`)
+  from diagnostic outputs (`results/figures_diagnostics/`). The remaining
+  figure-quality gap is concentrated in the multipole-coefficient layout and
+  any smaller paper-facing styling differences that still remain after the AHC
+  and rank-resolved label alignment work.
 
 ## Current Status
 
@@ -399,9 +400,9 @@ for the default reproducibility checks.
 
 What remains is follow-on work rather than a blocker for data availability:
 
-- split generated figures into manuscript-style and diagnostic outputs, then
-  align the AHC, rank-resolved, and multipole-coefficient plots with the paper
-  as described in Phase F;
+- continue Phase F by improving the paper-facing multipole-coefficient plots
+  and, if useful, adding contact-sheet style visual comparisons for
+  `results/figures_paper/`;
 - recover a direct archived compact export for the multipole coefficients if a
   later backup search turns one up;
 - copy additional private helper scripts only if they carry unique behavior
@@ -439,10 +440,9 @@ presentation upgrades.
 
 ### Remaining Optional Follow-up
 
-- Split generated plots into `results/figures_paper/` and
-  `results/figures_diagnostics/`. Move implementation-comparison series into
-  diagnostics, and make the paper-facing AHC plots match the manuscript's
-  `model` / `DFT` / `fitting` semantics before tuning visual styling.
+- Continue the manuscript-style alignment work by revising the
+  multipole-coefficient plots and any remaining paper-facing labels or panel
+  sizing details that still differ from `figures/paper/`.
 - Obtain upstream clarification for the copied archived code under
   `src/symwan_multipie/symwannier/` and
   `src/symwan_multipie/wannier_utils/`, then update `LICENSE` / `README.md`

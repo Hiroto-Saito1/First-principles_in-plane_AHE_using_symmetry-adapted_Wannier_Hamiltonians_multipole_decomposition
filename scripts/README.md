@@ -10,6 +10,6 @@ scripts.
   repository-backed figures, splitting manuscript-style and diagnostic outputs.
 - `reproduce_all_figures.sh`: figure-only driver that reads existing
   `data/processed/` files and writes to `results/figures_paper/` plus the
-  current AHC-specific `results/figures_diagnostics/` outputs.
+  current AHC/rank-resolved `results/figures_diagnostics/` outputs.
 - `workflow/`: scripts that prepare or transform Hamiltonian and multipole
   data.

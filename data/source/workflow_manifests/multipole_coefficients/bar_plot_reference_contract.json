@@ -1,0 +1,37 @@
+{
+  "description": "Reference-information contract for the paper-facing multipole-coefficient bar plots.",
+  "reference_evidence": {
+    "notes": [
+      "The paper-facing bar plots keep the top 20 coefficients selected by absolute magnitude from the committed compact CSV, with or without electric multipoles depending on the figure.",
+      "Paper mode uses compact family-letter legends and z_i + SAMB labels; diagnostic mode is allowed to keep raw z_i labels and family-role legend text."
+    ],
+    "reference_figures_dir": "figures/paper/",
+    "public_script": "scripts/reproduce_figures/plot_multipole_coefficients.py"
+  },
+  "input_csv": "data/processed/multipole_coefficients/multipole_coefficients.csv",
+  "paper_ylabel": "z [eV]",
+  "paper_legend_labels": {
+    "Q": "Q",
+    "M": "M",
+    "T": "T",
+    "G": "G"
+  },
+  "figures": {
+    "bar_ed_all_35": {
+      "figure_file": "bar_ed_all_35.pdf",
+      "generated_output": "results/figures_paper/multipole_coefficients/bar_ed_all_35.pdf",
+      "exclude_q": false,
+      "top_n": 20,
+      "required_indices": ["2", "4", "1", "22", "12", "20", "74", "38", "37", "9", "14", "72", "66", "86479", "85", "45", "90", "48", "350", "68"],
+      "required_families": ["Q", "Q", "Q", "Q", "Q", "Q", "Q", "Q", "Q", "Q", "Q", "Q", "Q", "M", "Q", "Q", "Q", "Q", "Q", "Q"]
+    },
+    "bar_ed_wo_q_35": {
+      "figure_file": "bar_ed_wo_q_35.pdf",
+      "generated_output": "results/figures_paper/multipole_coefficients/bar_ed_wo_q_35.pdf",
+      "exclude_q": true,
+      "top_n": 20,
+      "required_indices": ["86479", "86449", "86428", "86701", "86677", "86572", "86719", "86581", "86691", "86672", "87160", "86714", "89569", "86566", "87132", "87119", "87088", "87400", "87115", "87149"],
+      "required_families": ["M", "M", "M", "M", "M", "M", "M", "M", "M", "T", "M", "M", "M", "M", "M", "T", "M", "M", "M", "M"]
+    }
+  }
+}

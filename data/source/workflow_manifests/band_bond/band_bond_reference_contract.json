@@ -1,0 +1,50 @@
+{
+  "description": "Reference-information contract for the paper-facing band_bond convergence composite.",
+  "reference_evidence": {
+    "notes": [
+      "The committed paper-facing composite intentionally includes shell cutoffs 1, 2, 3, 4, 5, 10, and 35.",
+      "The recovered compact CSV also contains shell cutoff 20 because the per-cutoff vector sources were archived, but cutoff 20 remains outside the paper-facing composite."
+    ],
+    "reference_figures_dir": "figures/paper/",
+    "public_script": "scripts/reproduce_figures/plot_band_bond.py"
+  },
+  "figure_file": "band_bond.pdf",
+  "generated_output": "results/figures_paper/band_bond/band_bond.pdf",
+  "source_csv": "data/processed/band_bond/band_bond_curves.csv",
+  "paper_cutoffs": [1, 2, 3, 4, 5, 10, 35],
+  "excluded_cutoffs": [20],
+  "series": ["DFT", "model"],
+  "x_range": [0.0, 1.0],
+  "y_range": [-10.0, 5.8],
+  "xtick_labels": ["$\\Gamma$", "H", "N", "$\\Gamma$", "P", "H"],
+  "required_curves": {
+    "1": {
+      "DFT": {"curve_count": 16, "point_count": 1269},
+      "model": {"curve_count": 14, "point_count": 1253}
+    },
+    "2": {
+      "DFT": {"curve_count": 16, "point_count": 1269},
+      "model": {"curve_count": 14, "point_count": 1162}
+    },
+    "3": {
+      "DFT": {"curve_count": 16, "point_count": 1269},
+      "model": {"curve_count": 14, "point_count": 1183}
+    },
+    "4": {
+      "DFT": {"curve_count": 16, "point_count": 1269},
+      "model": {"curve_count": 15, "point_count": 1280}
+    },
+    "5": {
+      "DFT": {"curve_count": 16, "point_count": 1269},
+      "model": {"curve_count": 15, "point_count": 1244}
+    },
+    "10": {
+      "DFT": {"curve_count": 16, "point_count": 1269},
+      "model": {"curve_count": 17, "point_count": 1291}
+    },
+    "35": {
+      "DFT": {"curve_count": 16, "point_count": 1269},
+      "model": {"curve_count": 17, "point_count": 1275}
+    }
+  }
+}

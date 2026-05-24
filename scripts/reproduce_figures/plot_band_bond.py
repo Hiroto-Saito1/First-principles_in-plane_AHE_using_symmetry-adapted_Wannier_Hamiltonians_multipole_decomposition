@@ -15,6 +15,11 @@ XTICKS = [92.16, 169.95466, 224.963265, 279.971869, 347.342045, 414.72]
 XTICK_POSITIONS = [(value - XMIN) / (XMAX - XMIN) for value in XTICKS]
 XTICK_LABELS = [r"$\Gamma$", "H", "N", r"$\Gamma$", "P", "H"]
 DEFAULT_CUTOFFS = [1, 2, 3, 4, 5, 10, 35]
+PAPER_CUTOFFS = DEFAULT_CUTOFFS
+PAPER_SERIES = ["DFT", "model"]
+PAPER_YLABEL = r"$E-E_F$ [eV]"
+PAPER_XRANGE = (0.0, 1.0)
+PAPER_YRANGE = (-10.0, 5.8)
 
 
 def ordinal(value: int) -> str:
@@ -50,11 +55,11 @@ def plot_panel(ax, rows: list[dict[str, str]], cutoff: int) -> None:
         ax.plot(x, y, linewidth=1.3, **kwargs)
 
     ax.set_title(f"{ordinal(cutoff)} nearest neighbors")
-    ax.set_xlim(0.0, 1.0)
-    ax.set_ylim(-10.0, 5.8)
+    ax.set_xlim(*PAPER_XRANGE)
+    ax.set_ylim(*PAPER_YRANGE)
     ax.set_xticks(XTICK_POSITIONS)
     ax.set_xticklabels(XTICK_LABELS)
-    ax.set_ylabel(r"$E-E_F$ [eV]")
+    ax.set_ylabel(PAPER_YLABEL)
     ax.grid(True, linewidth=0.4)
     ax.legend(fontsize=8, loc="upper right")
 

@@ -35,6 +35,10 @@ Files:
   `z_i` labels listed in `selected_z_ids.csv`, but it is only a supporting
   provenance artifact and not a substitute for the missing direct `Fe_all_35`
   source used to build the compact coefficient HDF5/CSV.
+- `bar_plot_reference_contract.json`: paper-facing information contract for
+  the manuscript-style bar plots. It fixes the selected `z_i` entries, their
+  ordering, and the compact family-letter legend semantics expected from the
+  public paper-mode plotting script.
 
 The compact numerical CSV still rebuilt by the repository lives under
 `data/source/pdf_vector/multipole_coefficients/`. This manifest exists so the

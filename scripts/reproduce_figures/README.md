@@ -34,6 +34,22 @@ The minimal-model script is now guarded by
 That contract fixes the two committed parameter sweeps and their shared
 13-point angle grid for the paper-facing `sigma_n` scans.
 
+The `band_bond` composite is now guarded by
+`data/source/workflow_manifests/band_bond/band_bond_reference_contract.json`.
+That contract fixes the paper-facing cutoff set, requires both `DFT` and
+`model` series for each included cutoff, and records the recovered
+curve/point counts expected from the compact CSV.
+
+The paper-facing multipole bar plots are now also guarded by
+`data/source/workflow_manifests/multipole_coefficients/bar_plot_reference_contract.json`.
+That contract fixes the selected `z_i` entries, their ordering, and the
+compact family-letter legend semantics.
+
+The paper-facing `bcc` plane-definition figures are now guarded by
+`data/source/workflow_manifests/definitions/bcc_planes_reference_contract.json`.
+That contract fixes the plane normals, in-plane vectors, rotation angle, and
+crystallographic labels expected from the committed JSON definitions.
+
 For visual review, `make_paper_contact_sheet.py` builds a multi-page PDF that
 places each committed `figures/paper/` reference next to the corresponding
 generated `results/figures_paper/` output.

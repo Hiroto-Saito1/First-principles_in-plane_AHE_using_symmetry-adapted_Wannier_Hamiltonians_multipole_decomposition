@@ -79,6 +79,33 @@ def minimal_model_contract() -> dict[str, object]:
     )
 
 
+def band_bond_contract() -> dict[str, object]:
+    return json.loads(
+        (
+            ROOT
+            / "data/source/workflow_manifests/band_bond/band_bond_reference_contract.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
+def multipole_bar_contract() -> dict[str, object]:
+    return json.loads(
+        (
+            ROOT
+            / "data/source/workflow_manifests/multipole_coefficients/bar_plot_reference_contract.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
+def definitions_contract() -> dict[str, object]:
+    return json.loads(
+        (
+            ROOT
+            / "data/source/workflow_manifests/definitions/bcc_planes_reference_contract.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
 def pdf_strings(path: Path) -> str:
     """Extract plain strings from a generated PDF for lightweight label checks."""
     result = subprocess.run(
@@ -500,6 +527,47 @@ def test_minimal_model_processed_data_satisfies_contract() -> None:
             assert x_grid == scan["x_grid_deg"]
 
 
+def test_band_bond_paper_config_matches_reference_contract() -> None:
+    """The band/bond contract should match the public paper-facing composite role."""
+    module = load_script_module(
+        "scripts/reproduce_figures/plot_band_bond.py",
+        "plot_band_bond_contract_module",
+    )
+    contract = band_bond_contract()
+
+    assert contract["figure_file"] == "band_bond.pdf"
+    assert contract["generated_output"] == "results/figures_paper/band_bond/band_bond.pdf"
+    assert contract["paper_cutoffs"] == module.PAPER_CUTOFFS
+    assert contract["series"] == module.PAPER_SERIES
+    assert tuple(contract["x_range"]) == module.PAPER_XRANGE
+    assert tuple(contract["y_range"]) == module.PAPER_YRANGE
+    assert contract["xtick_labels"] == module.XTICK_LABELS
+
+
+def test_band_bond_processed_data_satisfies_contract() -> None:
+    """Recovered compact band/bond curves should satisfy the paper contract."""
+    contract = band_bond_contract()
+    with (ROOT / contract["source_csv"]).open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    cutoffs_present = sorted({int(row["cutoff_shell"]) for row in rows})
+    assert cutoffs_present == sorted(contract["paper_cutoffs"] + contract["excluded_cutoffs"])
+
+    for cutoff in contract["paper_cutoffs"]:
+        cutoff_rows = [row for row in rows if row["cutoff_shell"] == str(cutoff)]
+        assert sorted({row["series"] for row in cutoff_rows}) == contract["series"]
+        requirements = contract["required_curves"][str(cutoff)]
+        for series in contract["series"]:
+            series_rows = [row for row in cutoff_rows if row["series"] == series]
+            curve_count = len({row["curve_index"] for row in series_rows})
+            point_count = len(series_rows)
+            assert curve_count == requirements[series]["curve_count"]
+            assert point_count == requirements[series]["point_count"]
+            x_values = [float(row["k_path_fraction"]) for row in series_rows]
+            assert min(x_values) == contract["x_range"][0]
+            assert max(x_values) == contract["x_range"][1]
+
+
 def test_multipole_paper_config_uses_family_legend_and_short_labels() -> None:
     """Paper-mode multipole plots should match the manuscript-facing label and legend style."""
     module = load_script_module(
@@ -517,6 +585,73 @@ def test_multipole_paper_config_uses_family_legend_and_short_labels() -> None:
     assert module.FAMILY_LABELS["T"] == "T"
     assert module.FAMILY_ROLE_LABELS["T"] == "T magnetic-toroidal"
     assert "results/figures_paper/" in str(module.output_dir_for("paper"))
+
+
+def test_multipole_bar_contract_matches_paper_selection() -> None:
+    """The multipole bar contract should match the public paper-facing selection rules."""
+    module = load_script_module(
+        "scripts/reproduce_figures/plot_multipole_coefficients.py",
+        "plot_multipole_coefficients_contract_module",
+    )
+    contract = multipole_bar_contract()
+
+    assert contract["paper_ylabel"] == "z [eV]"
+    assert contract["paper_legend_labels"] == module.FAMILY_LABELS
+
+    with (ROOT / contract["input_csv"]).open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    for figure_key, figure in contract["figures"].items():
+        selected = module.select_rows(rows, exclude_q=figure["exclude_q"])
+        assert len(selected) == figure["top_n"]
+        assert [row["index"] for row in selected] == figure["required_indices"]
+        assert [module.family_code(row["name"]) for row in selected] == figure["required_families"]
+        assert figure["generated_output"].startswith("results/figures_paper/multipole_coefficients/")
+
+
+def test_bcc_definition_contract_matches_processed_json_and_script() -> None:
+    """The geometric contract should match the committed plane-definition JSON."""
+    module = load_script_module(
+        "scripts/reproduce_figures/plot_bcc_planes.py",
+        "plot_bcc_planes_contract_module",
+    )
+    contract = definitions_contract()
+
+    assert contract["generated_output_root"] == "results/figures_paper/definitions/"
+    assert str(module.DEFAULT_OUTPUT).endswith("results/figures_paper/definitions")
+    assert sorted(module.REQUIRED_CONFIG_KEYS) == sorted(
+        [
+            "id",
+            "title",
+            "output_file",
+            "psi_deg",
+            "plane_normal",
+            "reference_vector",
+            "reference_label",
+            "perpendicular_vector",
+            "perpendicular_label",
+        ]
+    )
+
+    configs = {
+        config["id"]: config
+        for config in json.loads((ROOT / contract["input_json"]).read_text(encoding="utf-8"))["planes"]
+    }
+    assert sorted(configs) == sorted(contract["planes"])
+
+    for plane_id, plane in contract["planes"].items():
+        config = configs[plane_id]
+        assert config["output_file"] == plane["figure_file"]
+        for key in [
+            "psi_deg",
+            "plane_normal",
+            "reference_vector",
+            "reference_label",
+            "perpendicular_vector",
+            "perpendicular_label",
+        ]:
+            assert config[key] == plane[key]
+        assert plane["generated_output"].startswith("results/figures_paper/definitions/")
 
 
 def test_contact_sheet_script_maps_inventory_to_paper_outputs() -> None:

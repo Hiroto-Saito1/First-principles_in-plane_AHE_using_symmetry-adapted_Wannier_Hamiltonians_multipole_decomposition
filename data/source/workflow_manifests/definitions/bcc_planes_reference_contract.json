@@ -1,0 +1,35 @@
+{
+  "description": "Reference-information contract for the paper-facing (111) and (103) bcc plane-definition figures.",
+  "reference_evidence": {
+    "notes": [
+      "The committed JSON under data/processed/definitions/bcc_planes.json is the public source of truth for the plane semantics.",
+      "The paper-facing geometric contract preserves vector definitions, labels, rotation angle, and output identity rather than point counts."
+    ],
+    "reference_figures_dir": "figures/paper/",
+    "public_script": "scripts/reproduce_figures/plot_bcc_planes.py"
+  },
+  "input_json": "data/processed/definitions/bcc_planes.json",
+  "generated_output_root": "results/figures_paper/definitions/",
+  "planes": {
+    "111": {
+      "figure_file": "bcc_111.pdf",
+      "generated_output": "results/figures_paper/definitions/bcc_111.pdf",
+      "psi_deg": 25.0,
+      "plane_normal": [1.0, 1.0, 1.0],
+      "reference_vector": [-1.0, -1.0, 2.0],
+      "reference_label": "[$\\bar{1}\\bar{1}2$]",
+      "perpendicular_vector": [1.0, -1.0, 0.0],
+      "perpendicular_label": "[1$\\bar{1}$0]"
+    },
+    "103": {
+      "figure_file": "bcc_103.pdf",
+      "generated_output": "results/figures_paper/definitions/bcc_103.pdf",
+      "psi_deg": 25.0,
+      "plane_normal": [1.0, 0.0, 3.0],
+      "reference_vector": [0.0, -1.0, 0.0],
+      "reference_label": "[0$\\bar{1}$0]",
+      "perpendicular_vector": [3.0, 0.0, -1.0],
+      "perpendicular_label": "[30$\\bar{1}$]"
+    }
+  }
+}

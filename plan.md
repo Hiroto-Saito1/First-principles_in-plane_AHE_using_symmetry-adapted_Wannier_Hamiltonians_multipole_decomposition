@@ -381,6 +381,19 @@ serve both purposes.
      under `data/source/workflow_manifests/minimal_model/` that fixes the two
      parameter sweeps and their shared angle grid for the paper-facing
      `sigma_n` scans.
+   - The `band_bond` composite now also has a reference-information contract
+     under `data/source/workflow_manifests/band_bond/` that fixes the
+     manuscript-style cutoff set, the required `DFT` and `model` series, and
+     the recovered curve/point counts expected for each included cutoff.
+   - The multipole-coefficient bar plots now also have a paper-facing
+     information contract under
+     `data/source/workflow_manifests/multipole_coefficients/` that fixes the
+     selected `z_i` entries, their ordering, and the compact family-letter
+     legend semantics.
+   - The `bcc_111` and `bcc_103` plane-definition plots now also have a
+     geometric information contract under
+     `data/source/workflow_manifests/definitions/` that fixes the plane
+     normals, in-plane vectors, rotation angle, and crystallographic labels.
 
 7. Validate with both data checks and visual contact sheets.
    - Data checks should confirm row counts, angle grids, units, component
@@ -472,9 +485,12 @@ workspaces.
   curves, manuscript-facing labels, and expected angle grids. The `[103]`
   strain plots now have an equivalent contract for their paper-facing
   `SW+ED` `sigma_n` branches. The minimal-model plots now have an equivalent
-  contract for their two committed parameter sweeps. The missing/sparse
-  compact DFT source remains a lower-priority diagnostic gap for the archived
-  implementation-comparison AHC plots.
+  contract for their two committed parameter sweeps. The `band_bond`
+  composite now has an equivalent contract for its included cutoff set and
+  recovered curve membership. The multipole bar plots and geometric
+  definition plots now also have explicit paper-facing information contracts.
+  The missing/sparse compact DFT source remains a lower-priority diagnostic
+  gap for the archived implementation-comparison AHC plots.
 - Similar checks should then be applied to the other paper-facing generated
   plots at lower priority. The goal is not pixel matching, but preventing
   silent information loss: missing rank/reference curves, altered bar
@@ -539,11 +555,8 @@ presentation upgrades.
   `figures/paper/`. Separately, recover denser compact DFT comparison data if
   a later backup search turns it up, so the diagnostic `plot_ahc.py`-style
   overlays can also be made repository-backed.
-- Add lighter figure-type contracts for the remaining paper-facing outputs:
-  curve plots (`band_bond`),
-  multipole-coefficient bar plots, and geometric definition plots. These
-  should block silent information loss without requiring byte-identical PDF
-  reproduction.
+- Continue contact-sheet review and fine panel/label polish now that the
+  remaining paper-facing figure families have explicit information contracts.
 - Obtain upstream clarification for the copied archived code under
   `src/symwan_multipie/symwannier/` and
   `src/symwan_multipie/wannier_utils/`, then update `LICENSE` / `README.md`

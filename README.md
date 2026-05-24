@@ -199,6 +199,18 @@ The minimal-model panels now also have a paper-facing contract under
 parameter scans, their committed hopping-value sweeps, and their shared
 13-point angle grid so the paper outputs cannot silently lose curves.
 
+The `band_bond` composite now also has a paper-facing contract under
+`data/source/workflow_manifests/band_bond/`. That contract fixes the included
+cutoff set `1, 2, 3, 4, 5, 10, 35`, keeps both `DFT` and `model` series for
+each included cutoff, and records the recovered curve/point counts that the
+paper-facing composite is expected to preserve.
+
+The multipole bar plots and `bcc` definition figures now also have explicit
+paper-facing information contracts. For the bar plots, the contract fixes bar
+selection, ordering, and compact family-letter legend semantics; for the plane
+definitions, it fixes the plane normals, in-plane vectors, rotation angle, and
+manuscript-facing crystallographic labels.
+
 Individual figure groups can also be regenerated directly:
 
 ```bash

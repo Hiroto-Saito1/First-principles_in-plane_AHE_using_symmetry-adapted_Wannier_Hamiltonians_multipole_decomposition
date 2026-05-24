@@ -45,6 +45,12 @@ The repository plotting script now supports two presentation modes:
   `results/figures_diagnostics/multipole_coefficients/`, together with more
   explicit family-role legend text.
 
+The paper-facing bar plots are additionally guarded by
+`data/source/workflow_manifests/multipole_coefficients/bar_plot_reference_contract.json`.
+That contract fixes the selected `z_i` entries, their ordering, and the
+compact family-letter legend semantics expected from the manuscript-style
+figures.
+
 When the decomposition HDF5 is available, the direct compact-export command is:
 
 ```bash

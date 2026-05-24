@@ -12,7 +12,18 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 PROCESSED = ROOT / "data" / "processed"
-DEFAULT_OUTPUT = ROOT / "results" / "figures"
+DEFAULT_OUTPUT = ROOT / "results" / "figures_paper" / "definitions"
+REQUIRED_CONFIG_KEYS = [
+    "id",
+    "title",
+    "output_file",
+    "psi_deg",
+    "plane_normal",
+    "reference_vector",
+    "reference_label",
+    "perpendicular_vector",
+    "perpendicular_label",
+]
 
 
 def get_pyplot():
@@ -26,7 +37,12 @@ def get_pyplot():
 
 def load_configs(path: Path) -> list[dict[str, object]]:
     data = json.loads(path.read_text(encoding="utf-8"))
-    return list(data["planes"])
+    configs = list(data["planes"])
+    for config in configs:
+        missing = [key for key in REQUIRED_CONFIG_KEYS if key not in config]
+        if missing:
+            raise KeyError(f"Missing plane-definition keys for {config.get('id', '?')}: {missing}")
+    return configs
 
 
 def unit(vector: np.ndarray) -> np.ndarray:

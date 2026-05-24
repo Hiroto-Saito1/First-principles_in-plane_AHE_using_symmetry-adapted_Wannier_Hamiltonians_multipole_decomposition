@@ -314,17 +314,17 @@ serve both purposes.
      maps cumulative and single-rank labels to manuscript-style multipole
      notation, while keeping raw `w_rank...` labels available in diagnostics.
    - Multipole-coefficient plots now also have separate paper and diagnostic
-     modes, with paper-facing short labels and explicit `Q` / `M` / `T` / `G`
-     family legend treatment. Any remaining work here is fine visual polish
-     rather than provenance or role separation.
+     modes, with paper-facing `z_i` + SAMB labels, compact family-letter
+     legends, and diagnostic family-role legend treatment. Any remaining work
+     here is fine visual polish rather than provenance or role separation.
 
 5. Validate with both data checks and visual contact sheets.
    - Data checks should confirm row counts, angle grids, units, component
      signs, and selected reference values.
-   - Visual checks should compare `figures/paper/` against
-     `results/figures_paper/` using contact sheets. Pixel identity is not the
-     target, but series membership, label semantics, scale, and panel structure
-     should match the paper.
+   - The repository now includes an opt-in paper contact-sheet generator that
+     compares `figures/paper/` against `results/figures_paper/`.
+   - Pixel identity is not the target, but series membership, label semantics,
+     scale, and panel structure should match the paper.
 
 ## Tests And Acceptance Criteria
 
@@ -401,8 +401,8 @@ for the default reproducibility checks.
 
 What remains is follow-on work rather than a blocker for data availability:
 
-- continue Phase F with contact-sheet style visual comparisons for
-  `results/figures_paper/` and any remaining fine panel/layout polish;
+- continue Phase F with manual review of the generated contact sheets and any
+  remaining fine panel/layout polish;
 - recover a direct archived compact export for the multipole coefficients if a
   later backup search turns one up;
 - copy additional private helper scripts only if they carry unique behavior

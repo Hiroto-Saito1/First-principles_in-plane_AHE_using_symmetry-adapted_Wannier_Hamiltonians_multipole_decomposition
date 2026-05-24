@@ -8,6 +8,8 @@ DIAGNOSTIC_OUTPUT_ROOT="$ROOT/results/figures_diagnostics"
 check_only=0
 generate_paper=1
 generate_diagnostics=1
+generate_contact_sheet=0
+CONTACT_SHEET_OUTPUT=""
 
 usage() {
   cat <<EOF
@@ -19,6 +21,9 @@ Options:
   --diagnostics-root PATH   Output root for diagnostic plots.
   --paper-only              Generate only manuscript-style plots.
   --diagnostics-only        Generate only diagnostic plots.
+  --with-contact-sheet      Build a reference-vs-generated contact sheet PDF.
+  --contact-sheet-output PATH
+                            Explicit output path for the contact sheet PDF.
   -h, --help                Show this help.
 
 With no options, the script writes manuscript-style outputs under
@@ -49,6 +54,14 @@ while [[ $# -gt 0 ]]; do
       generate_paper=0
       shift
       ;;
+    --with-contact-sheet)
+      generate_contact_sheet=1
+      shift
+      ;;
+    --contact-sheet-output)
+      CONTACT_SHEET_OUTPUT="$2"
+      shift 2
+      ;;
     -h|--help)
       usage
       exit 0
@@ -70,6 +83,15 @@ done
 if [[ "$generate_paper" -eq 0 && "$generate_diagnostics" -eq 0 ]]; then
   echo "Nothing to do: both paper and diagnostics outputs are disabled." >&2
   exit 2
+fi
+
+if [[ "$generate_contact_sheet" -eq 1 && "$generate_paper" -eq 0 ]]; then
+  echo "Contact sheets require manuscript-style figure output. Remove --diagnostics-only." >&2
+  exit 2
+fi
+
+if [[ -z "$CONTACT_SHEET_OUTPUT" ]]; then
+  CONTACT_SHEET_OUTPUT="$DIAGNOSTIC_OUTPUT_ROOT/contact_sheets/paper_vs_reference.pdf"
 fi
 
 required_inputs=(
@@ -125,6 +147,7 @@ required_scripts=(
   "$ROOT/scripts/reproduce_figures/plot_strain_103.py"
   "$ROOT/scripts/reproduce_figures/plot_multipole_coefficients.py"
   "$ROOT/scripts/reproduce_figures/plot_minimal_model.py"
+  "$ROOT/scripts/reproduce_figures/make_paper_contact_sheet.py"
 )
 
 missing=0
@@ -183,6 +206,12 @@ if [[ "$generate_diagnostics" -eq 1 ]]; then
     --output-dir "$DIAGNOSTIC_OUTPUT_ROOT/multipole_coefficients"
 fi
 
+if [[ "$generate_contact_sheet" -eq 1 ]]; then
+  "$PYTHON_BIN" "$ROOT/scripts/reproduce_figures/make_paper_contact_sheet.py" \
+    --paper-root "$PAPER_OUTPUT_ROOT" \
+    --output "$CONTACT_SHEET_OUTPUT"
+fi
+
 if [[ "$generate_paper" -eq 1 && "$generate_diagnostics" -eq 1 ]]; then
   cat <<EOF
 Generated repository-local figures under:
@@ -198,5 +227,12 @@ else
   cat <<EOF
 Generated repository-local diagnostic figures under:
   $DIAGNOSTIC_OUTPUT_ROOT
+EOF
+fi
+
+if [[ "$generate_contact_sheet" -eq 1 ]]; then
+  cat <<EOF
+Generated paper-figure contact sheet:
+  $CONTACT_SHEET_OUTPUT
 EOF
 fi

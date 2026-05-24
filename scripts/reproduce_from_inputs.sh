@@ -7,6 +7,8 @@ PAPER_OUTPUT_ROOT="$ROOT/results/figures_paper"
 DIAGNOSTIC_OUTPUT_ROOT="$ROOT/results/figures_diagnostics"
 EXECUTE_EXPENSIVE=0
 STAGES=()
+WITH_CONTACT_SHEET=0
+CONTACT_SHEET_OUTPUT=""
 
 usage() {
   cat <<EOF
@@ -27,6 +29,10 @@ Options:
   --diagnostic-output-root PATH
                         Diagnostic figure output directory for the figures
                         stage.
+  --with-contact-sheet  Generate a paper-vs-reference contact sheet during
+                        the figures stage.
+  --contact-sheet-output PATH
+                        Explicit output path for the contact sheet PDF.
   --python PATH         Python executable.
   --execute-expensive   Reserved for future cleaned HPC launch wrappers.
                         The current public driver still prints HPC recipes
@@ -67,6 +73,18 @@ while [[ $# -gt 0 ]]; do
         exit 2
       fi
       DIAGNOSTIC_OUTPUT_ROOT="$2"
+      shift 2
+      ;;
+    --with-contact-sheet)
+      WITH_CONTACT_SHEET=1
+      shift
+      ;;
+    --contact-sheet-output)
+      if [[ $# -lt 2 ]]; then
+        echo "--contact-sheet-output requires a value" >&2
+        exit 2
+      fi
+      CONTACT_SHEET_OUTPUT="$2"
       shift 2
       ;;
     --python)
@@ -151,9 +169,18 @@ run_stage() {
       "$PYTHON_BIN" "$ROOT/scripts/workflow/rebuild_processed_data.py"
       ;;
     figures)
-      PYTHON="$PYTHON_BIN" bash "$ROOT/scripts/reproduce_all_figures.sh" \
-        --paper-root "$PAPER_OUTPUT_ROOT" \
+      local -a figure_args=(
+        --paper-root "$PAPER_OUTPUT_ROOT"
         --diagnostics-root "$DIAGNOSTIC_OUTPUT_ROOT"
+      )
+      if [[ "$WITH_CONTACT_SHEET" -eq 1 ]]; then
+        figure_args+=(--with-contact-sheet)
+      fi
+      if [[ -n "$CONTACT_SHEET_OUTPUT" ]]; then
+        figure_args+=(--contact-sheet-output "$CONTACT_SHEET_OUTPUT")
+      fi
+      PYTHON="$PYTHON_BIN" bash "$ROOT/scripts/reproduce_all_figures.sh" \
+        "${figure_args[@]}"
       ;;
     *)
       echo "Unknown stage: $stage" >&2

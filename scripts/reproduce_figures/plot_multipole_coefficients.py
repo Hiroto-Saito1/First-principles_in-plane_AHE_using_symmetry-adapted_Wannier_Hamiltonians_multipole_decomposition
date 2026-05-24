@@ -27,6 +27,13 @@ FAMILY_COLORS = {
 }
 
 FAMILY_LABELS = {
+    "Q": "Q",
+    "M": "M",
+    "T": "T",
+    "G": "G",
+}
+
+FAMILY_ROLE_LABELS = {
     "Q": "Q electric",
     "M": "M magnetic",
     "T": "T magnetic-toroidal",
@@ -62,8 +69,7 @@ def parse_name(name: str) -> tuple[str, str, str]:
 
 
 def paper_label(row: dict[str, str]) -> str:
-    family, rank, irrep = parse_name(row["name"])
-    return f"z_{row['index']}\n{family}{rank} {irrep}"
+    return f"z{row['index']} {row['name']}"
 
 
 def diagnostic_label(row: dict[str, str]) -> str:
@@ -80,14 +86,21 @@ def plot(rows, output: Path, title: str | None, *, style: str) -> None:
         labels = [diagnostic_label(row) for row in rows]
     values = [parse_float(row["coefficient_ev"]) for row in rows]
     positions = list(range(len(rows)))
-    plt.figure(figsize=(7.4, 4.6) if style == "paper" else (7.8, 4.8))
+    plt.figure(figsize=(5.8, 3.35) if style == "paper" else (7.8, 4.8))
     plt.bar(positions, values, color=colors, edgecolor="black", linewidth=0.35)
     plt.axhline(0.0, color="black", linewidth=0.8)
-    plt.xticks(positions, labels, rotation=70 if style == "paper" else 90, ha="right", fontsize=7)
-    plt.ylabel("coefficient [eV]" if style == "paper" else "z_i [eV]")
+    plt.xticks(
+        positions,
+        labels,
+        rotation=90 if style == "paper" else 90,
+        ha="right",
+        fontsize=6.7 if style == "paper" else 7,
+    )
+    plt.ylabel("z [eV]" if style == "paper" else "z_i [eV]")
     if title:
         plt.title(title)
     plt.grid(axis="y", linewidth=0.4)
+    plt.margins(x=0.02)
     if style == "paper":
         families = []
         for row in rows:
@@ -98,9 +111,32 @@ def plot(rows, output: Path, title: str | None, *, style: str) -> None:
             Patch(facecolor=FAMILY_COLORS[code], edgecolor="black", label=FAMILY_LABELS[code])
             for code in families
         ]
+        plt.legend(
+            handles=handles,
+            ncols=min(4, len(handles)),
+            fontsize=7,
+            frameon=False,
+            loc="upper right",
+            handlelength=1.3,
+            handletextpad=0.4,
+            columnspacing=0.8,
+        )
+    else:
+        families = []
+        for row in rows:
+            code = family_code(row["name"])
+            if code not in families:
+                families.append(code)
+        handles = [
+            Patch(facecolor=FAMILY_COLORS[code], edgecolor="black", label=FAMILY_ROLE_LABELS[code])
+            for code in families
+        ]
         plt.legend(handles=handles, ncols=min(2, len(handles)), fontsize=7, frameon=False, loc="upper right")
     plt.tight_layout()
-    plt.savefig(output)
+    if style == "paper":
+        plt.savefig(output, bbox_inches="tight", pad_inches=0.02)
+    else:
+        plt.savefig(output)
     plt.close()
 
 

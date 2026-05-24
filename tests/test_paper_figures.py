@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 
@@ -212,9 +213,9 @@ def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
         if script_rel == "scripts/reproduce_figures/plot_multipole_coefficients.py":
             sample_pdf = output_dir / expected_names[0]
             text = pdf_strings(sample_pdf)
-            assert "Q(" not in text
-            assert "M(" not in text
-            assert "T(" not in text
+            assert "Q electric" not in text
+            assert "M magnetic" not in text
+            assert "T magnetic-toroidal" not in text
 
 
 def test_ahc_paper_configs_use_manuscript_series_roles() -> None:
@@ -252,7 +253,7 @@ def test_rank_resolved_paper_config_uses_manuscript_series_roles() -> None:
 
 
 def test_multipole_paper_config_uses_family_legend_and_short_labels() -> None:
-    """Paper-mode multipole plots should shorten tick labels and expose family roles."""
+    """Paper-mode multipole plots should match the manuscript-facing label and legend style."""
     module = load_script_module(
         "scripts/reproduce_figures/plot_multipole_coefficients.py",
         "plot_multipole_coefficients_module",
@@ -262,11 +263,47 @@ def test_multipole_paper_config_uses_family_legend_and_short_labels() -> None:
         "name": "M(1,T1g,,0|1,-1)",
         "coefficient_ev": "-3.80923944",
     }
-    assert module.paper_label(row) == "z_86479\nM1 T1g"
+    assert module.paper_label(row) == "z86479 M(1,T1g,,0|1,-1)"
     assert module.diagnostic_label(row) == "z_86479 M(1,T1g,,0|1,-1)"
     assert module.family_code(row["name"]) == "M"
-    assert module.FAMILY_LABELS["T"] == "T magnetic-toroidal"
+    assert module.FAMILY_LABELS["T"] == "T"
+    assert module.FAMILY_ROLE_LABELS["T"] == "T magnetic-toroidal"
     assert "results/figures_paper/" in str(module.output_dir_for("paper"))
+
+
+def test_contact_sheet_script_maps_inventory_to_paper_outputs() -> None:
+    """The contact-sheet helper should pair each reproducible plot with its paper output."""
+    module = load_script_module(
+        "scripts/reproduce_figures/make_paper_contact_sheet.py",
+        "make_paper_contact_sheet_module",
+    )
+    pairs = module.reproducible_pairs()
+    rows = reproducible_plot_rows()
+    assert len(pairs) == len(rows)
+    assert pairs[0].reference_pdf == ROOT / rows[0]["included_pdf"]
+    generated_rel = Path(rows[0]["generated_output"]).relative_to("results/figures_paper")
+    assert pairs[0].generated_rel == generated_rel
+    assert pairs[0].generated_pdf == ROOT / "results" / "figures_paper" / generated_rel
+    assert module.DEFAULT_CONTACT_SHEET_OUTPUT == (
+        ROOT / "results" / "figures_diagnostics" / "contact_sheets" / "paper_vs_reference.pdf"
+    )
+
+
+def test_contact_sheet_script_uses_ghostscript_when_available() -> None:
+    """Keep the contact-sheet dependency explicit so failures are easy to interpret."""
+    module = load_script_module(
+        "scripts/reproduce_figures/make_paper_contact_sheet.py",
+        "make_paper_contact_sheet_gs_module",
+    )
+    if shutil.which("gs") is None:
+        try:
+            module.require_ghostscript()
+        except RuntimeError as exc:
+            assert "Ghostscript" in str(exc)
+        else:
+            raise AssertionError("Expected Ghostscript lookup to fail when gs is absent")
+    else:
+        assert module.require_ghostscript().endswith("gs")
 
 
 def test_multipole_workflow_manifest_records_archived_hdf5_route() -> None:

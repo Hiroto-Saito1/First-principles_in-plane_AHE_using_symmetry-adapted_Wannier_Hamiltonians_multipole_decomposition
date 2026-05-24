@@ -7,8 +7,12 @@ Scripts here read from `data/processed/` and write generated figures under
 The AHC angular-dependence, rank-resolved, and multipole-coefficient scripts
 also support a diagnostic mode that writes to `results/figures_diagnostics/`
 and keeps internal comparison series such as `Wan90`, `SW+ED`, `SW+PD`,
-`cubic fit`, raw `w_rank...` labels, and full SAMB multipole names separate
-from manuscript-facing labels.
+`cubic fit`, raw `w_rank...` labels, and more explicit family-role legends
+separate from manuscript-facing labels.
+
+For visual review, `make_paper_contact_sheet.py` builds a multi-page PDF that
+places each committed `figures/paper/` reference next to the corresponding
+generated `results/figures_paper/` output.
 
 To regenerate every figure that currently has committed compact data, run:
 
@@ -30,6 +34,7 @@ Available scripts:
 - `plot_strain_103.py`
 - `plot_multipole_coefficients.py`
 - `plot_minimal_model.py`
+- `make_paper_contact_sheet.py`
 
 The plane-definition figures read from committed JSON, while the band/bond and
 multipole-coefficient fallbacks still rely on tracked vector

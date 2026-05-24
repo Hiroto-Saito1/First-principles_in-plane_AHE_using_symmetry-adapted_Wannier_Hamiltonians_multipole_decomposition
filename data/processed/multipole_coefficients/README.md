@@ -39,10 +39,11 @@ The full HDF5-based generation procedure remains documented in
 
 The repository plotting script now supports two presentation modes:
 
-- paper mode: shorter manuscript-facing tick labels and a family legend under
-  `results/figures_paper/multipole_coefficients/`;
+- paper mode: manuscript-facing `z_i` + SAMB labels with compact family-letter
+  legends under `results/figures_paper/multipole_coefficients/`;
 - diagnostic mode: raw `z_i` + SAMB names under
-  `results/figures_diagnostics/multipole_coefficients/`.
+  `results/figures_diagnostics/multipole_coefficients/`, together with more
+  explicit family-role legend text.
 
 When the decomposition HDF5 is available, the direct compact-export command is:
 

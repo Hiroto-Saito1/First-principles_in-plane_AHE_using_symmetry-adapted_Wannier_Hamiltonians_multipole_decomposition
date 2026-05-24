@@ -154,6 +154,7 @@ To regenerate only the figures from existing processed CSV files:
 
 ```bash
 ./scripts/reproduce_all_figures.sh
+./scripts/reproduce_all_figures.sh --with-contact-sheet
 ```
 
 This now writes two output trees:
@@ -163,6 +164,15 @@ This now writes two output trees:
 - `results/figures_diagnostics/`: repository-local diagnostic comparisons,
   currently used for the implementation-heavy AHC, rank-resolved, and
   multipole-coefficient comparison plots.
+
+When `--with-contact-sheet` is enabled, the figure driver also writes a
+multi-page PDF under `results/figures_diagnostics/contact_sheets/` that places
+each committed `figures/paper/` reference PDF next to the corresponding
+generated `results/figures_paper/` output for visual review.
+
+For the multipole bar figures, the paper-facing output now stays closer to the
+manuscript's `z_i` + SAMB labeling, while the diagnostic output keeps the more
+explicit family-role legend text.
 
 Individual figure groups can also be regenerated directly:
 

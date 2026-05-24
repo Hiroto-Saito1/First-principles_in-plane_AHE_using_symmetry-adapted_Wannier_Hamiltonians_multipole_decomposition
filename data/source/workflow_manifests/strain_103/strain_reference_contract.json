@@ -1,0 +1,38 @@
+{
+  "description": "Reference-information contract for paper-facing (103) strain-response AHC panels.",
+  "reference_evidence": {
+    "notes": [
+      "The committed figures under figures/paper/ define the paper-facing panel set for the tensile and compressive [103] strain scans.",
+      "Paper-facing strain plots intentionally keep only the SW+ED sigma_n curves; Wan90 and SW+PD remain diagnostic-only series in the compact CSV snapshots."
+    ],
+    "reference_figures_dir": "figures/paper/",
+    "public_script": "scripts/reproduce_figures/plot_strain_103.py"
+  },
+  "component": {
+    "source_column": "sigma_axis_s_cm",
+    "paper_ylabel": "$\\sigma_{n}\\ [\\mathrm{S/cm}]$",
+    "paper_xlabel": "$\\psi\\ [\\mathrm{deg}]$"
+  },
+  "branches": {
+    "tensile": {
+      "source_csv": "data/processed/strain_103/strain_plus_ahc.csv",
+      "figure_file": "sigma_plus_strain_sigma_axis.pdf",
+      "generated_output": "results/figures_paper/strain_103/sigma_plus_strain_sigma_axis.pdf",
+      "title": "Fe (103) tensile strain",
+      "required_method": "SW+ED",
+      "required_strain_values_percent": [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+      "min_finite_points_per_strain": 13,
+      "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
+    },
+    "compressive": {
+      "source_csv": "data/processed/strain_103/strain_minus_ahc.csv",
+      "figure_file": "sigma_minus_strain_sigma_axis.pdf",
+      "generated_output": "results/figures_paper/strain_103/sigma_minus_strain_sigma_axis.pdf",
+      "title": "Fe (103) compressive strain",
+      "required_method": "SW+ED",
+      "required_strain_values_percent": [-1.0, -0.8, -0.6, -0.4, -0.2, 0.0],
+      "min_finite_points_per_strain": 13,
+      "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
+    }
+  }
+}

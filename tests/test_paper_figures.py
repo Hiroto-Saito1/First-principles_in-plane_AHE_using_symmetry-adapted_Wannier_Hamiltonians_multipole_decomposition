@@ -52,6 +52,33 @@ def fit_ahc_contract() -> dict[str, object]:
     )
 
 
+def rank_resolved_contract() -> dict[str, object]:
+    return json.loads(
+        (
+            ROOT
+            / "data/source/workflow_manifests/rank_resolved_103/rank_resolved_reference_contract.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
+def strain_contract() -> dict[str, object]:
+    return json.loads(
+        (
+            ROOT
+            / "data/source/workflow_manifests/strain_103/strain_reference_contract.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
+def minimal_model_contract() -> dict[str, object]:
+    return json.loads(
+        (
+            ROOT
+            / "data/source/workflow_manifests/minimal_model/minimal_model_reference_contract.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
 def pdf_strings(path: Path) -> str:
     """Extract plain strings from a generated PDF for lightweight label checks."""
     result = subprocess.run(
@@ -308,6 +335,169 @@ def test_rank_resolved_paper_config_uses_manuscript_series_roles() -> None:
     assert module.reference_label("paper") == "all ranks"
     assert module.component_ylabel("axis", style="paper") == r"$\sigma_{n}\ [\mathrm{S/cm}]$"
     assert "results/figures_paper/" in str(module.output_dir_for("paper"))
+
+
+def test_rank_resolved_reference_contract_matches_paper_config() -> None:
+    """The rank-resolved contract should mirror the public paper-facing plot roles."""
+    module = load_script_module(
+        "scripts/reproduce_figures/plot_rank_resolved_103.py",
+        "plot_rank_resolved_103_contract_module",
+    )
+    contract = rank_resolved_contract()
+
+    assert sorted(contract["components"]) == ["axis", "para", "perp"]
+    assert sorted(contract["panel_sets"]) == ["group1", "group2", "group3", "single_rank"]
+
+    cumulative_methods = [panel["required_series"][:2] for key, panel in contract["panel_sets"].items() if key.startswith("group")]
+    assert [[item["source_method"] for item in pair] for pair in cumulative_methods] == module.GROUPS
+    assert [item["source_method"] for item in contract["panel_sets"]["single_rank"]["required_series"][:4]] == module.SINGLE_RANK_METHODS
+
+    for component, meta in contract["components"].items():
+        assert meta["paper_ylabel"] == module.component_ylabel(component, style="paper")
+
+    for panel_key, panel in contract["panel_sets"].items():
+        single_rank = panel_key == "single_rank"
+        expected_reference = panel["required_series"][-1]
+        assert expected_reference["source_method"] == "SW+ED"
+        assert expected_reference["paper_label"] == module.reference_label("paper")
+        for requirement in panel["required_series"][:-1]:
+            assert requirement["paper_label"] == module.display_label(
+                requirement["source_method"],
+                style="paper",
+                single_rank=single_rank,
+            )
+        for component, output in panel["panel_outputs"].items():
+            assert output["generated_output"].startswith("results/figures_paper/rank_resolved_103/")
+            assert output["figure_file"].endswith(".pdf")
+            expected_name = (
+                f"sigma_{component}.pdf" if single_rank else f"sigma_{component}_{panel_key}.pdf"
+            )
+            assert output["figure_file"] == expected_name
+
+
+def test_rank_resolved_processed_data_satisfies_contract() -> None:
+    """Committed compact rank-resolved sources should satisfy the paper contract."""
+    contract = rank_resolved_contract()
+    components = contract["components"]
+
+    for panel_key, panel in contract["panel_sets"].items():
+        with (ROOT / panel["source_csv"]).open(newline="", encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+        for component, component_meta in components.items():
+            source_column = component_meta["source_column"]
+            for requirement in panel["required_series"]:
+                matching_rows = [
+                    row
+                    for row in rows
+                    if row["series_group"] == requirement["series_group"]
+                    and row["method"] == requirement["source_method"]
+                    and row[source_column].strip().lower() != "nan"
+                ]
+                finite_points = len(matching_rows)
+                assert finite_points == requirement["min_finite_points"]
+                x_grid = sorted({int(float(row["phi_deg"])) for row in matching_rows})
+                assert x_grid == requirement["x_grid_deg"]
+
+
+def test_strain_paper_config_matches_reference_contract() -> None:
+    """The strain contract should match the public paper-facing strain plot role."""
+    module = load_script_module(
+        "scripts/reproduce_figures/plot_strain_103.py",
+        "plot_strain_103_contract_module",
+    )
+    contract = strain_contract()
+
+    assert contract["component"]["source_column"] == module.PAPER_COMPONENT_COLUMN
+    assert contract["component"]["paper_ylabel"] == module.PAPER_YLABEL
+    assert contract["component"]["paper_xlabel"] == module.PAPER_XLABEL
+
+    for branch_name, branch in contract["branches"].items():
+        assert branch["required_method"] == module.PAPER_METHOD
+        assert branch["title"] == module.BRANCH_TITLES[branch_name]
+        assert branch["generated_output"].startswith("results/figures_paper/strain_103/")
+        assert branch["figure_file"].endswith(".pdf")
+
+
+def test_strain_processed_data_satisfies_contract() -> None:
+    """Committed compact strain-response sources should satisfy the paper contract."""
+    contract = strain_contract()
+    source_column = contract["component"]["source_column"]
+
+    for branch_name, branch in contract["branches"].items():
+        with (ROOT / branch["source_csv"]).open(newline="", encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+
+        strain_values = sorted(
+            {
+                float(row["strain_percent"])
+                for row in rows
+                if row["method"] == branch["required_method"]
+                and row[source_column].strip().lower() != "nan"
+            }
+        )
+        assert strain_values == branch["required_strain_values_percent"]
+
+        for strain_value in strain_values:
+            matching_rows = [
+                row
+                for row in rows
+                if row["method"] == branch["required_method"]
+                and float(row["strain_percent"]) == strain_value
+                and row[source_column].strip().lower() != "nan"
+            ]
+            assert len(matching_rows) == branch["min_finite_points_per_strain"]
+            x_grid = sorted({int(float(row["phi_deg"])) for row in matching_rows})
+            assert x_grid == branch["x_grid_deg"]
+
+
+def test_minimal_model_paper_config_matches_reference_contract() -> None:
+    """The minimal-model contract should match the public paper-facing plot role."""
+    module = load_script_module(
+        "scripts/reproduce_figures/plot_minimal_model.py",
+        "plot_minimal_model_contract_module",
+    )
+    contract = minimal_model_contract()
+
+    assert contract["component"]["source_column"] == "sigma_axis"
+    assert contract["component"]["paper_ylabel"] == module.PAPER_YLABEL
+    assert contract["component"]["paper_xlabel"] == module.PAPER_XLABEL
+    assert contract["scans"]["first_nn"]["figure_file"] == module.SCAN_OUTPUTS["first_nn"]
+    assert contract["scans"]["second_nn"]["figure_file"] == module.SCAN_OUTPUTS["second_nn"]
+    for scan_name, scan in contract["scans"].items():
+        assert scan["generated_output"].startswith("results/figures_paper/minimal_model/")
+
+
+def test_minimal_model_processed_data_satisfies_contract() -> None:
+    """Committed compact minimal-model source should satisfy the paper contract."""
+    contract = minimal_model_contract()
+    source_column = contract["component"]["source_column"]
+
+    with (ROOT / contract["scans"]["first_nn"]["source_csv"]).open(
+        newline="", encoding="utf-8"
+    ) as handle:
+        rows = list(csv.DictReader(handle))
+
+    for scan_name, scan in contract["scans"].items():
+        subset = [row for row in rows if row["scan"] == scan_name]
+        parameter_values = sorted(
+            {
+                float(row["parameter_value"])
+                for row in subset
+                if row[source_column].strip().lower() != "nan"
+            }
+        )
+        assert parameter_values == scan["required_parameter_values"]
+
+        for parameter_value in parameter_values:
+            matching_rows = [
+                row
+                for row in subset
+                if float(row["parameter_value"]) == parameter_value
+                and row[source_column].strip().lower() != "nan"
+            ]
+            assert len(matching_rows) == scan["min_finite_points_per_parameter"]
+            x_grid = sorted({int(float(row["phi_deg"])) for row in matching_rows})
+            assert x_grid == scan["x_grid_deg"]
 
 
 def test_multipole_paper_config_uses_family_legend_and_short_labels() -> None:

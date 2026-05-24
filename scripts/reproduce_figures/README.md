@@ -17,6 +17,23 @@ series plus the analytic fit curve; the broader `Wan90`/DFT overlay belongs to
 the archived `plot_ahc.py` comparison plots instead. The diagnostic AHC
 outputs still show the currently committed implementation-comparison data.
 
+The paper-facing `(103)` rank-resolved plots are now guarded by
+`data/source/workflow_manifests/rank_resolved_103/rank_resolved_reference_contract.json`.
+That contract fixes the required cumulative and single-rank curve sets, their
+paper labels, and the expected angle grids without forcing pixel-identical PDF
+reproduction.
+
+The `[103]` strain script is now guarded by
+`data/source/workflow_manifests/strain_103/strain_reference_contract.json`.
+That contract fixes the paper-facing role of the script to the `SW+ED`
+`sigma_n` curves for the committed tensile and compressive branches and keeps
+their six strain values plus shared 13-point angle grid explicit.
+
+The minimal-model script is now guarded by
+`data/source/workflow_manifests/minimal_model/minimal_model_reference_contract.json`.
+That contract fixes the two committed parameter sweeps and their shared
+13-point angle grid for the paper-facing `sigma_n` scans.
+
 For visual review, `make_paper_contact_sheet.py` builds a multi-page PDF that
 places each committed `figures/paper/` reference next to the corresponding
 generated `results/figures_paper/` output.

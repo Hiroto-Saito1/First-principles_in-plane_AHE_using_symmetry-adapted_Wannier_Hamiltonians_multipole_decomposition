@@ -181,6 +181,24 @@ diagnostic concern tied to the archived `plot_ahc.py` workflow, because the
 committed compact DFT snapshots are still sparse for `(103)` and absent for
 `(111)`.
 
+For the `(103)` rank-resolved panels, the paper-facing outputs now also follow
+an explicit reference-information contract under
+`data/source/workflow_manifests/rank_resolved_103/`. That contract fixes the
+required cumulative and single-rank curves, manuscript-facing multipole labels,
+and angle grids, while the diagnostic mode keeps the raw `w_rank...` series
+names for implementation comparison.
+
+The `[103]` strain panels now follow the same pattern under
+`data/source/workflow_manifests/strain_103/`: the paper-facing output is fixed
+to the `SW+ED` `sigma_n` curves for the committed tensile and compressive
+strain branches, with the expected six strain values and shared 13-point angle
+grid preserved by tests.
+
+The minimal-model panels now also have a paper-facing contract under
+`data/source/workflow_manifests/minimal_model/`. That contract fixes the two
+parameter scans, their committed hopping-value sweeps, and their shared
+13-point angle grid so the paper outputs cannot silently lose curves.
+
 Individual figure groups can also be regenerated directly:
 
 ```bash

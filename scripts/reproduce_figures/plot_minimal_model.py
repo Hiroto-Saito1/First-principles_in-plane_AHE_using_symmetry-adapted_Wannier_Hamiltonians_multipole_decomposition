@@ -9,6 +9,14 @@ from pathlib import Path
 from _common import DEFAULT_OUTPUT, PROCESSED, get_pyplot, parse_float, read_csv
 
 
+PAPER_XLABEL = r"$\psi\ [\mathrm{deg}]$"
+PAPER_YLABEL = r"$\sigma_{n}$"
+SCAN_OUTPUTS = {
+    "first_nn": "sigma_axis_model_1st_nn.pdf",
+    "second_nn": "sigma_axis_model_2nd_nn.pdf",
+}
+
+
 def plot_scan(rows, scan: str, output: Path) -> None:
     subset = [row for row in rows if row["scan"] == scan]
     parameters = sorted({parse_float(row["parameter_value"]) for row in subset})
@@ -21,8 +29,8 @@ def plot_scan(rows, scan: str, output: Path) -> None:
         x = [parse_float(row["phi_deg"]) for row in series]
         y = [parse_float(row["sigma_axis"]) for row in series]
         plt.plot(x, y, marker="o", markersize=3, linewidth=1.2, label=f"{parameter:g}")
-    plt.xlabel("psi [deg]")
-    plt.ylabel("sigma_axis")
+    plt.xlabel(PAPER_XLABEL)
+    plt.ylabel(PAPER_YLABEL)
     plt.xlim(0, 180)
     plt.xticks(range(0, 181, 30))
     plt.grid(True, linewidth=0.4)
@@ -44,8 +52,8 @@ def main() -> None:
             "data/processed/minimal_model/README.md."
         )
     rows = read_csv(args.input)
-    plot_scan(rows, "first_nn", args.output_dir / "sigma_axis_model_1st_nn.pdf")
-    plot_scan(rows, "second_nn", args.output_dir / "sigma_axis_model_2nd_nn.pdf")
+    plot_scan(rows, "first_nn", args.output_dir / SCAN_OUTPUTS["first_nn"])
+    plot_scan(rows, "second_nn", args.output_dir / SCAN_OUTPUTS["second_nn"])
 
 
 if __name__ == "__main__":

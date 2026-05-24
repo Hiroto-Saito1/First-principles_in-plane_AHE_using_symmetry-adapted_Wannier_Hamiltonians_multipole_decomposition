@@ -365,10 +365,22 @@ serve both purposes.
    - Rank-resolved `(103)` plots now have a paper-facing plotting mode that
      maps cumulative and single-rank labels to manuscript-style multipole
      notation, while keeping raw `w_rank...` labels available in diagnostics.
+   - A reference-information contract now lives under
+     `data/source/workflow_manifests/rank_resolved_103/` and fixes the
+     required cumulative-group and single-rank curves, their paper-facing
+     labels, and their coarse-versus-reference angle grids.
    - Multipole-coefficient plots now also have separate paper and diagnostic
      modes, with paper-facing `z_i` + SAMB labels, compact family-letter
      legends, and diagnostic family-role legend treatment. Any remaining work
      here is fine visual polish rather than provenance or role separation.
+   - The `[103]` strain plots now also have a reference-information contract
+     under `data/source/workflow_manifests/strain_103/` that fixes the
+     `SW+ED` `sigma_n` paper role, committed strain values, and shared angle
+     grid for the tensile and compressive branches.
+   - The minimal-model plots now also have a reference-information contract
+     under `data/source/workflow_manifests/minimal_model/` that fixes the two
+     parameter sweeps and their shared angle grid for the paper-facing
+     `sigma_n` scans.
 
 7. Validate with both data checks and visual contact sheets.
    - Data checks should confirm row counts, angle grids, units, component
@@ -455,9 +467,14 @@ workspaces.
   rank-resolved, and multipole-coefficient plots. The `fit_ahc`
   reference-series contract and tests now follow the archived manuscript fit
   scripts, so the paper-facing outputs rebuild from committed `SW+ED` data
-  plus the analytic fit curve. The missing/sparse compact DFT source remains a
-  lower-priority diagnostic gap for the archived implementation-comparison
-  plots.
+  plus the analytic fit curve. The `(103)` rank-resolved plots now also have a
+  reference-information contract that fixes the required grouped/single-rank
+  curves, manuscript-facing labels, and expected angle grids. The `[103]`
+  strain plots now have an equivalent contract for their paper-facing
+  `SW+ED` `sigma_n` branches. The minimal-model plots now have an equivalent
+  contract for their two committed parameter sweeps. The missing/sparse
+  compact DFT source remains a lower-priority diagnostic gap for the archived
+  implementation-comparison AHC plots.
 - Similar checks should then be applied to the other paper-facing generated
   plots at lower priority. The goal is not pixel matching, but preventing
   silent information loss: missing rank/reference curves, altered bar
@@ -523,10 +540,10 @@ presentation upgrades.
   a later backup search turns it up, so the diagnostic `plot_ahc.py`-style
   overlays can also be made repository-backed.
 - Add lighter figure-type contracts for the remaining paper-facing outputs:
-  curve plots (`rank_resolved_103`, `strain_103`, `minimal_model`,
-  `band_bond`), multipole-coefficient bar plots, and geometric definition
-  plots. These should block silent information loss without requiring
-  byte-identical PDF reproduction.
+  curve plots (`band_bond`),
+  multipole-coefficient bar plots, and geometric definition plots. These
+  should block silent information loss without requiring byte-identical PDF
+  reproduction.
 - Obtain upstream clarification for the copied archived code under
   `src/symwan_multipie/symwannier/` and
   `src/symwan_multipie/wannier_utils/`, then update `LICENSE` / `README.md`

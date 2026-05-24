@@ -1,0 +1,34 @@
+{
+  "description": "Reference-information contract for paper-facing minimal-model sigma_n scans.",
+  "reference_evidence": {
+    "notes": [
+      "The committed figures under figures/paper/ define the paper-facing panel set for the minimal-model scans.",
+      "The compact CSV is a direct export from archived minimal-model AHC outputs, so the paper-facing contract only needs to protect the committed parameter sweeps and shared angle grid."
+    ],
+    "reference_figures_dir": "figures/paper/",
+    "public_script": "scripts/reproduce_figures/plot_minimal_model.py"
+  },
+  "component": {
+    "source_column": "sigma_axis",
+    "paper_ylabel": "$\\sigma_{n}$",
+    "paper_xlabel": "$\\psi\\ [\\mathrm{deg}]$"
+  },
+  "scans": {
+    "first_nn": {
+      "source_csv": "data/processed/minimal_model/model_sigma_axis.csv",
+      "figure_file": "sigma_axis_model_1st_nn.pdf",
+      "generated_output": "results/figures_paper/minimal_model/sigma_axis_model_1st_nn.pdf",
+      "required_parameter_values": [0.0, 0.05, 0.1, 0.15, 0.2],
+      "min_finite_points_per_parameter": 13,
+      "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
+    },
+    "second_nn": {
+      "source_csv": "data/processed/minimal_model/model_sigma_axis.csv",
+      "figure_file": "sigma_axis_model_2nd_nn.pdf",
+      "generated_output": "results/figures_paper/minimal_model/sigma_axis_model_2nd_nn.pdf",
+      "required_parameter_values": [0.0, 0.1, 0.11, 0.12, 0.13, 0.14],
+      "min_finite_points_per_parameter": 13,
+      "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
+    }
+  }
+}

@@ -174,6 +174,13 @@ For the multipole bar figures, the paper-facing output now stays closer to the
 manuscript's `z_i` + SAMB labeling, while the diagnostic output keeps the more
 explicit family-role legend text.
 
+For the `fit_ahc` panels, the current paper-facing outputs now follow the
+archived manuscript fit scripts: they show the committed `SW+ED` angular series
+plus the analytic fit curve. The broader `Wan90`/DFT comparison remains a
+diagnostic concern tied to the archived `plot_ahc.py` workflow, because the
+committed compact DFT snapshots are still sparse for `(103)` and absent for
+`(111)`.
+
 Individual figure groups can also be regenerated directly:
 
 ```bash

@@ -10,6 +10,13 @@ and keeps internal comparison series such as `Wan90`, `SW+ED`, `SW+PD`,
 `cubic fit`, raw `w_rank...` labels, and more explicit family-role legends
 separate from manuscript-facing labels.
 
+The paper-facing `fit_ahc` scripts consult
+`data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json`. Archived
+`fit_ahc.py` sources show that these panels are built from the `SW+ED` angular
+series plus the analytic fit curve; the broader `Wan90`/DFT overlay belongs to
+the archived `plot_ahc.py` comparison plots instead. The diagnostic AHC
+outputs still show the currently committed implementation-comparison data.
+
 For visual review, `make_paper_contact_sheet.py` builds a multi-page PDF that
 places each committed `figures/paper/` reference next to the corresponding
 generated `results/figures_paper/` output.

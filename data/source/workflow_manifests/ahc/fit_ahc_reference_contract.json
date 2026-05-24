@@ -1,0 +1,131 @@
+{
+  "description": "Reference-information contracts for paper-facing AHC angular-dependence panels.",
+  "reference_evidence": {
+    "notes": [
+      "Archived manuscript-side fit_ahc.py scripts read angle_dep_ahc.xml, use the first SW+ED series, and add only the analytic fit curve.",
+      "Archived plot_ahc.py scripts can overlay DFT from a separate angle_dep_ahc_dft.xml path, but that DFT overlay belongs to the broader angular-comparison plots rather than the fit_ahc*.pdf panels."
+    ],
+    "reference_scripts": [
+      "PAPER_ROOT/figs/Fe/FM_sqa_111/anisotropy/fit_ahc.py",
+      "PAPER_ROOT/figs/Fe/FM_sqa_103/anisotropy/fit_ahc.py",
+      "PAPER_ROOT/figs/Fe/FM_sqa_111/anisotropy/plot_ahc.py",
+      "PAPER_ROOT/figs/Fe/FM_sqa_103/anisotropy/plot_ahc.py"
+    ]
+  },
+  "panels": {
+    "111:axis": {
+      "figure_file": "fit_ahc_axis.pdf",
+      "generated_output": "results/figures_paper/ahc_111/fit_ahc_axis.pdf",
+      "paper_reproducible": true,
+      "required_series": [
+        {
+          "paper_label": "SW+ED+TRS",
+          "source_method": "SW+ED",
+          "source_column": "sigma_axis_s_cm",
+          "min_finite_points": 13
+        },
+        {
+          "paper_label": "fit",
+          "source_method": "analytic_fit",
+          "source_column": null,
+          "min_finite_points": 181
+        }
+      ]
+    },
+    "111:para": {
+      "figure_file": "fit_ahc_para.pdf",
+      "generated_output": "results/figures_paper/ahc_111/fit_ahc_para.pdf",
+      "paper_reproducible": true,
+      "required_series": [
+        {
+          "paper_label": "SW+ED+TRS",
+          "source_method": "SW+ED",
+          "source_column": "sigma_para_s_cm",
+          "min_finite_points": 13
+        },
+        {
+          "paper_label": "fit",
+          "source_method": "analytic_fit",
+          "source_column": null,
+          "min_finite_points": 181
+        }
+      ]
+    },
+    "111:perp": {
+      "figure_file": "fit_ahc_perp.pdf",
+      "generated_output": "results/figures_paper/ahc_111/fit_ahc_perp.pdf",
+      "paper_reproducible": true,
+      "required_series": [
+        {
+          "paper_label": "SW+ED+TRS",
+          "source_method": "SW+ED",
+          "source_column": "sigma_perp_s_cm",
+          "min_finite_points": 13
+        },
+        {
+          "paper_label": "fit",
+          "source_method": "analytic_fit",
+          "source_column": null,
+          "min_finite_points": 181
+        }
+      ]
+    },
+    "103:axis": {
+      "figure_file": "fit_ahc_axis_103.pdf",
+      "generated_output": "results/figures_paper/ahc_103/fit_ahc_axis_103.pdf",
+      "paper_reproducible": true,
+      "required_series": [
+        {
+          "paper_label": "SW+ED+TRS",
+          "source_method": "SW+ED",
+          "source_column": "sigma_axis_s_cm",
+          "min_finite_points": 13
+        },
+        {
+          "paper_label": "fit",
+          "source_method": "analytic_fit",
+          "source_column": null,
+          "min_finite_points": 181
+        }
+      ]
+    },
+    "103:para": {
+      "figure_file": "fit_ahc_para_103.pdf",
+      "generated_output": "results/figures_paper/ahc_103/fit_ahc_para_103.pdf",
+      "paper_reproducible": true,
+      "required_series": [
+        {
+          "paper_label": "SW+ED+TRS",
+          "source_method": "SW+ED",
+          "source_column": "sigma_para_s_cm",
+          "min_finite_points": 13
+        },
+        {
+          "paper_label": "fit",
+          "source_method": "analytic_fit",
+          "source_column": null,
+          "min_finite_points": 181
+        }
+      ]
+    },
+    "103:perp": {
+      "figure_file": "fit_ahc_perp_103.pdf",
+      "generated_output": "results/figures_paper/ahc_103/fit_ahc_perp_103.pdf",
+      "paper_reproducible": true,
+      "required_series": [
+        {
+          "paper_label": "SW+ED+TRS",
+          "source_method": "SW+ED",
+          "source_column": "sigma_perp_s_cm",
+          "min_finite_points": 13
+        },
+        {
+          "paper_label": "fit",
+          "source_method": "analytic_fit",
+          "source_column": null,
+          "min_finite_points": 181
+        }
+      ]
+    }
+  }
+}

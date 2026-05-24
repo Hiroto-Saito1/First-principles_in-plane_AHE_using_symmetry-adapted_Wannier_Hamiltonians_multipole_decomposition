@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import math
 from pathlib import Path
 
@@ -24,6 +25,11 @@ def read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def read_json(path: Path) -> dict[str, object]:
+    with path.open(encoding="utf-8") as handle:
+        return json.load(handle)
+
+
 def require_file(path: Path) -> Path:
     if not path.is_file():
         raise FileNotFoundError(f"Required input file is missing: {path}")
@@ -37,6 +43,43 @@ def get_pyplot():
     import matplotlib.pyplot as plt
 
     return plt
+
+
+def render_notice_panel(
+    output: Path,
+    *,
+    title: str | None,
+    lines: list[str],
+    xlabel: str,
+    ylabel: str,
+    figsize: tuple[float, float] = (5.0, 3.6),
+) -> None:
+    plt = get_pyplot()
+    output.parent.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    if title:
+        ax.set_title(title)
+    ax.text(
+        0.5,
+        0.58,
+        "\n".join(lines),
+        ha="center",
+        va="center",
+        fontsize=10,
+        wrap=True,
+        bbox={"boxstyle": "round,pad=0.5", "facecolor": "#f8fafc", "edgecolor": "#64748b"},
+    )
+    fig.tight_layout()
+    fig.savefig(output)
+    plt.close(fig)
 
 
 def grouped(rows: list[dict[str, str]], key: str) -> dict[str, list[dict[str, str]]]:

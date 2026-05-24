@@ -300,7 +300,59 @@ serve both purposes.
    - If an implementation-specific series has no paper counterpart, leave it
      in diagnostics only.
 
-3. Prioritize the AHC angular-dependence figures.
+3. Make paper-facing `fit_ahc` plots information-preserving.
+   - Treat each committed `figures/paper/fit_ahc*.pdf` as the minimum
+     information contract for the generated paper-facing output. Before
+     tuning style, inventory the reference panel's semantic content: plotted
+     series, angle sampling, marker-only versus line series, fitted curve,
+     missing-point behavior, axis range, units, legend labels, and component
+     notation.
+   - A generated paper-facing `fit_ahc` panel must not silently contain less
+     information than the reference panel. If a reference element cannot be
+     rebuilt from the current processed CSV, recover the compact source data
+     into `data/source/` and `data/processed/ahc_{111,103}/`, or mark that
+     panel as not yet paper-reproducible rather than emitting a reduced
+     manuscript-style plot.
+   - Keep implementation-only comparisons (`Wan90`, `SW+ED`, `SW+PD`, fit
+     residuals, alternate analytic curves) in diagnostics unless they are
+     explicitly mapped to a reference series. Paper-facing output should add
+     reference information first, not trade reference information for
+     diagnostic detail.
+   - Record the resulting series contract in a small manifest or test fixture
+     for `fig:ahc_111` and `fig:ahc_103`: each panel should state which
+     series are required, the expected label in the paper, the source CSV
+     column or compact source file, and the minimum number of finite points.
+   - That contract now lives under
+     `data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json`.
+     Archived `fit_ahc.py` sources show that the `fit_ahc*.pdf` panels are
+     built from the `SW+ED` angular series plus the analytic fit curve. The
+     broader DFT overlay belongs to archived `plot_ahc.py` comparison plots,
+     so sparse/missing committed `Wan90` data is currently a diagnostic gap
+     rather than a blocker for the paper-facing `fit_ahc` panels.
+
+4. Extend reference-information contracts to other paper-facing plots by risk.
+   - Apply the same information-preservation principle to every
+     `reproducible_plot` output under `results/figures_paper/`, but tailor the
+     contract to the figure type. Diagnostics-only outputs are exempt, and
+     `not_included` static or manually composed panels remain covered by the
+     inventory rather than by generated-plot checks.
+   - For multi-series curve plots (`rank_resolved_103`, `strain_103`,
+     `minimal_model`, and `band_bond`), the contract should cover required
+     panels, series identities, finite point counts, x-grid or cutoff values,
+     reference/all-series roles, axis units, axis ranges, and any required
+     fit or guide curves.
+   - For multipole-coefficient bar plots, the contract should cover selected
+     coefficient labels, bar ordering, signs, magnitudes, zero baseline,
+     `Q` / `M` / `T` / `G` family classification, legend semantics, and
+     whether omitted coefficients are intentionally excluded.
+   - For geometric definition plots such as `bcc_111` and `bcc_103`, the
+     contract should cover the defining vectors, plane labels, rotation angle
+     annotation, and view semantics rather than point counts.
+   - Prioritize contracts where information loss is plausible: first
+     `fit_ahc`, then other multi-series curve plots, then bar plots, then
+     geometric definition plots.
+
+5. Prioritize the AHC angular-dependence figures.
    - `fig:ahc_103` and `fig:ahc_111` currently differ most visibly from the
      manuscript because the generated plots show `Wan90`, `SW+ED`, `SW+PD`,
      and `cubic fit`, while the paper panels show `model`, `DFT`, and
@@ -309,7 +361,7 @@ serve both purposes.
      (`sigma_1`, `sigma_perp`, `sigma_n` in rendered Greek form), legend text,
      marker/line roles, axis limits, tick spacing, and units.
 
-4. Then align rank-resolved and coefficient plots.
+6. Then align rank-resolved and coefficient plots.
    - Rank-resolved `(103)` plots now have a paper-facing plotting mode that
      maps cumulative and single-rank labels to manuscript-style multipole
      notation, while keeping raw `w_rank...` labels available in diagnostics.
@@ -318,9 +370,16 @@ serve both purposes.
      legends, and diagnostic family-role legend treatment. Any remaining work
      here is fine visual polish rather than provenance or role separation.
 
-5. Validate with both data checks and visual contact sheets.
+7. Validate with both data checks and visual contact sheets.
    - Data checks should confirm row counts, angle grids, units, component
      signs, and selected reference values.
+   - `fit_ahc` tests should fail if a paper-facing generated panel has fewer
+     required series, fewer finite reference points, or a missing fitted curve
+     relative to its series contract.
+   - Other paper-facing plot tests should fail when a generated plot violates
+     its figure-type contract, for example by dropping a required curve,
+     changing the coefficient selection/order, omitting a family legend, or
+     losing a required geometric annotation.
    - The repository now includes an opt-in paper contact-sheet generator that
      compares `figures/paper/` against `results/figures_paper/`.
    - Pixel identity is not the target, but series membership, label semantics,
@@ -345,6 +404,14 @@ Default tests remain lightweight. Required default checks:
 - manuscript-style plot checks validate that paper-facing outputs do not
   contain diagnostic-only series labels (`Wan90`, `SW+ED`, `SW+PD`) unless the
   corresponding manuscript panel explicitly uses them.
+- `fit_ahc` paper-facing checks validate against a reference-information
+  manifest so generated panels cannot drop required reference series, finite
+  data points, or fitted curves while still passing as manuscript-style output.
+- Other paper-facing reproducible plots validate against figure-type
+  reference-information contracts. Curve plots check required panels, series,
+  grids, finite points, and fit/reference roles; bar plots check selection,
+  order, signs, magnitudes, and family legends; geometric definition plots
+  check required vectors, labels, and angle annotations.
 
 Tests must not require Quantum ESPRESSO, Wannier90, SymWannier, MultiPie,
 WannierBerri, MPI, HDF5 generation, cluster access, or the private
@@ -385,9 +452,18 @@ workspaces.
 - The generated figure count matches the repository inventory, and the
   repository now splits manuscript-style outputs (`results/figures_paper/`)
   from diagnostic outputs (`results/figures_diagnostics/`) for the AHC,
-  rank-resolved, and multipole-coefficient plots. The remaining figure-quality
-  work is mostly fine visual alignment and optional contact-sheet comparison
-  against `figures/paper/`.
+  rank-resolved, and multipole-coefficient plots. The `fit_ahc`
+  reference-series contract and tests now follow the archived manuscript fit
+  scripts, so the paper-facing outputs rebuild from committed `SW+ED` data
+  plus the analytic fit curve. The missing/sparse compact DFT source remains a
+  lower-priority diagnostic gap for the archived implementation-comparison
+  plots.
+- Similar checks should then be applied to the other paper-facing generated
+  plots at lower priority. The goal is not pixel matching, but preventing
+  silent information loss: missing rank/reference curves, altered bar
+  selections, dropped family legends, changed cutoffs, or absent geometric
+  annotations should be caught by a manifest or test fixture before visual
+  polish is considered complete.
 
 ## Current Status
 
@@ -401,8 +477,9 @@ for the default reproducibility checks.
 
 What remains is follow-on work rather than a blocker for data availability:
 
-- continue Phase F with manual review of the generated contact sheets and any
-  remaining fine panel/layout polish;
+- continue Phase F by extending figure-type contracts from `fit_ahc` to the
+  remaining curve, bar, and geometric plots before contact-sheet review and
+  fine panel/layout polish;
 - recover a direct archived compact export for the multipole coefficients if a
   later backup search turns one up;
 - copy additional private helper scripts only if they carry unique behavior
@@ -440,9 +517,16 @@ presentation upgrades.
 
 ### Remaining Optional Follow-up
 
-- Continue the manuscript-style alignment work with contact-sheet comparisons
-  and any remaining paper-facing label or panel sizing details that still
-  differ from `figures/paper/`.
+- For `fit_ahc`, keep the archived source-evidence contract and continue
+  contact-sheet comparisons plus fine label/panel-size polishing against
+  `figures/paper/`. Separately, recover denser compact DFT comparison data if
+  a later backup search turns it up, so the diagnostic `plot_ahc.py`-style
+  overlays can also be made repository-backed.
+- Add lighter figure-type contracts for the remaining paper-facing outputs:
+  curve plots (`rank_resolved_103`, `strain_103`, `minimal_model`,
+  `band_bond`), multipole-coefficient bar plots, and geometric definition
+  plots. These should block silent information loss without requiring
+  byte-identical PDF reproduction.
 - Obtain upstream clarification for the copied archived code under
   `src/symwan_multipie/symwannier/` and
   `src/symwan_multipie/wannier_utils/`, then update `LICENSE` / `README.md`
@@ -476,7 +560,8 @@ The reorganization is considered complete when:
   committed processed CSV files and regenerate every repository-backed plot;
 - every repository-backed figure PDF is generated by a repository script;
 - every paper-facing generated figure has a defined diagnostic/paper role,
-  and manuscript-style outputs match the paper's series membership, labels,
+  and manuscript-style outputs preserve at least the reference panel's
+  information content while matching the paper's series membership, labels,
   units, and panel structure;
 - expensive single artifacts above 100 MB are not tracked, but have an
   exact regeneration recipe and required-input list.

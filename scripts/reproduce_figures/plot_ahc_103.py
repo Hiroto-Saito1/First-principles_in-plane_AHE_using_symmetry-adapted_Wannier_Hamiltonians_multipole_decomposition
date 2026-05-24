@@ -6,12 +6,14 @@ from __future__ import annotations
 import argparse
 import math
 from pathlib import Path
+from typing import Any
 
 from _common import (
     DEFAULT_OUTPUT_DIAGNOSTICS,
     DEFAULT_OUTPUT_PAPER,
     PROCESSED,
     plot_methods,
+    read_json,
     read_csv,
     require_file,
 )
@@ -19,16 +21,22 @@ from _common import (
 
 ALPHA = -896.116
 BETA = 100.928
+CONTRACT_PATH = (
+    PROCESSED.parents[1]
+    / "data"
+    / "source"
+    / "workflow_manifests"
+    / "ahc"
+    / "fit_ahc_reference_contract.json"
+)
 
-PAPER_METHODS = ["Wan90", "SW+ED"]
+PAPER_METHODS = ["SW+ED"]
 PAPER_LABELS = {
-    "Wan90": "DFT",
-    "SW+ED": "model",
-    "fitting": "fitting",
+    "SW+ED": "SW+ED+TRS",
+    "fitting": "fit",
 }
 PAPER_STYLES = {
-    "Wan90": {"marker": "o", "linestyle": "None", "color": "black"},
-    "SW+ED": {"marker": "s", "linestyle": "None", "color": "tab:blue"},
+    "SW+ED": {"marker": "o", "linestyle": "None", "color": "tab:red"},
 }
 PAPER_YLABELS = {
     "para": r"$\sigma_{\parallel}\ [\mathrm{S/cm}]$",
@@ -65,6 +73,11 @@ def output_dir_for(style: str) -> Path:
     raise ValueError(style)
 
 
+def load_contract(component: str) -> dict[str, Any]:
+    manifest = read_json(require_file(CONTRACT_PATH))
+    return manifest["panels"][f"103:{component}"]
+
+
 def paper_plot_config(component: str) -> dict[str, object]:
     return {
         "methods": PAPER_METHODS,
@@ -92,12 +105,14 @@ def main() -> None:
     for component, filename in outputs.items():
         x, y = theory(component)
         if args.style == "paper":
+            contract = load_contract(component)
+            assert contract["paper_reproducible"] is True
             plot_methods(
                 rows,
                 component=component,
                 output=output_dir / filename,
                 extra_curves=[
-                    ("fitting", x, y, {"color": "black", "linewidth": 1.6})
+                    ("fitting", x, y, {"color": "tab:red", "linestyle": "--", "linewidth": 1.8})
                 ],
                 **paper_plot_config(component),
             )

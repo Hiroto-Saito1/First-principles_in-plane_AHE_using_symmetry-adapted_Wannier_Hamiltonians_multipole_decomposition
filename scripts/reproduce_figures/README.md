@@ -12,10 +12,11 @@ separate from manuscript-facing labels.
 
 The paper-facing `fit_ahc` scripts consult
 `data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json`. Archived
-`fit_ahc.py` sources show that these panels are built from the `SW+ED` angular
-series plus the analytic fit curve; the broader `Wan90`/DFT overlay belongs to
-the archived `plot_ahc.py` comparison plots instead. The diagnostic AHC
-outputs still show the currently committed implementation-comparison data.
+`fit_ahc.py` sources and the committed reference PDFs together define the
+public role mapping: the paper-facing plots label `SW+ED` as `model`, label the
+analytic curve as `fitting`, and overlay `Wan90` as `DFT` only when finite
+compact values are available. The diagnostic AHC outputs still show the raw
+implementation-comparison series.
 
 The paper-facing `(103)` rank-resolved plots are now guarded by
 `data/source/workflow_manifests/rank_resolved_103/rank_resolved_reference_contract.json`.

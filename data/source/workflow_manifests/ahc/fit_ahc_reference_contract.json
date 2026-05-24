@@ -2,8 +2,9 @@
   "description": "Reference-information contracts for paper-facing AHC angular-dependence panels.",
   "reference_evidence": {
     "notes": [
-      "Archived manuscript-side fit_ahc.py scripts read angle_dep_ahc.xml, use the first SW+ED series, and add only the analytic fit curve.",
-      "Archived plot_ahc.py scripts can overlay DFT from a separate angle_dep_ahc_dft.xml path, but that DFT overlay belongs to the broader angular-comparison plots rather than the fit_ahc*.pdf panels."
+      "Archived manuscript-side fit_ahc.py scripts read angle_dep_ahc.xml, use the first SW+ED series, and add the analytic fit curve.",
+      "Committed reference PDFs visually present the fit panels with manuscript-facing roles model / DFT / fitting.",
+      "The public paper-facing scripts now mirror those roles by mapping SW+ED to model, analytic theory to fitting, and Wan90 compact points to DFT when finite values are available."
     ],
     "reference_scripts": [
       "PAPER_ROOT/figs/Fe/FM_sqa_111/anisotropy/fit_ahc.py",
@@ -19,16 +20,24 @@
       "paper_reproducible": true,
       "required_series": [
         {
-          "paper_label": "SW+ED+TRS",
+          "paper_label": "model",
           "source_method": "SW+ED",
           "source_column": "sigma_axis_s_cm",
           "min_finite_points": 13
         },
         {
-          "paper_label": "fit",
+          "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_column": null,
           "min_finite_points": 181
+        }
+      ],
+      "optional_series": [
+        {
+          "paper_label": "DFT",
+          "source_method": "Wan90",
+          "source_column": "sigma_axis_s_cm",
+          "min_finite_points": 0
         }
       ]
     },
@@ -38,16 +47,24 @@
       "paper_reproducible": true,
       "required_series": [
         {
-          "paper_label": "SW+ED+TRS",
+          "paper_label": "model",
           "source_method": "SW+ED",
           "source_column": "sigma_para_s_cm",
           "min_finite_points": 13
         },
         {
-          "paper_label": "fit",
+          "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_column": null,
           "min_finite_points": 181
+        }
+      ],
+      "optional_series": [
+        {
+          "paper_label": "DFT",
+          "source_method": "Wan90",
+          "source_column": "sigma_para_s_cm",
+          "min_finite_points": 0
         }
       ]
     },
@@ -57,16 +74,24 @@
       "paper_reproducible": true,
       "required_series": [
         {
-          "paper_label": "SW+ED+TRS",
+          "paper_label": "model",
           "source_method": "SW+ED",
           "source_column": "sigma_perp_s_cm",
           "min_finite_points": 13
         },
         {
-          "paper_label": "fit",
+          "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_column": null,
           "min_finite_points": 181
+        }
+      ],
+      "optional_series": [
+        {
+          "paper_label": "DFT",
+          "source_method": "Wan90",
+          "source_column": "sigma_perp_s_cm",
+          "min_finite_points": 0
         }
       ]
     },
@@ -76,16 +101,24 @@
       "paper_reproducible": true,
       "required_series": [
         {
-          "paper_label": "SW+ED+TRS",
+          "paper_label": "model",
           "source_method": "SW+ED",
           "source_column": "sigma_axis_s_cm",
           "min_finite_points": 13
         },
         {
-          "paper_label": "fit",
+          "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_column": null,
           "min_finite_points": 181
+        }
+      ],
+      "optional_series": [
+        {
+          "paper_label": "DFT",
+          "source_method": "Wan90",
+          "source_column": "sigma_axis_s_cm",
+          "min_finite_points": 5
         }
       ]
     },
@@ -95,16 +128,24 @@
       "paper_reproducible": true,
       "required_series": [
         {
-          "paper_label": "SW+ED+TRS",
+          "paper_label": "model",
           "source_method": "SW+ED",
           "source_column": "sigma_para_s_cm",
           "min_finite_points": 13
         },
         {
-          "paper_label": "fit",
+          "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_column": null,
           "min_finite_points": 181
+        }
+      ],
+      "optional_series": [
+        {
+          "paper_label": "DFT",
+          "source_method": "Wan90",
+          "source_column": "sigma_para_s_cm",
+          "min_finite_points": 5
         }
       ]
     },
@@ -114,16 +155,24 @@
       "paper_reproducible": true,
       "required_series": [
         {
-          "paper_label": "SW+ED+TRS",
+          "paper_label": "model",
           "source_method": "SW+ED",
           "source_column": "sigma_perp_s_cm",
           "min_finite_points": 13
         },
         {
-          "paper_label": "fit",
+          "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_column": null,
           "min_finite_points": 181
+        }
+      ],
+      "optional_series": [
+        {
+          "paper_label": "DFT",
+          "source_method": "Wan90",
+          "source_column": "sigma_perp_s_cm",
+          "min_finite_points": 5
         }
       ]
     }

@@ -30,13 +30,15 @@ CONTRACT_PATH = (
     / "fit_ahc_reference_contract.json"
 )
 
-PAPER_METHODS = ["SW+ED"]
+PAPER_METHODS = ["SW+ED", "Wan90"]
 PAPER_LABELS = {
-    "SW+ED": "SW+ED+TRS",
-    "fitting": "fit",
+    "SW+ED": "model",
+    "Wan90": "DFT",
+    "fitting": "fitting",
 }
 PAPER_STYLES = {
-    "SW+ED": {"marker": "o", "linestyle": "None", "color": "tab:red"},
+    "SW+ED": {"marker": "o", "linestyle": "--", "color": "tab:red"},
+    "Wan90": {"marker": "D", "linestyle": "--", "color": "black"},
 }
 PAPER_YLABELS = {
     "para": r"$\sigma_{\parallel}\ [\mathrm{S/cm}]$",
@@ -112,7 +114,7 @@ def main() -> None:
                 component=component,
                 output=output_dir / filename,
                 extra_curves=[
-                    ("fitting", x, y, {"color": "tab:red", "linestyle": "--", "linewidth": 1.8})
+                    ("fitting", x, y, {"color": "tab:blue", "linestyle": "-", "linewidth": 1.8})
                 ],
                 **paper_plot_config(component),
             )

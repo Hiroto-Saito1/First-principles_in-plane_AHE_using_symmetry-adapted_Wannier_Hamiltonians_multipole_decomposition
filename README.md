@@ -175,11 +175,11 @@ manuscript's `z_i` + SAMB labeling, while the diagnostic output keeps the more
 explicit family-role legend text.
 
 For the `fit_ahc` panels, the current paper-facing outputs now follow the
-archived manuscript fit scripts: they show the committed `SW+ED` angular series
-plus the analytic fit curve. The broader `Wan90`/DFT comparison remains a
-diagnostic concern tied to the archived `plot_ahc.py` workflow, because the
-committed compact DFT snapshots are still sparse for `(103)` and absent for
-`(111)`.
+committed reference-PDF roles: `SW+ED` is shown as `model`, the analytic curve
+is shown as `fitting`, and committed `Wan90` points are shown as `DFT` when
+finite values are available. That means `(103)` gets a sparse DFT overlay from
+the compact source, while `(111)` still has no committed compact DFT points to
+overlay.
 
 For the `(103)` rank-resolved panels, the paper-facing outputs now also follow
 an explicit reference-information contract under

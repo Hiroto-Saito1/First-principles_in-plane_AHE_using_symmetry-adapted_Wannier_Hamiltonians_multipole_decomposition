@@ -271,7 +271,7 @@ def draw_plane(config: dict[str, object], output: Path) -> None:
     except AttributeError:
         pass
 
-    plt.tight_layout()
+    fig.subplots_adjust(left=0.02, right=0.98, bottom=0.02, top=0.98)
     output.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(output, dpi=300)
     plt.close(fig)

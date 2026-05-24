@@ -273,22 +273,24 @@ def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
 
 
 def test_ahc_paper_configs_follow_archived_fit_source_roles() -> None:
-    """Paper-mode fit_ahc plots should match the archived fit-script series roles."""
+    """Paper-mode fit_ahc plots should expose reference-PDF series roles honestly."""
     for module_name, script_rel in [
         ("plot_ahc_111_module", "scripts/reproduce_figures/plot_ahc_111.py"),
         ("plot_ahc_103_module", "scripts/reproduce_figures/plot_ahc_103.py"),
     ]:
         module = load_script_module(script_rel, module_name)
         config = module.paper_plot_config("para")
-        assert config["methods"] == ["SW+ED"]
-        assert config["label_map"]["SW+ED"] == "SW+ED+TRS"
-        assert config["label_map"]["fitting"] == "fit"
-        assert config["style_map"]["SW+ED"]["linestyle"] == "None"
+        assert config["methods"] == ["SW+ED", "Wan90"]
+        assert config["label_map"]["SW+ED"] == "model"
+        assert config["label_map"]["Wan90"] == "DFT"
+        assert config["label_map"]["fitting"] == "fitting"
+        assert config["style_map"]["SW+ED"]["linestyle"] == "--"
+        assert config["style_map"]["Wan90"]["marker"] == "D"
         assert "results/figures_paper/" in str(module.output_dir_for("paper"))
 
 
-def test_fit_ahc_reference_contract_matches_archived_source_behavior() -> None:
-    """The AHC contract should match the archived fit-script source behavior."""
+def test_fit_ahc_reference_contract_matches_public_paper_roles() -> None:
+    """The AHC contract should match the public paper-facing role mapping."""
     contract = fit_ahc_contract()
     assert sorted(contract["panels"]) == [
         "103:axis",
@@ -304,10 +306,14 @@ def test_fit_ahc_reference_contract_matches_archived_source_behavior() -> None:
     for panel_key, panel in contract["panels"].items():
         assert panel["paper_reproducible"] is True
         series = panel["required_series"]
-        assert [item["paper_label"] for item in series] == ["SW+ED+TRS", "fit"]
+        assert [item["paper_label"] for item in series] == ["model", "fitting"]
         assert series[0]["source_method"] == "SW+ED"
         assert series[0]["min_finite_points"] == 13
         assert series[1]["min_finite_points"] == 181
+        optional = panel["optional_series"]
+        assert len(optional) == 1
+        assert optional[0]["paper_label"] == "DFT"
+        assert optional[0]["source_method"] == "Wan90"
 
 
 def test_fit_ahc_processed_data_satisfies_contract() -> None:
@@ -328,10 +334,18 @@ def test_fit_ahc_processed_data_satisfies_contract() -> None:
                 and row[requirement["source_column"]].strip().lower() != "nan"
             )
             assert finite == 13
+            optional = panel["optional_series"][0]
+            optional_finite = sum(
+                1
+                for row in rows
+                if row["method"] == optional["source_method"]
+                and row[optional["source_column"]].strip().lower() != "nan"
+            )
+            assert optional_finite == optional["min_finite_points"]
 
 
-def test_fit_ahc_dft_gap_remains_diagnostic_only() -> None:
-    """Sparse/missing DFT compact data should remain a diagnostic concern."""
+def test_fit_ahc_optional_dft_overlay_matches_compact_availability() -> None:
+    """Optional DFT overlays should reflect the actual compact-source coverage."""
     expected = {"111": 0, "103": 5}
     for plane, target in expected.items():
         with (ROOT / f"data/processed/ahc_{plane}/ahc_angle_dependence.csv").open(

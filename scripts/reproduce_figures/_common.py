@@ -133,6 +133,13 @@ def plot_methods(
         if method not in by_method:
             continue
         x, y = sorted_xy(by_method[method], component)
+        finite_pairs = [
+            (xv, yv) for xv, yv in zip(x, y, strict=True) if math.isfinite(xv) and math.isfinite(yv)
+        ]
+        if not finite_pairs:
+            continue
+        x = [xv for xv, _ in finite_pairs]
+        y = [yv for _, yv in finite_pairs]
         kwargs = style.get(method, {"marker": "o", "linestyle": "-"})
         label = (label_map or {}).get(method, method)
         plt.plot(x, y, label=label, markersize=4, linewidth=1.4, **kwargs)
@@ -144,6 +151,13 @@ def plot_methods(
             else:
                 label, x, y, kwargs = curve
                 kwargs = {"color": "black", "linewidth": 1.2, **kwargs}
+            finite_pairs = [
+                (xv, yv) for xv, yv in zip(x, y, strict=True) if math.isfinite(xv) and math.isfinite(yv)
+            ]
+            if not finite_pairs:
+                continue
+            x = [xv for xv, _ in finite_pairs]
+            y = [yv for _, yv in finite_pairs]
             label = (label_map or {}).get(label, label)
             plt.plot(x, y, label=label, **kwargs)
     plt.xlabel(xlabel)

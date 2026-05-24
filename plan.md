@@ -324,11 +324,27 @@ serve both purposes.
      column or compact source file, and the minimum number of finite points.
    - That contract now lives under
      `data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json`.
-     Archived `fit_ahc.py` sources show that the `fit_ahc*.pdf` panels are
-     built from the `SW+ED` angular series plus the analytic fit curve. The
-     broader DFT overlay belongs to archived `plot_ahc.py` comparison plots,
-     so sparse/missing committed `Wan90` data is currently a diagnostic gap
-     rather than a blocker for the paper-facing `fit_ahc` panels.
+     The entries in that manifest must be treated as provisional until each
+     paper label is verified against the committed reference PDFs or archived
+     source data. A label such as `model` is not valid merely because it is
+     attached to a generated curve; the plotted values must be shown to
+     represent the paper's `model` series rather than the paper's `DFT` series
+     or another implementation comparison.
+   - Add an explicit role-identity audit for the `fit_ahc` panels. For each
+     paper role (`model`, `DFT`, `fitting`), record the source method, source
+     file, expected finite-point set, visual style, and reference evidence.
+     If the generated curve currently labeled `model` actually corresponds to
+     the paper's `DFT` curve, or cannot be distinguished from it using the
+     archived evidence, do not swap labels by guesswork. Instead mark the
+     affected panel or series as `unverified`, remove it from
+     `results/figures_paper/`, and keep it only in diagnostics until the
+     correct compact source is recovered or the provenance is proven.
+   - The paper-facing scripts should fail closed on role mismatches. A
+     `paper_reproducible: true` panel requires both information preservation
+     and label identity: every rendered legend entry must map to the same
+     scientific role as the reference panel. If a `model` legend would plot
+     data matching the paper's `DFT` role, the generated paper-facing figure is
+     wrong even if its point count, axis labels, and styling otherwise pass.
 
 4. Extend reference-information contracts to other paper-facing plots by risk.
    - Apply the same information-preservation principle to every
@@ -432,6 +448,11 @@ Default tests remain lightweight. Required default checks:
 - `fit_ahc` paper-facing checks validate against a reference-information
   manifest so generated panels cannot drop required reference series, finite
   data points, or fitted curves while still passing as manuscript-style output.
+- `fit_ahc` role-identity checks validate that each generated legend label
+  represents the same scientific role as the reference panel. In particular,
+  a curve labeled `model` must not be backed by data that match the paper's
+  `DFT` role; unverified or role-mismatched series must be excluded from
+  paper-facing output and retained only as diagnostics.
 - Other paper-facing reproducible plots validate against figure-type
   reference-information contracts. Curve plots check required panels, series,
   grids, finite points, and fit/reference roles; bar plots check selection,
@@ -478,9 +499,13 @@ workspaces.
   repository now splits manuscript-style outputs (`results/figures_paper/`)
   from diagnostic outputs (`results/figures_diagnostics/`) for the AHC,
   rank-resolved, and multipole-coefficient plots. The `fit_ahc`
-  reference-series contract and tests now follow the archived manuscript fit
-  scripts, so the paper-facing outputs rebuild from committed `SW+ED` data
-  plus the analytic fit curve. The `(103)` rank-resolved plots now also have a
+  reference-series contract exists, but its role mapping now needs a stricter
+  identity audit: the generated curve currently labeled `model` must be
+  proven to be the paper's `model` series, not the paper's `DFT` series or a
+  mislabeled implementation-comparison series. Until that role identity is
+  proven, the affected `fit_ahc` paper-facing panels should be treated as
+  not fully manuscript-reproducible, even if their files are generated
+  successfully. The `(103)` rank-resolved plots now also have a
   reference-information contract that fixes the required grouped/single-rank
   curves, manuscript-facing labels, and expected angle grids. The `[103]`
   strain plots now have an equivalent contract for their paper-facing
@@ -489,8 +514,6 @@ workspaces.
   composite now has an equivalent contract for its included cutoff set and
   recovered curve membership. The multipole bar plots and geometric
   definition plots now also have explicit paper-facing information contracts.
-  The missing/sparse compact DFT source remains a lower-priority diagnostic
-  gap for the archived implementation-comparison AHC plots.
 - Similar checks should then be applied to the other paper-facing generated
   plots at lower priority. The goal is not pixel matching, but preventing
   silent information loss: missing rank/reference curves, altered bar
@@ -510,9 +533,12 @@ for the default reproducibility checks.
 
 What remains is follow-on work rather than a blocker for data availability:
 
-- continue Phase F by extending figure-type contracts from `fit_ahc` to the
-  remaining curve, bar, and geometric plots before contact-sheet review and
-  fine panel/layout polish;
+- continue Phase F by correcting the `fit_ahc` role-identity problem first:
+  verify whether each generated `model`, `DFT`, and `fitting` legend entry
+  really corresponds to the same paper role in the reference PDFs, remove or
+  demote unverified series to diagnostics, then extend figure-type contracts
+  to the remaining curve, bar, and geometric plots before contact-sheet review
+  and fine panel/layout polish;
 - recover a direct archived compact export for the multipole coefficients if a
   later backup search turns one up;
 - copy additional private helper scripts only if they carry unique behavior
@@ -550,11 +576,13 @@ presentation upgrades.
 
 ### Remaining Optional Follow-up
 
-- For `fit_ahc`, keep the archived source-evidence contract and continue
-  contact-sheet comparisons plus fine label/panel-size polishing against
-  `figures/paper/`. Separately, recover denser compact DFT comparison data if
-  a later backup search turns it up, so the diagnostic `plot_ahc.py`-style
-  overlays can also be made repository-backed.
+- For `fit_ahc`, fix the role-identity problem before treating generated
+  paper-facing PDFs as manuscript-equivalent. The generated `model` legend
+  must be backed by the paper's `model` data, not by data that correspond to
+  the paper's `DFT` plot. The contract should include a `verified` /
+  `unverified` status per legend role; unverified roles should be recovered
+  from compact source data, demoted to diagnostics, or omitted from
+  `results/figures_paper/`.
 - Continue contact-sheet review and fine panel/label polish now that the
   remaining paper-facing figure families have explicit information contracts.
 - Obtain upstream clarification for the copied archived code under
@@ -591,8 +619,8 @@ The reorganization is considered complete when:
 - every repository-backed figure PDF is generated by a repository script;
 - every paper-facing generated figure has a defined diagnostic/paper role,
   and manuscript-style outputs preserve at least the reference panel's
-  information content while matching the paper's series membership, labels,
-  units, and panel structure;
+  information content while matching the paper's series membership, role
+  identity, labels, units, and panel structure;
 - expensive single artifacts above 100 MB are not tracked, but have an
   exact regeneration recipe and required-input list.
 

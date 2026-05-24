@@ -26,12 +26,8 @@ FAMILY_COLORS = {
     "G": "#059669",
 }
 
-FAMILY_LABELS = {
-    "Q": "Q",
-    "M": "M",
-    "T": "T",
-    "G": "G",
-}
+FAMILY_LABELS = {"Q": "Q", "M": "M", "T": "T", "G": "G"}
+PAPER_FAMILY_ORDER = ["Q", "M", "T", "G"]
 
 FAMILY_ROLE_LABELS = {
     "Q": "Q electric",
@@ -96,24 +92,19 @@ def plot(rows, output: Path, title: str | None, *, style: str) -> None:
         ha="right",
         fontsize=6.7 if style == "paper" else 7,
     )
-    plt.ylabel("z [eV]" if style == "paper" else "z_i [eV]")
+    plt.ylabel(r"$z_i$ [eV]" if style == "paper" else "z_i [eV]")
     if title:
         plt.title(title)
     plt.grid(axis="y", linewidth=0.4)
     plt.margins(x=0.02)
     if style == "paper":
-        families = []
-        for row in rows:
-            code = family_code(row["name"])
-            if code not in families:
-                families.append(code)
         handles = [
             Patch(facecolor=FAMILY_COLORS[code], edgecolor="black", label=FAMILY_LABELS[code])
-            for code in families
+            for code in PAPER_FAMILY_ORDER
         ]
         plt.legend(
             handles=handles,
-            ncols=min(4, len(handles)),
+            ncols=4,
             fontsize=7,
             frameon=False,
             loc="upper right",

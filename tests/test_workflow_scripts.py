@@ -181,3 +181,60 @@ def test_export_minimal_model_source_script_collects_sigma_axis_rows(
     assert row["source_file"] == "t_T_0.1/psi_90/sigma_ahc_eta1.00meV.txt"
     expected = (3.0 + 12.0) / (10.0 ** 0.5)
     assert abs(float(row["sigma_axis"]) - expected) < 1e-8
+
+
+def test_export_fit_ahc_source_script_collects_archived_model_rows(tmp_path: Path) -> None:
+    """The fit_ahc export helper should condense angle_dep_ahc.xml into a compact CSV."""
+    xml_path = tmp_path / "angle_dep_ahc.xml"
+    xml_path.write_text(
+        "<angle_dep_ahc>\n"
+        '  <method label="SW+ED">\n'
+        '    <angle phi="0">\n'
+        "      <sigma_xy>0.0</sigma_xy>\n"
+        "      <sigma_yz>1.0</sigma_yz>\n"
+        "      <sigma_zx>2.0</sigma_zx>\n"
+        "      <sigma_para>3.0</sigma_para>\n"
+        "      <sigma_perp>4.0</sigma_perp>\n"
+        "      <sigma_axis>5.0</sigma_axis>\n"
+        "    </angle>\n"
+        '    <angle phi="30">\n'
+        "      <sigma_xy>6.0</sigma_xy>\n"
+        "      <sigma_yz>7.0</sigma_yz>\n"
+        "      <sigma_zx>8.0</sigma_zx>\n"
+        "      <sigma_para>9.0</sigma_para>\n"
+        "      <sigma_perp>10.0</sigma_perp>\n"
+        "      <sigma_axis>11.0</sigma_axis>\n"
+        "    </angle>\n"
+        "  </method>\n"
+        "</angle_dep_ahc>\n",
+        encoding="utf-8",
+    )
+
+    output = tmp_path / "fit_ahc_angle_dependence.csv"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "workflow" / "export_fit_ahc_source.py"),
+            "--xml",
+            str(xml_path),
+            "--plane",
+            "103",
+            "--output",
+            str(output),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert output.is_file()
+    assert "Wrote 2 rows" in result.stdout
+    with output.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert len(rows) == 2
+    assert rows[0]["plane"] == "103"
+    assert rows[0]["series_group"] == "fit_ahc_model"
+    assert rows[0]["method"] == "SW+ED"
+    assert rows[0]["phi_deg"] == "0.0000000000"
+    assert rows[1]["sigma_axis_s_cm"] == "11.0000000000"

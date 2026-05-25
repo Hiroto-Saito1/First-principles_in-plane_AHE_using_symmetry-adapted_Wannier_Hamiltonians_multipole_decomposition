@@ -15,6 +15,7 @@ from _common import (
     plot_methods,
     read_json,
     read_csv,
+    render_notice_panel,
     require_file,
 )
 
@@ -29,22 +30,18 @@ CONTRACT_PATH = (
     / "ahc"
     / "fit_ahc_reference_contract.json"
 )
+PAPER_SOURCE = PROCESSED / "ahc_111" / "fit_ahc_angle_dependence.csv"
 
-PAPER_METHODS = ["SW+ED", "Wan90"]
-PAPER_LABELS = {
-    "SW+ED": "model",
-    "Wan90": "DFT",
-    "fitting": "fitting",
-}
 PAPER_STYLES = {
-    "SW+ED": {"marker": "o", "linestyle": "--", "color": "tab:red"},
-    "Wan90": {"marker": "D", "linestyle": "--", "color": "black"},
+    "SW+ED": {"marker": "o", "linestyle": "None", "color": "tab:red", "markersize": 5.0},
+    "Wan90": {"marker": "D", "linestyle": "None", "color": "black", "markersize": 4.5},
 }
 PAPER_YLABELS = {
-    "para": r"$\sigma_{\parallel}\ [\mathrm{S/cm}]$",
-    "perp": r"$\sigma_{\perp}\ [\mathrm{S/cm}]$",
-    "axis": r"$\sigma_{n}\ [\mathrm{S/cm}]$",
+    "para": r"$\sigma_{\parallel}$ at $E_F$ [S/cm]",
+    "perp": r"$\sigma_{\perp}$ at $E_F$ [S/cm]",
+    "axis": r"$\sigma_{n}$ at $E_F$ [S/cm]",
 }
+PAPER_LEGEND_KWARGS = {"loc": "upper right"}
 
 
 def theory(component: str) -> tuple[list[float], list[float]]:
@@ -75,14 +72,53 @@ def load_contract(component: str) -> dict[str, Any]:
 
 
 def paper_plot_config(component: str) -> dict[str, object]:
+    panel = load_contract(component)
+    verified = panel["required_series"] + panel.get("optional_series", [])
+    methods = [
+        item["source_method"]
+        for item in verified
+        if item["source_method"] != "analytic_fit"
+        and item["verification_status"] == "verified"
+    ]
+    label_map = {
+        item["source_method"]: item["paper_label"]
+        for item in verified
+        if item["source_method"] != "analytic_fit"
+        and item["verification_status"] == "verified"
+    }
+    style_map = {
+        method: PAPER_STYLES[method]
+        for method in methods
+        if method in PAPER_STYLES
+    }
     return {
-        "methods": PAPER_METHODS,
-        "label_map": PAPER_LABELS,
-        "style_map": PAPER_STYLES,
+        "methods": methods,
+        "label_map": label_map,
+        "style_map": style_map,
+        "legend_kwargs": PAPER_LEGEND_KWARGS,
         "title": None,
         "xlabel": r"$\psi\ [\mathrm{deg}]$",
         "ylabel": PAPER_YLABELS[component],
     }
+
+
+def paper_extra_curves(component: str) -> list[tuple[str, list[float], list[float], dict[str, object]]]:
+    panel = load_contract(component)
+    x, y = theory(component)
+    return [
+        ("fitting", x, y, {"color": "tab:red", "linestyle": "--", "linewidth": 1.6})
+        for item in panel["required_series"] + panel.get("optional_series", [])
+        if item["source_method"] == "analytic_fit" and item["verification_status"] == "verified"
+    ]
+
+
+def paper_notice_lines() -> list[str]:
+    return [
+        "Paper fit_ahc role identity is unverified.",
+        "Committed compact AHC data come from angle_dep_ahc_dft.xml.",
+        "Archived fit_ahc.py expects angle_dep_ahc.xml.",
+        "Use diagnostics for SW+ED / Wan90 / fitting curves.",
+    ]
 
 
 def main() -> None:
@@ -91,7 +127,8 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
 
-    rows = read_csv(require_file(PROCESSED / "ahc_111" / "ahc_angle_dependence.csv"))
+    diagnostic_rows = read_csv(require_file(PROCESSED / "ahc_111" / "ahc_angle_dependence.csv"))
+    paper_rows = read_csv(require_file(PAPER_SOURCE))
     output_dir = args.output_dir or output_dir_for(args.style)
     outputs = {
         "para": "fit_ahc_para.pdf",
@@ -99,22 +136,28 @@ def main() -> None:
         "axis": "fit_ahc_axis.pdf",
     }
     for component, filename in outputs.items():
-        x, y = theory(component)
         if args.style == "paper":
             contract = load_contract(component)
-            assert contract["paper_reproducible"] is True
-            plot_methods(
-                rows,
-                component=component,
-                output=output_dir / filename,
-                extra_curves=[
-                    ("fitting", x, y, {"color": "tab:blue", "linestyle": "-", "linewidth": 1.8})
-                ],
-                **paper_plot_config(component),
-            )
+            if contract["paper_reproducible"]:
+                plot_methods(
+                    paper_rows,
+                    component=component,
+                    output=output_dir / filename,
+                    extra_curves=paper_extra_curves(component),
+                    **paper_plot_config(component),
+                )
+            else:
+                render_notice_panel(
+                    output_dir / filename,
+                    title=None,
+                    lines=paper_notice_lines(),
+                    xlabel=r"$\psi\ [\mathrm{deg}]$",
+                    ylabel=PAPER_YLABELS[component],
+                )
         else:
+            x, y = theory(component)
             plot_methods(
-                rows,
+                diagnostic_rows,
                 component=component,
                 output=output_dir / filename,
                 title=f"Fe (111) sigma_{component}",

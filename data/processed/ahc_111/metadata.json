@@ -2,6 +2,10 @@
   "description": "Processed bcc Fe (111) angular data.",
   "fermi_level_ev": 17.4112,
   "large_file_policy": "No raw DFT, Wannier, or AHC intermediate files are stored in Git.",
+  "paper_fit_source_files": [
+    "SYMWAN_ROOT/tests/Fe/FM_sqa_111/theta0_qe-7.2/hamiltonian_hdf5_trs/anisotropy/angle_dep_ahc.xml",
+    "data/source/production_exports/ahc_111/fit_ahc_angle_dependence.csv"
+  ],
   "source_files": [
     "angle_dep_ahc_dft.xml",
     "angle_dep_ed.xml"

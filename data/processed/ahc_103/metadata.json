@@ -2,6 +2,10 @@
   "description": "Processed bcc Fe (103) angular data.",
   "fermi_level_ev": 17.4112,
   "large_file_policy": "No raw DFT, Wannier, or AHC intermediate files are stored in Git.",
+  "paper_fit_source_files": [
+    "PAPER_ROOT/figs/Fe/FM_sqa_103/anisotropy/angle_dep_ahc.xml",
+    "data/source/production_exports/ahc_103/fit_ahc_angle_dependence.csv"
+  ],
   "source_files": [
     "angle_dep_ahc_dft.xml",
     "angle_dep_ed.xml"

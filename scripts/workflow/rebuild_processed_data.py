@@ -21,12 +21,20 @@ PRODUCTION_EXPORTS = [
         PROCESSED / "ahc_111/ahc_angle_dependence.csv",
     ),
     (
+        SOURCE / "production_exports/ahc_111/fit_ahc_angle_dependence.csv",
+        PROCESSED / "ahc_111/fit_ahc_angle_dependence.csv",
+    ),
+    (
         SOURCE / "production_exports/ahc_111/energy_angle_dependence.csv",
         PROCESSED / "ahc_111/energy_angle_dependence.csv",
     ),
     (
         SOURCE / "production_exports/ahc_103/ahc_angle_dependence.csv",
         PROCESSED / "ahc_103/ahc_angle_dependence.csv",
+    ),
+    (
+        SOURCE / "production_exports/ahc_103/fit_ahc_angle_dependence.csv",
+        PROCESSED / "ahc_103/fit_ahc_angle_dependence.csv",
     ),
     (
         SOURCE / "production_exports/ahc_103/energy_angle_dependence.csv",

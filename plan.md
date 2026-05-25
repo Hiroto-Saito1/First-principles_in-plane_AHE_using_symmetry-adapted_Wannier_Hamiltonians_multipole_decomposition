@@ -576,13 +576,12 @@ presentation upgrades.
 
 ### Remaining Optional Follow-up
 
-- For `fit_ahc`, fix the role-identity problem before treating generated
-  paper-facing PDFs as manuscript-equivalent. The generated `model` legend
-  must be backed by the paper's `model` data, not by data that correspond to
-  the paper's `DFT` plot. The contract should include a `verified` /
-  `unverified` status per legend role; unverified roles should be recovered
-  from compact source data, demoted to diagnostics, or omitted from
-  `results/figures_paper/`.
+- The `fit_ahc` paper-facing scripts are again paper-reproducible for both
+  `(111)` and `(103)` because each plane now has a committed archived-model
+  compact export derived from `angle_dep_ahc.xml`. The remaining follow-up is
+  therefore narrower: prove which committed DFT-like comparison branch
+  corresponds to the manuscript's DFT overlay, if that overlay is later needed
+  for a public paper-facing role.
 - Continue contact-sheet review and fine panel/label polish now that the
   remaining paper-facing figure families have explicit information contracts.
 - Obtain upstream clarification for the copied archived code under

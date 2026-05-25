@@ -272,25 +272,47 @@ def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
             assert "T magnetic-toroidal" not in text
 
 
-def test_ahc_paper_configs_follow_archived_fit_source_roles() -> None:
-    """Paper-mode fit_ahc plots should expose reference-PDF series roles honestly."""
-    for module_name, script_rel in [
-        ("plot_ahc_111_module", "scripts/reproduce_figures/plot_ahc_111.py"),
-        ("plot_ahc_103_module", "scripts/reproduce_figures/plot_ahc_103.py"),
-    ]:
-        module = load_script_module(script_rel, module_name)
-        config = module.paper_plot_config("para")
-        assert config["methods"] == ["SW+ED", "Wan90"]
-        assert config["label_map"]["SW+ED"] == "model"
-        assert config["label_map"]["Wan90"] == "DFT"
-        assert config["label_map"]["fitting"] == "fitting"
-        assert config["style_map"]["SW+ED"]["linestyle"] == "--"
-        assert config["style_map"]["Wan90"]["marker"] == "D"
-        assert "results/figures_paper/" in str(module.output_dir_for("paper"))
+def test_ahc_paper_configs_fail_closed_on_unverified_roles() -> None:
+    """Paper-mode fit_ahc plots should only relabel verified compact series."""
+    module_111 = load_script_module(
+        "scripts/reproduce_figures/plot_ahc_111.py",
+        "plot_ahc_111_module",
+    )
+    panel_111 = module_111.load_contract("para")
+    assert panel_111["paper_reproducible"] is True
+    config_111 = module_111.paper_plot_config("para")
+    assert config_111["methods"] == ["SW+ED"]
+    assert config_111["label_map"]["SW+ED"] == "model"
+    assert config_111["style_map"]["SW+ED"]["linestyle"] == "None"
+    assert config_111["legend_kwargs"]["loc"] == "upper right"
+    extra_111 = module_111.paper_extra_curves("para")
+    assert len(extra_111) == 1
+    assert extra_111[0][0] == "fitting"
+    assert extra_111[0][3]["color"] == "tab:red"
+    assert extra_111[0][3]["linestyle"] == "--"
+    assert "results/figures_paper/" in str(module_111.output_dir_for("paper"))
+
+    module_103 = load_script_module(
+        "scripts/reproduce_figures/plot_ahc_103.py",
+        "plot_ahc_103_module",
+    )
+    panel_103 = module_103.load_contract("para")
+    assert panel_103["paper_reproducible"] is True
+    config_103 = module_103.paper_plot_config("para")
+    assert config_103["methods"] == ["SW+ED"]
+    assert config_103["label_map"]["SW+ED"] == "model"
+    assert config_103["style_map"]["SW+ED"]["linestyle"] == "None"
+    assert config_103["legend_kwargs"]["loc"] == "upper right"
+    extra_103 = module_103.paper_extra_curves("para")
+    assert len(extra_103) == 1
+    assert extra_103[0][0] == "fitting"
+    assert extra_103[0][3]["color"] == "tab:red"
+    assert extra_103[0][3]["linestyle"] == "--"
+    assert "results/figures_paper/" in str(module_103.output_dir_for("paper"))
 
 
-def test_fit_ahc_reference_contract_matches_public_paper_roles() -> None:
-    """The AHC contract should match the public paper-facing role mapping."""
+def test_fit_ahc_reference_contract_records_verified_model_roles() -> None:
+    """The AHC contract should distinguish verified paper roles from diagnostic-only ones."""
     contract = fit_ahc_contract()
     assert sorted(contract["panels"]) == [
         "103:axis",
@@ -303,24 +325,36 @@ def test_fit_ahc_reference_contract_matches_public_paper_roles() -> None:
     evidence = contract["reference_evidence"]
     assert "fit_ahc.py" in " ".join(evidence["reference_scripts"])
     assert "plot_ahc.py" in " ".join(evidence["reference_scripts"])
+    assert "angle_dep_ahc_dft.xml" in " ".join(evidence["notes"])
+    assert "angle_dep_ahc.xml" in " ".join(evidence["notes"])
     for panel_key, panel in contract["panels"].items():
         assert panel["paper_reproducible"] is True
+        assert panel["blocker"] is None
         series = panel["required_series"]
         assert [item["paper_label"] for item in series] == ["model", "fitting"]
         assert series[0]["source_method"] == "SW+ED"
-        assert series[0]["min_finite_points"] == 13
+        assert series[0]["verification_status"] == "verified"
+        assert series[0]["source_file"].endswith("fit_ahc_angle_dependence.csv")
+        assert series[0]["min_finite_points"] == 37
+        assert series[1]["verification_status"] == "verified"
         assert series[1]["min_finite_points"] == 181
-        optional = panel["optional_series"]
-        assert len(optional) == 1
-        assert optional[0]["paper_label"] == "DFT"
-        assert optional[0]["source_method"] == "Wan90"
+        assert panel["optional_series"] == []
+        diagnostic = panel["diagnostic_only_series"]
+        assert len(diagnostic) == 1
+        assert diagnostic[0]["paper_label"] == "DFT"
+        assert diagnostic[0]["source_method"] == "Wan90"
+        assert diagnostic[0]["verification_status"] == "unverified"
 
 
-def test_fit_ahc_processed_data_satisfies_contract() -> None:
-    """Current compact AHC sources should satisfy the fit_ahc paper contract."""
+def test_fit_ahc_processed_data_matches_contract_sources() -> None:
+    """Current compact fit_ahc sources should match the contract source counts."""
     contract = fit_ahc_contract()["panels"]
+    processed_map = {
+        "111": ROOT / "data/processed/ahc_111/fit_ahc_angle_dependence.csv",
+        "103": ROOT / "data/processed/ahc_103/fit_ahc_angle_dependence.csv",
+    }
     for plane in ["111", "103"]:
-        with (ROOT / f"data/processed/ahc_{plane}/ahc_angle_dependence.csv").open(
+        with processed_map[plane].open(
             newline="", encoding="utf-8"
         ) as handle:
             rows = list(csv.DictReader(handle))
@@ -333,19 +367,12 @@ def test_fit_ahc_processed_data_satisfies_contract() -> None:
                 if row["method"] == requirement["source_method"]
                 and row[requirement["source_column"]].strip().lower() != "nan"
             )
-            assert finite == 13
-            optional = panel["optional_series"][0]
-            optional_finite = sum(
-                1
-                for row in rows
-                if row["method"] == optional["source_method"]
-                and row[optional["source_column"]].strip().lower() != "nan"
-            )
-            assert optional_finite == optional["min_finite_points"]
+            assert finite == requirement["min_finite_points"]
+            assert panel["paper_reproducible"] is True
 
 
 def test_fit_ahc_optional_dft_overlay_matches_compact_availability() -> None:
-    """Optional DFT overlays should reflect the actual compact-source coverage."""
+    """DFT-like diagnostic overlays should reflect the actual compact-source coverage."""
     expected = {"111": 0, "103": 5}
     for plane, target in expected.items():
         with (ROOT / f"data/processed/ahc_{plane}/ahc_angle_dependence.csv").open(
@@ -359,6 +386,19 @@ def test_fit_ahc_optional_dft_overlay_matches_compact_availability() -> None:
                 if row["method"] == "Wan90" and row[column].strip().lower() != "nan"
             )
             assert finite == target
+
+
+def test_fit_ahc_paper_notice_payload_is_stable() -> None:
+    """The fail-closed notice helper should stay available for future role audits."""
+    module = load_script_module(
+        "scripts/reproduce_figures/plot_ahc_111.py",
+        "plot_ahc_111_notice_module",
+    )
+    lines = module.paper_notice_lines()
+    assert lines[0] == "Paper fit_ahc role identity is unverified."
+    assert any("angle_dep_ahc_dft.xml" in line for line in lines)
+    assert any("angle_dep_ahc.xml" in line for line in lines)
+    assert any("diagnostics" in line for line in lines)
 
 
 def test_rank_resolved_paper_config_uses_manuscript_series_roles() -> None:
@@ -727,8 +767,10 @@ def test_processed_csv_files_have_source_chain() -> None:
     }
     export_backed = {
         Path("data/processed/ahc_111/ahc_angle_dependence.csv"),
+        Path("data/processed/ahc_111/fit_ahc_angle_dependence.csv"),
         Path("data/processed/ahc_111/energy_angle_dependence.csv"),
         Path("data/processed/ahc_103/ahc_angle_dependence.csv"),
+        Path("data/processed/ahc_103/fit_ahc_angle_dependence.csv"),
         Path("data/processed/ahc_103/energy_angle_dependence.csv"),
         Path("data/processed/rank_resolved_103/rank_resolved_ahc.csv"),
         Path("data/processed/rank_resolved_103/rank_cumulative_energy.csv"),

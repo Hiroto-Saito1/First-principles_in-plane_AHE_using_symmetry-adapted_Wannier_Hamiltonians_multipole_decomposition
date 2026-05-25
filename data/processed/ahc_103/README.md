@@ -13,7 +13,14 @@ energy-angle data used by the corresponding manuscript panels.
 Immediate committed sources:
 
 - `data/source/production_exports/ahc_103/ahc_angle_dependence.csv`
+- `data/source/production_exports/ahc_103/fit_ahc_angle_dependence.csv`
 - `data/source/production_exports/ahc_103/energy_angle_dependence.csv`
+
+The paper-facing `fit_ahc_*_103.pdf` plots now read from
+`fit_ahc_angle_dependence.csv`, which is a compact export recovered from the
+archived `FM_sqa_103/anisotropy/angle_dep_ahc.xml` model source. The broader
+diagnostic AHC comparisons still read from `ahc_angle_dependence.csv`, which is
+the compact snapshot extracted from `angle_dep_ahc_dft.xml`.
 
 Rebuild command:
 

@@ -11,12 +11,15 @@ and keeps internal comparison series such as `Wan90`, `SW+ED`, `SW+PD`,
 separate from manuscript-facing labels.
 
 The paper-facing `fit_ahc` scripts consult
-`data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json`. Archived
-`fit_ahc.py` sources and the committed reference PDFs together define the
-public role mapping: the paper-facing plots label `SW+ED` as `model`, label the
-analytic curve as `fitting`, and overlay `Wan90` as `DFT` only when finite
-compact values are available. The diagnostic AHC outputs still show the raw
-implementation-comparison series.
+`data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json`. The
+`(103)` script reads the committed
+`data/processed/ahc_103/fit_ahc_angle_dependence.csv`, recovered from the
+archived `FM_sqa_103/anisotropy/angle_dep_ahc.xml` model source, and the
+`(111)` script reads the committed
+`data/processed/ahc_111/fit_ahc_angle_dependence.csv`, recovered from the
+archived `FM_sqa_111/.../anisotropy/angle_dep_ahc.xml` model source. The
+diagnostic AHC outputs continue to show the raw implementation-comparison
+series.
 
 The paper-facing `(103)` rank-resolved plots are now guarded by
 `data/source/workflow_manifests/rank_resolved_103/rank_resolved_reference_contract.json`.

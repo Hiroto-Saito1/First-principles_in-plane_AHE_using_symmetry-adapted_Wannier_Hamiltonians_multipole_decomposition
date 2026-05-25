@@ -114,6 +114,7 @@ def plot_methods(
     | None = None,
     label_map: dict[str, str] | None = None,
     style_map: dict[str, dict[str, object]] | None = None,
+    legend_kwargs: dict[str, object] | None = None,
     xlabel: str = "psi [deg]",
     ylabel: str | None = None,
 ) -> None:
@@ -140,9 +141,13 @@ def plot_methods(
             continue
         x = [xv for xv, _ in finite_pairs]
         y = [yv for _, yv in finite_pairs]
-        kwargs = style.get(method, {"marker": "o", "linestyle": "-"})
+        kwargs = {
+            "markersize": 4,
+            "linewidth": 1.4,
+            **style.get(method, {"marker": "o", "linestyle": "-"}),
+        }
         label = (label_map or {}).get(method, method)
-        plt.plot(x, y, label=label, markersize=4, linewidth=1.4, **kwargs)
+        plt.plot(x, y, label=label, **kwargs)
     if extra_curves:
         for curve in extra_curves:
             if len(curve) == 3:
@@ -167,7 +172,7 @@ def plot_methods(
     plt.xlim(0, 180)
     plt.xticks(range(0, 181, 30))
     plt.grid(True, linewidth=0.4)
-    plt.legend(fontsize=8)
+    plt.legend(fontsize=8, **(legend_kwargs or {}))
     plt.tight_layout()
     plt.savefig(output)
     plt.close()

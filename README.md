@@ -174,12 +174,12 @@ For the multipole bar figures, the paper-facing output now stays closer to the
 manuscript's `z_i` + SAMB labeling, while the diagnostic output keeps the more
 explicit family-role legend text.
 
-For the `fit_ahc` panels, the current paper-facing outputs now follow the
-committed reference-PDF roles: `SW+ED` is shown as `model`, the analytic curve
-is shown as `fitting`, and committed `Wan90` points are shown as `DFT` when
-finite values are available. That means `(103)` gets a sparse DFT overlay from
-the compact source, while `(111)` still has no committed compact DFT points to
-overlay.
+For the `fit_ahc` panels, both paper-facing planes are now backed by committed
+compact exports of the archived `angle_dep_ahc.xml` model sources. That means
+the paper-facing `fit_ahc` panels show the verified manuscript `model` curve
+plus the analytic `fitting` curve for both `(111)` and `(103)`, while the
+diagnostic outputs continue to keep the raw `SW+ED`/`Wan90`/`fitting`
+comparison curves separate.
 
 For the `(103)` rank-resolved panels, the paper-facing outputs now also follow
 an explicit reference-information contract under

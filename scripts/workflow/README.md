@@ -15,6 +15,9 @@ Current scripts:
 - `export_minimal_model_source.py`: condenses archived minimal-model
   `sigma_ahc_eta1.00meV.txt` outputs into the compact CSV used by the figure
   plotting script.
+- `export_fit_ahc_source.py`: condenses an archived `angle_dep_ahc.xml` fit
+  source into the compact CSV used by the paper-facing `(111)` / `(103)`
+  `fit_ahc` panels.
 - `export_multipole_coefficients.py`: extracts a compact coefficient CSV from
   a decomposition HDF5 that contains `z_coefficients` plus the corresponding
   `Fe_samb.py` label table.

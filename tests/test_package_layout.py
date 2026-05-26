@@ -178,3 +178,52 @@ import symwan_multipie.wannier_utils.win
 
     assert result.returncode != 0
     assert "blocked optional dependency" in result.stderr
+
+
+def test_archived_wannier_utils_compile_without_syntax_warnings() -> None:
+    """Archived wannier_utils modules should compile cleanly under SyntaxWarning-as-error."""
+
+    files = sorted(str(path) for path in (SRC / "wannier_utils").glob("*.py"))
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-Werror::SyntaxWarning",
+            "-m",
+            "py_compile",
+            *files,
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+
+
+def test_archived_code_redistribution_status_is_explicit() -> None:
+    """Reader-facing docs should keep the archived-code exclusion visible."""
+
+    license_text = (ROOT / "LICENSE").read_text(encoding="utf-8")
+    readme_text = (ROOT / "README.md").read_text(encoding="utf-8")
+    docs_readme_text = (ROOT / "docs/README.md").read_text(encoding="utf-8")
+    status_text = (ROOT / "docs/redistribution_status.md").read_text(
+        encoding="utf-8"
+    )
+
+    archived_paths = (
+        "src/symwan_multipie/symwannier/",
+        "src/symwan_multipie/wannier_utils/",
+    )
+
+    for path in archived_paths:
+        assert path in license_text
+        assert path in readme_text
+        assert path in status_text
+
+    assert "upstream redistribution status has not yet" in license_text
+    assert "all rights reserved pending clarification" in license_text
+    assert "temporarily excluded from the" in readme_text
+    assert "permissive grant until their redistribution status is confirmed" in readme_text
+    assert "excluded from the repository's local MIT" in status_text
+    assert "grant" in status_text
+    assert "redistribution_status.md" in docs_readme_text

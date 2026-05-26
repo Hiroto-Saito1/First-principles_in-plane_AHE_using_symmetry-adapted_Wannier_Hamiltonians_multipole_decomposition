@@ -60,6 +60,8 @@ Use the following files as the main entry points:
 - `README.md`: high-level overview, quick start, and package scope.
 - `CHANGELOG.md`: release-level summary, including `v0.1.0`.
 - `docs/README.md`: guide to the detailed workflow and inventory documents.
+- `docs/redistribution_status.md`: current status of copied archived code that
+  remains outside the repository's permissive grant.
 - `plan.md`: close-out notes and completion definition for the public
   reorganization work.
 

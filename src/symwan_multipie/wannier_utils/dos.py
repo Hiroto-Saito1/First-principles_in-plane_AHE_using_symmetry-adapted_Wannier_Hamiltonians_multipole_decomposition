@@ -265,7 +265,7 @@ class DOS(WannierKmesh):
         energy_all: np.ndarray, 
         weight_all: np.ndarray, 
     ):
-        """
+        r"""
         Args:
             ind: _description_.
             mu: Fermi level.
@@ -320,7 +320,7 @@ class DOS(WannierKmesh):
         energy_all: np.ndarray, 
         weight_all: np.ndarray, 
     ):
-        """
+        r"""
         Args:
             ind: _description_.
             mu: Fermi level.

@@ -442,7 +442,7 @@ class HamK:
 
     @property
     def HHa(self) -> np.ndarray:
-        """
+        r"""
         return \bar{H}^(H)_a = dH^(H)/da in size of (3, num_wann, num_wann).
         """
         if not hasattr(self, "uk"):
@@ -476,7 +476,7 @@ class HamK:
 
     @property
     def vmna(self) -> np.ndarray:
-        """
+        r"""
         return v_mna = \bar{H}^{H}_mna - i*(e_n - e_m)\bar{A}^{H}_mna in size of
         (3, num_wann, num_wann).
         """

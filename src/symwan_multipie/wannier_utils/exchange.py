@@ -129,7 +129,7 @@ def main():
 
 
 class Exchange(WannierKmesh):
-    """
+    r"""
     Evaluate Heisenberg exchange interaction with Lichtenstein's formula and below settings.
     1. DFT calculation is done in colinear magnetization along z axis, no SOC.
     2. Wannier90 calculation is one shot.

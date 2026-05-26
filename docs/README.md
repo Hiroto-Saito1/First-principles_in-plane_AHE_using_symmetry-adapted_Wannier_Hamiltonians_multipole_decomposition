@@ -7,6 +7,8 @@ reproducibility package.
 
 - `../README.md`: project overview and quick start.
 - `../CHANGELOG.md`: release notes, including the `v0.1.0` baseline.
+- `redistribution_status.md`: current public status of copied archived code
+  that remains excluded from the repository's permissive grant.
 - `../plan.md`: completion notes and optional future upgrades.
 
 ## Repository Maps
@@ -32,5 +34,7 @@ For a first pass through the repository:
 2. inspect `paper_mapping.md` and `data_inventory.md`;
 3. use `workflow.md` when you want to understand where a processed dataset or
    omitted large artifact came from;
-4. consult `../plan.md` for the final scope decision and remaining optional
+4. read `redistribution_status.md` if you need the current status of the
+   copied archived workflow trees under `src/symwan_multipie/`;
+5. consult `../plan.md` for the final scope decision and remaining optional
    upgrades.

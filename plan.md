@@ -581,12 +581,14 @@ workspaces.
 - Standalone `plot_bcc_planes.py` now defaults to the documented single
   `results/figures_paper/definitions/` output directory, and that default is
   covered by tests.
-- Python 3.13 reports invalid-escape `SyntaxWarning` messages in archived
-  `wannier_utils` docstrings during compilation.
+- Python 3.13 invalid-escape `SyntaxWarning` messages in archived
+  `wannier_utils` docstrings have been removed, and the test suite now keeps
+  those modules under `-Werror::SyntaxWarning`.
 - The copied archived `symwannier/` and `wannier_utils/` trees remain in the
   public repository without confirmed redistribution status. Excluding them
   from the local MIT grant documents uncertainty but does not itself establish
-  permission to distribute them.
+  permission to distribute them. Reader-facing docs and tests now keep that
+  exclusion visible, but the underlying redistribution basis is still open.
 
 ## Current Status
 
@@ -594,14 +596,13 @@ The repository has a functional public data-availability baseline on the
 current `main` branch: it includes production input templates, cleaned public
 workflow drivers, compact processed figure data, plotting scripts,
 figure/data/source inventories, archived workflow manifests for large
-regenerated artifacts, regression tests, and CI checks. The remaining blockers
-for the stronger manuscript-style completion criterion are now limited to
-packaged warning cleanup and archived-code redistribution hygiene.
+regenerated artifacts, regression tests, and CI checks. The remaining blocker
+for the stronger manuscript-style completion criterion is now limited to
+archived-code redistribution hygiene.
 
 Required work before claiming manuscript-style reproduction complete:
 
-- remove avoidable compilation warnings and resolve the archived-code
-  redistribution basis.
+- resolve the archived-code redistribution basis.
 
 Optional provenance or maintenance upgrades after those blockers:
 
@@ -618,9 +619,9 @@ split and archived `fit_ahc` model-source recovery. The working tree was clean
 and synchronized with `origin/main`; `pytest` passed with 62 tests;
 `scripts/reproduce_all_figures.sh --check` and `pip check` completed; and a
 fresh `/tmp` generation produced 27 paper PDFs, 20 diagnostic PDFs, and a
-reference-vs-generated contact sheet. `compileall` completed but emitted
-invalid-escape `SyntaxWarning` messages from archived `wannier_utils`
-docstrings.
+reference-vs-generated contact sheet. The later warning-cleanup pass removed
+the archived `wannier_utils` invalid-escape `SyntaxWarning` output and added a
+regression check that compiles those modules with `-Werror::SyntaxWarning`.
 
 ### Required Corrections
 
@@ -648,7 +649,8 @@ docstrings.
      evidence for manuscript-style completion.
 
 4. Public-release hygiene.
-   - Eliminate avoidable Python 3.13 docstring warnings.
+   - Resolved: avoidable Python 3.13 docstring warnings have been removed and
+     are now covered by tests.
    - Resolve redistribution permission for copied archived code before relying
      on the repository as a distributable public package.
 
@@ -698,8 +700,8 @@ The reorganization is considered complete when:
 Status on `main` as audited on 2026-05-26: the executable data-availability
 baseline passes, but this completion definition is not satisfied. The fit AHC
 role/source gap, preflight, minimal-model presentation, and bcc-plane
-default-path items have been resolved; the remaining open items are Python
-3.13 warning cleanup and archived-code redistribution status.
+default-path items have been resolved; the remaining open item is archived-code
+redistribution status.
 
 After those requirements are met, the principal optional provenance upgrade is
 to replace the recovered multipole-coefficient compact snapshot with a direct

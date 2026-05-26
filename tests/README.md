@@ -32,7 +32,9 @@ WannierBerri, MPI, or cluster calculation directories.
   manifests, and do not embed private absolute paths.
 - `test_package_layout.py`: verifies that the copied `symwannier/` and
   `wannier_utils/` module sets are present under `src/`, use repo-local
-  imports, and preserve the lightweight `HamK` / helper import surface.
+  imports, preserve the lightweight `HamK` / helper import surface, and keep
+  the current archived-code redistribution exclusions visible in reader-facing
+  docs.
 
 ## Running
 
@@ -50,3 +52,12 @@ top-level imports and the lightweight `wannier_utils` surface must work
 without the workflow-only dependencies, while modules such as
 `symwan_multipie.wannier_utils.win` are allowed to require
 `pip install -e ".[workflow]"`.
+
+They also keep the archived `wannier_utils` tree free of avoidable Python
+`SyntaxWarning` output by compiling those modules with
+`-Werror::SyntaxWarning`.
+
+The same package-layout checks also verify that `LICENSE`, `README.md`, and
+`docs/redistribution_status.md` consistently flag the copied archived module
+trees as excluded from the repository's permissive grant until their
+redistribution basis is clarified.

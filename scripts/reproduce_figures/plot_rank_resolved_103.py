@@ -31,31 +31,40 @@ PAPER_COMPONENT_LABELS = {
 }
 
 PAPER_CUMULATIVE_LABELS = {
-    "w_rank1": r"$\mathbb{M}_1$",
-    "w_rank1_2": r"$\mathbb{M}_1 + \mathbb{T}_2$",
-    "w_rank1_2_3": r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3$",
-    "w_rank1_2_3_4": r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3 + \mathbb{T}_4$",
-    "w_rank1_2_3_4_5": r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3 + \mathbb{T}_4 + \mathbb{M}_5$",
-    "w_rank1_2_3_4_5_6": r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3 + \mathbb{T}_4 + \mathbb{M}_5 + \mathbb{T}_6$",
+    "w_rank1": "w/ rank 1",
+    "w_rank1_2": "w/ rank 1,2",
+    "w_rank1_2_3": "w/ rank 1,2,3",
+    "w_rank1_2_3_4": "w/ rank 1,2,3,4",
+    "w_rank1_2_3_4_5": "w/ rank 1,2,3,4,5",
+    "w_rank1_2_3_4_5_6": "w/ rank 1,2,3,4,5,6",
 }
 
 PAPER_SINGLE_RANK_LABELS = {
-    "w_rank1": r"$\mathbb{M}_1$",
-    "w_rank3": r"$\mathbb{M}_3$",
-    "w_rank4": r"$\mathbb{T}_4$",
-    "w_rank5": r"$\mathbb{M}_5$",
+    "w_rank1": "w/ rank 1",
+    "w_rank3": "w/ rank 3",
+    "w_rank4": "w/ rank 4",
+    "w_rank5": "w/ rank 5",
 }
 
 PAPER_STYLE_MAP = {
-    "w_rank1": {"marker": "o", "linestyle": "-", "color": "tab:blue"},
-    "w_rank1_2": {"marker": "s", "linestyle": "--", "color": "tab:orange"},
-    "w_rank1_2_3": {"marker": "o", "linestyle": "-", "color": "tab:blue"},
-    "w_rank1_2_3_4": {"marker": "s", "linestyle": "--", "color": "tab:orange"},
-    "w_rank1_2_3_4_5": {"marker": "o", "linestyle": "-", "color": "tab:blue"},
-    "w_rank1_2_3_4_5_6": {"marker": "s", "linestyle": "--", "color": "tab:orange"},
-    "w_rank3": {"marker": "^", "linestyle": "-", "color": "tab:green"},
-    "w_rank4": {"marker": "D", "linestyle": "-", "color": "tab:red"},
-    "w_rank5": {"marker": "v", "linestyle": "-", "color": "tab:purple"},
+    "w_rank1": {"marker": "s", "linestyle": "-", "color": "tab:blue"},
+    "w_rank1_2": {"marker": "P", "linestyle": "--", "color": "tab:orange"},
+    "w_rank1_2_3": {"marker": "s", "linestyle": "-", "color": "tab:blue"},
+    "w_rank1_2_3_4": {"marker": "P", "linestyle": "--", "color": "tab:orange"},
+    "w_rank1_2_3_4_5": {"marker": "s", "linestyle": "-", "color": "tab:blue"},
+    "w_rank1_2_3_4_5_6": {"marker": "P", "linestyle": "--", "color": "tab:orange"},
+    "w_rank3": {"marker": "^", "linestyle": "-.", "color": "tab:green"},
+    "w_rank4": {"marker": "D", "linestyle": ":", "color": "tab:purple"},
+    "w_rank5": {"marker": "v", "linestyle": "-", "color": "tab:brown"},
+}
+
+PAPER_REFERENCE_STYLE = {
+    "color": "tab:red",
+    "marker": "*",
+    "linestyle": "-",
+    "alpha": 0.7,
+    "markersize": 8,
+    "linewidth": 2.5,
 }
 
 
@@ -84,7 +93,7 @@ def component_ylabel(component: str, *, style: str) -> str:
 
 
 def reference_label(style: str) -> str:
-    return "all ranks" if style == "paper" else "all"
+    return "all" if style == "paper" else "all"
 
 
 def plot_component(rows, methods, component: str, output: Path, *, style: str) -> None:
@@ -106,15 +115,15 @@ def plot_component(rows, methods, component: str, output: Path, *, style: str) -
     reference = by_key.get(("reference", "SW+ED"), [])
     if reference:
         x, y = sorted_xy(reference, component)
-        plt.plot(
-            x,
-            y,
-            color="black",
-            marker="*",
-            markersize=5,
-            linewidth=1.5,
-            label=reference_label(style),
-        )
+        ref_kwargs = {
+            "color": "black",
+            "marker": "*",
+            "markersize": 5,
+            "linewidth": 1.5,
+        }
+        if style == "paper":
+            ref_kwargs.update(PAPER_REFERENCE_STYLE)
+        plt.plot(x, y, label=reference_label(style), **ref_kwargs)
     plt.xlabel(r"$\psi\ [\mathrm{deg}]$" if style == "paper" else "psi [deg]")
     plt.ylabel(component_ylabel(component, style=style))
     plt.xlim(0, 180)
@@ -145,15 +154,15 @@ def plot_single_rank(rows, component: str, output: Path, *, style: str) -> None:
     reference = by_key.get(("reference", "SW+ED"), [])
     if reference:
         x, y = sorted_xy(reference, component)
-        plt.plot(
-            x,
-            y,
-            color="black",
-            marker="*",
-            markersize=5,
-            linewidth=1.5,
-            label=reference_label(style),
-        )
+        ref_kwargs = {
+            "color": "black",
+            "marker": "*",
+            "markersize": 5,
+            "linewidth": 1.5,
+        }
+        if style == "paper":
+            ref_kwargs.update(PAPER_REFERENCE_STYLE)
+        plt.plot(x, y, label=reference_label(style), **ref_kwargs)
     plt.xlabel(r"$\psi\ [\mathrm{deg}]$" if style == "paper" else "psi [deg]")
     plt.ylabel(component_ylabel(component, style=style))
     plt.xlim(0, 180)

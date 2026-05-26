@@ -3,7 +3,8 @@
   "reference_evidence": {
     "notes": [
       "The committed figures under figures/paper/ define the paper-facing panel structure for the rank-resolved (103) plots.",
-      "Paper-facing outputs intentionally keep only the grouped cumulative curves and the selected single-rank roles exposed by plot_rank_resolved_103.py; omitted cumulative tails and w_rankNone remain outside the manuscript-style contract."
+      "Paper-facing outputs intentionally keep only the grouped cumulative curves and the selected single-rank roles exposed by plot_rank_resolved_103.py; omitted cumulative tails and w_rankNone remain outside the manuscript-style contract.",
+      "Reference-facing paper labels follow the archived public plot vocabulary `w/ rank ...` plus `all`, not the later multipole-interpretation aliases."
     ],
     "reference_figures_dir": "figures/paper/",
     "public_script": "scripts/reproduce_figures/plot_rank_resolved_103.py"
@@ -30,21 +31,21 @@
         {
           "series_group": "rank_cumulative",
           "source_method": "w_rank1",
-          "paper_label": "$\\mathbb{M}_1$",
+          "paper_label": "w/ rank 1",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "rank_cumulative",
           "source_method": "w_rank1_2",
-          "paper_label": "$\\mathbb{M}_1 + \\mathbb{T}_2$",
+          "paper_label": "w/ rank 1,2",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "reference",
           "source_method": "SW+ED",
-          "paper_label": "all ranks",
+          "paper_label": "all",
           "min_finite_points": 37,
           "x_grid_deg": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180]
         }
@@ -71,21 +72,21 @@
         {
           "series_group": "rank_cumulative",
           "source_method": "w_rank1_2_3",
-          "paper_label": "$\\mathbb{M}_1 + \\mathbb{T}_2 + \\mathbb{M}_3$",
+          "paper_label": "w/ rank 1,2,3",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "rank_cumulative",
           "source_method": "w_rank1_2_3_4",
-          "paper_label": "$\\mathbb{M}_1 + \\mathbb{T}_2 + \\mathbb{M}_3 + \\mathbb{T}_4$",
+          "paper_label": "w/ rank 1,2,3,4",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "reference",
           "source_method": "SW+ED",
-          "paper_label": "all ranks",
+          "paper_label": "all",
           "min_finite_points": 37,
           "x_grid_deg": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180]
         }
@@ -112,21 +113,21 @@
         {
           "series_group": "rank_cumulative",
           "source_method": "w_rank1_2_3_4_5",
-          "paper_label": "$\\mathbb{M}_1 + \\mathbb{T}_2 + \\mathbb{M}_3 + \\mathbb{T}_4 + \\mathbb{M}_5$",
+          "paper_label": "w/ rank 1,2,3,4,5",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "rank_cumulative",
           "source_method": "w_rank1_2_3_4_5_6",
-          "paper_label": "$\\mathbb{M}_1 + \\mathbb{T}_2 + \\mathbb{M}_3 + \\mathbb{T}_4 + \\mathbb{M}_5 + \\mathbb{T}_6$",
+          "paper_label": "w/ rank 1,2,3,4,5,6",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "reference",
           "source_method": "SW+ED",
-          "paper_label": "all ranks",
+          "paper_label": "all",
           "min_finite_points": 37,
           "x_grid_deg": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180]
         }
@@ -153,35 +154,35 @@
         {
           "series_group": "single_rank",
           "source_method": "w_rank1",
-          "paper_label": "$\\mathbb{M}_1$",
+          "paper_label": "w/ rank 1",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "single_rank",
           "source_method": "w_rank3",
-          "paper_label": "$\\mathbb{M}_3$",
+          "paper_label": "w/ rank 3",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "single_rank",
           "source_method": "w_rank4",
-          "paper_label": "$\\mathbb{T}_4$",
+          "paper_label": "w/ rank 4",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "single_rank",
           "source_method": "w_rank5",
-          "paper_label": "$\\mathbb{M}_5$",
+          "paper_label": "w/ rank 5",
           "min_finite_points": 13,
           "x_grid_deg": [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
         },
         {
           "series_group": "reference",
           "source_method": "SW+ED",
-          "paper_label": "all ranks",
+          "paper_label": "all",
           "min_finite_points": 37,
           "x_grid_deg": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180]
         }

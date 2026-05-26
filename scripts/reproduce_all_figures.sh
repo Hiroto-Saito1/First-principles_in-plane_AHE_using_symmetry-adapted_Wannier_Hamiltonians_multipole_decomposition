@@ -94,116 +94,34 @@ if [[ -z "$CONTACT_SHEET_OUTPUT" ]]; then
   CONTACT_SHEET_OUTPUT="$DIAGNOSTIC_OUTPUT_ROOT/contact_sheets/paper_vs_reference.pdf"
 fi
 
-inventory_required_inputs=()
+dependency_query=(
+  "$PYTHON_BIN"
+  "$ROOT/scripts/workflow/figure_dependencies.py"
+  --root
+  "$ROOT"
+)
+
+if [[ "$generate_paper" -eq 1 ]]; then
+  dependency_query+=(--paper)
+fi
+
+if [[ "$generate_diagnostics" -eq 1 ]]; then
+  dependency_query+=(--diagnostics)
+fi
+
+if [[ "$generate_contact_sheet" -eq 1 ]]; then
+  dependency_query+=(--contact-sheet)
+fi
+
+required_paths=()
 while IFS= read -r line; do
-  inventory_required_inputs+=("$line")
-done < <(
-  "$PYTHON_BIN" - <<'PY' "$ROOT"
-from __future__ import annotations
-import csv
-import sys
-from pathlib import Path
-
-root = Path(sys.argv[1])
-with (root / "data/processed/figure_inventory.csv").open(newline="", encoding="utf-8") as handle:
-    rows = list(csv.DictReader(handle))
-
-paths = sorted(
-    {
-        row["processed_data"]
-        for row in rows
-        if row["processed_data"] and row["reproduction_category"] == "reproducible_plot"
-    }
-)
-for path in paths:
-    print(root / path)
-PY
-)
-
-inventory_required_scripts=()
-while IFS= read -r line; do
-  inventory_required_scripts+=("$line")
-done < <(
-  "$PYTHON_BIN" - <<'PY' "$ROOT"
-from __future__ import annotations
-import csv
-import sys
-from pathlib import Path
-
-root = Path(sys.argv[1])
-with (root / "data/processed/figure_inventory.csv").open(newline="", encoding="utf-8") as handle:
-    rows = list(csv.DictReader(handle))
-
-paths = sorted(
-    {
-        row["plotting_script"]
-        for row in rows
-        if row["plotting_script"] and row["reproduction_category"] == "reproducible_plot"
-    }
-)
-for path in paths:
-    print(root / path)
-PY
-)
-
-required_inputs=(
-  "${inventory_required_inputs[@]}"
-  "$ROOT/data/processed/ahc_111/fit_ahc_dft_angle_dependence.csv"
-  "$ROOT/data/processed/ahc_103/fit_ahc_dft_angle_dependence.csv"
-)
-
-required_sources=(
-  "$ROOT/data/source/README.md"
-  "$ROOT/data/source/production_exports/README.md"
-  "$ROOT/data/source/production_exports/ahc_111/ahc_angle_dependence.csv"
-  "$ROOT/data/source/production_exports/ahc_111/energy_angle_dependence.csv"
-  "$ROOT/data/source/production_exports/ahc_111/fit_ahc_angle_dependence.csv"
-  "$ROOT/data/source/production_exports/ahc_111/fit_ahc_dft_angle_dependence.csv"
-  "$ROOT/data/source/production_exports/ahc_103/ahc_angle_dependence.csv"
-  "$ROOT/data/source/production_exports/ahc_103/energy_angle_dependence.csv"
-  "$ROOT/data/source/production_exports/ahc_103/fit_ahc_angle_dependence.csv"
-  "$ROOT/data/source/production_exports/ahc_103/fit_ahc_dft_angle_dependence.csv"
-  "$ROOT/data/source/production_exports/rank_resolved_103/rank_resolved_ahc.csv"
-  "$ROOT/data/source/production_exports/rank_resolved_103/rank_cumulative_energy.csv"
-  "$ROOT/data/source/production_exports/rank_resolved_103/single_rank_ahc.csv"
-  "$ROOT/data/source/production_exports/strain_103/strain_plus_ahc.csv"
-  "$ROOT/data/source/production_exports/strain_103/strain_minus_ahc.csv"
-  "$ROOT/data/source/pdf_vector/README.md"
-  "$ROOT/data/source/pdf_vector/band_bond/README.md"
-  "$ROOT/data/source/pdf_vector/band_bond/band_1.pdf"
-  "$ROOT/data/source/pdf_vector/band_bond/band_2.pdf"
-  "$ROOT/data/source/pdf_vector/band_bond/band_3.pdf"
-  "$ROOT/data/source/pdf_vector/band_bond/band_4.pdf"
-  "$ROOT/data/source/pdf_vector/band_bond/band_5.pdf"
-  "$ROOT/data/source/pdf_vector/band_bond/band_10.pdf"
-  "$ROOT/data/source/pdf_vector/band_bond/band_20.pdf"
-  "$ROOT/data/source/pdf_vector/band_bond/band_35.pdf"
-  "$ROOT/figures/paper/bcc_111.pdf"
-  "$ROOT/figures/paper/bcc_103.pdf"
-  "$ROOT/figures/paper/band_bond.pdf"
-  "$ROOT/figures/paper/bar_ed_all_35.pdf"
-  "$ROOT/figures/paper/bar_ed_wo_q_35.pdf"
-  "$ROOT/figures/paper/sigma_axis_model_1st_nn.pdf"
-  "$ROOT/figures/paper/sigma_axis_model_2nd_nn.pdf"
-)
-
-required_contracts=(
-  "$ROOT/data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json"
-  "$ROOT/data/source/workflow_manifests/rank_resolved_103/rank_resolved_reference_contract.json"
-  "$ROOT/data/source/workflow_manifests/strain_103/strain_reference_contract.json"
-  "$ROOT/data/source/workflow_manifests/minimal_model/minimal_model_reference_contract.json"
-  "$ROOT/data/source/workflow_manifests/band_bond/band_bond_reference_contract.json"
-  "$ROOT/data/source/workflow_manifests/multipole_coefficients/bar_plot_reference_contract.json"
-  "$ROOT/data/source/workflow_manifests/definitions/bcc_planes_reference_contract.json"
-)
-
-required_scripts=(
-  "${inventory_required_scripts[@]}"
-  "$ROOT/scripts/reproduce_figures/make_paper_contact_sheet.py"
-)
+  if [[ -n "$line" ]]; then
+    required_paths+=("$line")
+  fi
+done < <("${dependency_query[@]}")
 
 missing=0
-for path in "${required_inputs[@]}" "${required_sources[@]}" "${required_contracts[@]}" "${required_scripts[@]}"; do
+for path in "${required_paths[@]}"; do
   if [[ ! -e "$path" ]]; then
     echo "Missing required file: $path" >&2
     missing=1

@@ -27,8 +27,8 @@ implementation-comparison series.
 The paper-facing `(103)` rank-resolved plots are now guarded by
 `data/source/workflow_manifests/rank_resolved_103/rank_resolved_reference_contract.json`.
 That contract fixes the required cumulative and single-rank curve sets, their
-paper labels, and the expected angle grids without forcing pixel-identical PDF
-reproduction.
+reference-facing `w/ rank ...` / `all` labels, and the expected angle grids
+without forcing pixel-identical PDF reproduction.
 
 The `[103]` strain script is now guarded by
 `data/source/workflow_manifests/strain_103/strain_reference_contract.json`.

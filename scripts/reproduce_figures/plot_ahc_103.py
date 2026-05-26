@@ -34,8 +34,19 @@ PAPER_MODEL_SOURCE = PROCESSED / "ahc_103" / "fit_ahc_angle_dependence.csv"
 PAPER_DFT_SOURCE = PROCESSED / "ahc_103" / "fit_ahc_dft_angle_dependence.csv"
 
 PAPER_STYLES = {
-    "SW+ED": {"marker": "o", "linestyle": "None", "color": "tab:red", "markersize": 5.0},
-    "DFT": {"marker": "D", "linestyle": "--", "color": "black", "markersize": 4.5, "linewidth": 1.0},
+    "SW+ED": {
+        "marker": "o",
+        "linestyle": "-",
+        "color": "tab:red",
+        "markersize": 5.0,
+        "linewidth": 1.6,
+    },
+    "DFT": {
+        "marker": "D",
+        "linestyle": "None",
+        "color": "black",
+        "markersize": 4.5,
+    },
 }
 PAPER_YLABELS = {
     "para": r"$\sigma_{\parallel}$ at $E_F$ [S/cm]",
@@ -113,7 +124,7 @@ def paper_extra_curves(component: str) -> list[tuple[str, list[float], list[floa
     panel = load_contract(component)
     x, y = theory(component)
     return [
-        ("fitting", x, y, {"color": "tab:red", "linestyle": "--", "linewidth": 1.6})
+        ("fitting", x, y, {"color": "tab:blue", "linestyle": "-", "linewidth": 1.8})
         for item in panel["required_series"] + panel.get("optional_series", [])
         if item["source_method"] == "analytic_fit" and item["verification_status"] == "verified"
     ]
@@ -133,12 +144,18 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
 
-    diagnostic_rows = read_csv(require_file(PROCESSED / "ahc_103" / "ahc_angle_dependence.csv"))
-    paper_rows = (
-        read_csv(require_file(PAPER_MODEL_SOURCE))
-        + read_csv(require_file(PAPER_DFT_SOURCE))
-    )
     output_dir = args.output_dir or output_dir_for(args.style)
+    paper_rows = None
+    diagnostic_rows = None
+    if args.style == "paper":
+        paper_rows = (
+            read_csv(require_file(PAPER_MODEL_SOURCE))
+            + read_csv(require_file(PAPER_DFT_SOURCE))
+        )
+    else:
+        diagnostic_rows = read_csv(
+            require_file(PROCESSED / "ahc_103" / "ahc_angle_dependence.csv")
+        )
     outputs = {
         "para": "fit_ahc_para_103.pdf",
         "perp": "fit_ahc_perp_103.pdf",
@@ -146,6 +163,7 @@ def main() -> None:
     }
     for component, filename in outputs.items():
         if args.style == "paper":
+            assert paper_rows is not None
             contract = load_contract(component)
             if contract["paper_reproducible"]:
                 plot_methods(
@@ -164,6 +182,7 @@ def main() -> None:
                     ylabel=PAPER_YLABELS[component],
                 )
         else:
+            assert diagnostic_rows is not None
             x, y = theory(component)
             plot_methods(
                 diagnostic_rows,

@@ -192,9 +192,9 @@ continue to keep the raw `SW+ED`/`Wan90`/`SW+PD` comparison curves separate.
 For the `(103)` rank-resolved panels, the paper-facing outputs now also follow
 an explicit reference-information contract under
 `data/source/workflow_manifests/rank_resolved_103/`. That contract fixes the
-required cumulative and single-rank curves, manuscript-facing multipole labels,
-and angle grids, while the diagnostic mode keeps the raw `w_rank...` series
-names for implementation comparison.
+required cumulative and single-rank curves, the reference PDF labels
+`w/ rank ...` plus `all`, and the expected angle grids, while the diagnostic
+mode keeps the raw `w_rank...` series names for implementation comparison.
 
 The `[103]` strain panels now follow the same pattern under
 `data/source/workflow_manifests/strain_103/`: the paper-facing output is fixed

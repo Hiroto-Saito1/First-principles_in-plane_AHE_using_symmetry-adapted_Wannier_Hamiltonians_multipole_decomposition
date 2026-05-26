@@ -378,13 +378,17 @@ serve both purposes.
      marker/line roles, axis limits, tick spacing, and units.
 
 6. Then align rank-resolved and coefficient plots.
-   - Rank-resolved `(103)` plots now have a paper-facing plotting mode that
-     maps cumulative and single-rank labels to manuscript-style multipole
-     notation, while keeping raw `w_rank...` labels available in diagnostics.
-   - A reference-information contract now lives under
-     `data/source/workflow_manifests/rank_resolved_103/` and fixes the
-     required cumulative-group and single-rank curves, their paper-facing
-     labels, and their coarse-versus-reference angle grids.
+   - Rank-resolved `(103)` plots have a separate paper-facing plotting mode,
+     but the post-`v0.1.2` contact-sheet review found that its current
+     multipole labels (`M_1`, `M_1 + T_2`, and `all ranks`) do not match the
+     committed reference PDFs, which use rank-cumulative labels such as
+     `w/ rank 1`, `w/ rank 1,2`, and `all`.
+   - Update the reference-information contract under
+     `data/source/workflow_manifests/rank_resolved_103/` so the reference PDFs
+     remain authoritative for paper-facing labels, colors, and line/marker
+     roles. Retain multipole-interpretation labels only in a diagnostic or
+     separately named annotated output unless that notation is present in the
+     manuscript reference.
    - Multipole-coefficient plots now also have separate paper and diagnostic
      modes, with paper-facing `z_i` + SAMB labels, compact family-letter
      legends, and diagnostic family-role legend treatment. Any remaining work
@@ -415,8 +419,8 @@ serve both purposes.
    - Data checks should confirm row counts, angle grids, units, component
      signs, and selected reference values.
    - `fit_ahc` tests should fail if a paper-facing generated panel has fewer
-     required series, fewer finite reference points, or a missing fitted curve
-     relative to its series contract.
+     required series, fewer finite reference points, a missing fitted curve,
+     or style roles inconsistent with the reference panel.
    - Other paper-facing plot tests should fail when a generated plot violates
      its figure-type contract, for example by dropping a required curve,
      changing the coefficient selection/order, omitting a family legend, or
@@ -426,58 +430,58 @@ serve both purposes.
    - Pixel identity is not the target, but series membership, label semantics,
      scale, and panel structure should match the paper.
 
-### Phase G: Resolve findings from the 2026-05-26 re-audit
+### Phase G: Resolve focused findings from the post-`v0.1.2` figure re-audit
 
-The latest visual comparison and execution audit found that the figure
-infrastructure works, but manuscript-style acceptance is not yet met. Apply
-the following fixes in order.
+This focused follow-up covers only the three remaining figure-reproduction
+findings from the 2026-05-26 review: rank-resolved paper-label fidelity,
+`fit_ahc` visual-role fidelity, and complete dependency preflight. The DFT
+source recovery, minimal-model labels, bcc output default, and Python warning
+cleanup were separately verified as resolved.
 
-1. Restore the missing `fit_ahc` DFT series before declaring those panels
-   reproducible.
-   - The recovered `fit_ahc_angle_dependence.csv` files establish the
-     manuscript `model` source for `(111)` and `(103)`.
-   - The committed reference PDFs nevertheless show three paper roles in all
-     six `fit_ahc` panels: `model`, `DFT`, and `fitting`. The generated
-     paper-facing plots currently show only `model` and `fitting`.
-   - Recover and verify the compact DFT source corresponding to the reference
-     panels, then make `DFT` a required series in
-     `fit_ahc_reference_contract.json` and in the plotting scripts.
-   - Match the reference curve/marker semantics as part of this correction;
-     the fitting curve must not change visual role while reconstructing the
-     missing series.
-   - Until all required reference roles are backed by verified compact sources,
-     set affected panels to `paper_reproducible: false` or classify them as
-     not yet paper-reproducible rather than emitting incomplete paper output.
+1. Restore reference-facing labels and styles for `rank_resolved_103`.
+   - Treat the committed `figures/paper/sigma_*group*.pdf` and
+     `figures/paper/sigma_{para,perp,axis}.pdf` files as authoritative for
+     paper-mode legend text and style roles.
+   - Replace the current paper-mode cumulative legend mapping
+     (`M_1`, `M_1 + T_2`, ..., `all ranks`) with the reference labels
+     (`w/ rank 1`, `w/ rank 1,2`, ..., `all`) and restore the associated
+     color/line/marker assignments.
+   - Keep the existing multipole-symbol presentation only as an explicitly
+     diagnostic or annotated output; it must not be emitted as reference-like
+     paper output without a matching manuscript reference.
+   - Revise `rank_resolved_reference_contract.json` and tests so they compare
+     against reference-facing labels and visual roles, rather than merely
+     asserting agreement between the script and a contract that shares its
+     renamed labels.
 
-2. Make reproduction checks cover the declared plotting dependencies.
-   - Extend `scripts/reproduce_all_figures.sh --check` to require the two
-     processed `fit_ahc_angle_dependence.csv` files, their committed source
-     exports, and all reference-contract JSON files consumed by or asserted
-     for paper-facing figures.
-   - Prefer deriving this list from the figure inventory and contract
-     manifests where practical, to prevent future additions from bypassing the
-     preflight gate.
-   - Add a regression test that removes or substitutes each newly required
-     input in a temporary copy and verifies that `--check` fails.
+2. Complete the `fit_ahc` correction by restoring visual role identity.
+   - Keep the now-verified compact sources for all three required roles:
+     `model`, `DFT`, and `fitting`; no further source recovery is required for
+     this item.
+   - Match the reference encoding in all six paper panels: red
+     line-plus-marker `model`, black `DFT`, and blue solid `fitting`, including
+     the marker/line distinctions visible in the committed reference PDFs.
+   - Add style requirements to `fit_ahc_reference_contract.json` and regression
+     tests for legend order, colors, line styles, and marker roles, so a plot
+     cannot be called paper-facing solely because it contains the correct
+     series names and point counts.
 
-3. Close the remaining paper-label and output-path defects.
-   - Restore the minimal-model legends' parameter identity (`t_T` with the
-     appropriate neighbor-order superscript) and the reference y-axis unit /
-     Fermi-level wording; protect both in its contract and tests.
-   - Fix the standalone default of `plot_bcc_planes.py` so it writes directly
-     to `results/figures_paper/definitions/`, not a nested
-     `definitions/definitions/` directory.
-   - Regenerate the contact sheet after these changes and review all pages
-     before changing a figure family from open to complete.
-
-4. Clear public-release maintenance items.
-   - Remove Python 3.13 `SyntaxWarning` output in archived `wannier_utils`
-     docstrings by using raw docstrings or escaped backslashes, without
-     changing executable behavior.
-   - Confirm redistribution permission or upstream license coverage for the
-     copied `symwannier/` and `wannier_utils/` trees. If permission cannot be
-     established, remove those copied trees from the public distribution or
-     replace them with documented external prerequisites.
+3. Make preflight and inventory describe every actual reproduction dependency.
+   - Eliminate unnecessary paper-mode dependencies by loading diagnostic AHC
+     CSV files only when `--style diagnostic` is requested; if a runtime input
+     remains required in paper mode, it must be checked by
+     `scripts/reproduce_all_figures.sh --check`.
+   - Extend preflight coverage to the compact source files needed for rebuild,
+     including `data/source/production_exports/minimal_model/model_sigma_axis.csv`
+     and `data/source/pdf_vector/multipole_coefficients/multipole_coefficients.csv`,
+     in addition to all paper runtime inputs and reference contracts.
+   - Update the six `fit_ahc` rows in `data/processed/figure_inventory.csv` so
+     they record the DFT compact dependency and no longer describe the output
+     as coming only from the model CSV plus analytic fit.
+   - Prefer a structured dependency source shared by plot generation, rebuild,
+     inventory, and preflight rather than maintaining partial hand-written
+     path lists. Add failure-path tests for every newly covered dependency and
+     for paper-only versus diagnostic-only execution.
 
 ## Tests And Acceptance Criteria
 
@@ -507,6 +511,11 @@ Default tests remain lightweight. Required default checks:
   a curve labeled `model` must not be backed by data that match the paper's
   `DFT` role; unverified or role-mismatched series must be excluded from
   paper-facing output and retained only as diagnostics.
+- `fit_ahc` visual-role checks validate reference-facing legend order, color,
+  line style, and marker roles for `model`, `DFT`, and `fitting`.
+- `rank_resolved_103` paper-facing checks validate the committed reference
+  labels (`w/ rank ...` and `all`) and their series styling; alternative
+  multipole-symbol annotations belong to a separately classified output.
 - Other paper-facing reproducible plots validate against figure-type
   reference-information contracts. Curve plots check required panels, series,
   grids, finite points, and fit/reference roles; bar plots check selection,
@@ -570,14 +579,20 @@ workspaces.
   composite now has an equivalent contract for its included cutoff set and
   recovered curve membership. The multipole bar plots and geometric
   definition plots now also have explicit paper-facing information contracts.
+- The `rank_resolved_103` paper-mode contract, labels, and styling have been
+  corrected back to the committed reference vocabulary (`w/ rank ...` and
+  `all`) and the archived marker / linestyle roles. The diagnostic mode keeps
+  the alternate `w_rank...` identifiers for implementation comparison.
+- The `fit_ahc` source and series-role recovery is complete, and the
+  paper-facing plots now keep the reference visual roles as well: red
+  line-plus-marker `model`, black `DFT`, and blue solid `fitting`.
 - The minimal-model output now preserves the committed numerical sweeps and
   restores manuscript-facing parameter identity plus the reference y-axis /
   Fermi-level wording through its paper-facing contract.
-- `scripts/reproduce_all_figures.sh --check` now requires the recovered
-  `fit_ahc` compact sources and the current paper-facing reference-contract
-  manifests, and the test suite exercises failure behavior when those
-  dependencies are absent. Preflight reliability is therefore no longer a
-  current gap.
+- `scripts/reproduce_all_figures.sh --check` now derives mode-specific
+  dependencies from a shared manifest, skips diagnostic AHC CSVs in
+  paper-only mode, covers the minimal-model and multipole rebuild sources, and
+  records the `fit_ahc` DFT compact inputs in the figure inventory.
 - Standalone `plot_bcc_planes.py` now defaults to the documented single
   `results/figures_paper/definitions/` output directory, and that default is
   covered by tests.
@@ -596,13 +611,11 @@ The repository has a functional public data-availability baseline on the
 current `main` branch: it includes production input templates, cleaned public
 workflow drivers, compact processed figure data, plotting scripts,
 figure/data/source inventories, archived workflow manifests for large
-regenerated artifacts, regression tests, and CI checks. The remaining blocker
-for the stronger manuscript-style completion criterion is now limited to
-archived-code redistribution hygiene.
-
-Required work before claiming manuscript-style reproduction complete:
-
-- resolve the archived-code redistribution basis.
+regenerated artifacts, regression tests, and CI checks. The focused
+figure-reproduction scope of this update is now satisfied on `main`: paper
+outputs preserve the reference series roles and `scripts/reproduce_all_figures.sh
+--check` covers the mode-specific runtime, rebuild, and contract dependencies
+used by paper and diagnostic generation.
 
 Optional provenance or maintenance upgrades after those blockers:
 
@@ -614,45 +627,36 @@ Optional provenance or maintenance upgrades after those blockers:
 
 ## Re-Audit Improvement Queue
 
-The repository was re-audited on 2026-05-26 after the paper/diagnostic plot
-split and archived `fit_ahc` model-source recovery. The working tree was clean
-and synchronized with `origin/main`; `pytest` passed with 62 tests;
-`scripts/reproduce_all_figures.sh --check` and `pip check` completed; and a
-fresh `/tmp` generation produced 27 paper PDFs, 20 diagnostic PDFs, and a
-reference-vs-generated contact sheet. The later warning-cleanup pass removed
-the archived `wannier_utils` invalid-escape `SyntaxWarning` output and added a
-regression check that compiles those modules with `-Werror::SyntaxWarning`.
+The repository was re-audited on 2026-05-26 at `v0.1.2`. The working tree was
+clean and synchronized with `origin/main`; `pytest` passed with 66 tests;
+`scripts/reproduce_all_figures.sh --check`, `pip check`, and compilation with
+`-Werror::SyntaxWarning` completed; and a fresh `/tmp` generation produced 27
+paper PDFs, 20 diagnostic PDFs, and a reference-vs-generated contact sheet.
+That contact sheet and dependency audit establish the focused open work below.
 
-### Required Corrections
+### Focused Corrections In This Update
 
-1. `fit_ahc` paper reproduction.
-   - Resolved: both planes now keep the recovered archived-model compact
-     exports as the verified `model` sources, and committed
-     `fit_ahc_dft_angle_dependence.csv` exports preserve the `SW+ED` branch
-     used by archived `plot_ahc.py` for the paper-facing `DFT` role.
-   - Contracts, plotting behavior, and tests now require `model`, `DFT`, and
-     `fitting` together for the six paper-facing panels.
+1. `rank_resolved_103` paper-output fidelity.
+   - Resolved: paper-facing labels now follow the reference PDF vocabulary
+     (`w/ rank ...` and `all`) and archived marker / linestyle roles.
+   - The alternative multipole-interpretation vocabulary is no longer used as
+     the paper-facing contract.
 
-2. Preflight reliability.
-   - Require all paper-generation inputs and reference contracts in
-     `scripts/reproduce_all_figures.sh --check`, including the recovered
-     `fit_ahc` processed/source CSVs and the contract manifests.
-   - Test the failure behavior for absent required dependencies rather than
-     only asserting that the current complete checkout succeeds.
+2. `fit_ahc` visual-role fidelity.
+   - Resolved: the recovered and verified `model`/`DFT` compact sources are
+     now paired with reference-facing style roles in all six panels.
+   - Contracts and tests now validate visual-role identity in addition to data
+     membership.
 
-3. Remaining paper-presentation defects.
-   - Restore minimal-model legend identities and y-axis units / `E_F`
-     annotation from the reference figures.
-   - Correct the standalone bcc-plane output default so the documented output
-     path and actual output path are identical.
-   - Re-run the contact sheet after correction and treat it as required review
-     evidence for manuscript-style completion.
-
-4. Public-release hygiene.
-   - Resolved: avoidable Python 3.13 docstring warnings have been removed and
-     are now covered by tests.
-   - Resolve redistribution permission for copied archived code before relying
-     on the repository as a distributable public package.
+3. Preflight and dependency inventory.
+   - Resolved: paper-mode AHC scripts no longer load diagnostic CSVs
+     unconditionally.
+   - A shared dependency manifest now drives preflight for paper-only,
+     diagnostics-only, and contact-sheet execution, covering runtime,
+     compact-rebuild source, and contract dependencies.
+   - `fit_ahc` inventory metadata now records the DFT compact inputs, and
+     negative-path tests cover the required dependencies for each generation
+     mode.
 
 ### Later Provenance Improvements
 
@@ -698,10 +702,13 @@ The reorganization is considered complete when:
   exact regeneration recipe and required-input list.
 
 Status on `main` as audited on 2026-05-26: the executable data-availability
-baseline passes, but this completion definition is not satisfied. The fit AHC
-role/source gap, preflight, minimal-model presentation, and bcc-plane
-default-path items have been resolved; the remaining open item is archived-code
-redistribution status.
+baseline passes, but this completion definition is not satisfied. The
+`fit_ahc` source/series gap, `rank_resolved_103` label/style drift,
+minimal-model presentation, bcc-plane default-path, Python warning items,
+`fit_ahc` visual-role fidelity, and preflight/inventory dependency coverage
+have been resolved. The remaining unsatisfied completion items are outside
+this focused figure update and remain recorded in the completion definition
+and existing gap list above.
 
 After those requirements are met, the principal optional provenance upgrade is
 to replace the recovered multipole-coefficient compact snapshot with a direct

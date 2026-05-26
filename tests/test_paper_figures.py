@@ -106,6 +106,13 @@ def definitions_contract() -> dict[str, object]:
     )
 
 
+def figure_dependency_module():
+    return load_script_module(
+        "scripts/workflow/figure_dependencies.py",
+        "figure_dependencies_module",
+    )
+
+
 def pdf_strings(path: Path) -> str:
     """Extract plain strings from a generated PDF for lightweight label checks."""
     result = subprocess.run(
@@ -199,6 +206,47 @@ def test_reproduce_all_figures_check_mode() -> None:
     assert "processed and source inputs" in result.stdout
 
 
+def test_figure_dependency_manifest_tracks_mode_specific_paths() -> None:
+    """The shared dependency manifest should distinguish paper, diagnostics, and contact-sheet inputs."""
+
+    module = figure_dependency_module()
+    paper_paths = {
+        str(path.relative_to(ROOT))
+        for path in module.dependency_paths(
+            ROOT,
+            include_paper=True,
+            include_diagnostics=False,
+            include_contact_sheet=False,
+        )
+    }
+    diagnostic_paths = {
+        str(path.relative_to(ROOT))
+        for path in module.dependency_paths(
+            ROOT,
+            include_paper=False,
+            include_diagnostics=True,
+            include_contact_sheet=False,
+        )
+    }
+    contact_paths = {
+        str(path.relative_to(ROOT))
+        for path in module.dependency_paths(
+            ROOT,
+            include_paper=True,
+            include_diagnostics=False,
+            include_contact_sheet=True,
+        )
+    }
+
+    assert "data/processed/ahc_111/fit_ahc_dft_angle_dependence.csv" in paper_paths
+    assert "data/processed/ahc_111/ahc_angle_dependence.csv" not in paper_paths
+    assert "data/processed/ahc_111/ahc_angle_dependence.csv" in diagnostic_paths
+    assert "data/source/production_exports/minimal_model/model_sigma_axis.csv" in paper_paths
+    assert "data/source/pdf_vector/multipole_coefficients/multipole_coefficients.csv" in paper_paths
+    assert "scripts/reproduce_figures/make_paper_contact_sheet.py" in contact_paths
+    assert "figures/paper/fit_ahc_para.pdf" in contact_paths
+
+
 def test_reproduce_all_figures_check_mode_requires_fit_sources_and_contracts(
     tmp_path: Path,
 ) -> None:
@@ -220,6 +268,8 @@ def test_reproduce_all_figures_check_mode_requires_fit_sources_and_contracts(
         ROOT / "data/source/workflow_manifests/band_bond/band_bond_reference_contract.json",
         ROOT / "data/source/workflow_manifests/multipole_coefficients/bar_plot_reference_contract.json",
         ROOT / "data/source/workflow_manifests/definitions/bcc_planes_reference_contract.json",
+        ROOT / "data/source/production_exports/minimal_model/model_sigma_axis.csv",
+        ROOT / "data/source/pdf_vector/multipole_coefficients/multipole_coefficients.csv",
     ]
 
     for path in required_paths:
@@ -236,6 +286,114 @@ def test_reproduce_all_figures_check_mode_requires_fit_sources_and_contracts(
             assert f"Missing required file: {path}" in result.stderr
         finally:
             backup.replace(path)
+
+
+def test_reproduce_all_figures_check_mode_is_mode_aware_for_paper_vs_diagnostics(
+    tmp_path: Path,
+) -> None:
+    """Paper-only preflight should skip diagnostic AHC CSVs, while diagnostics-only requires them."""
+
+    diagnostic_path = ROOT / "data/processed/ahc_111/ahc_angle_dependence.csv"
+    paper_only_path = ROOT / "data/source/production_exports/minimal_model/model_sigma_axis.csv"
+
+    diagnostic_backup = tmp_path / diagnostic_path.name
+    diagnostic_path.replace(diagnostic_backup)
+    try:
+        paper_result = subprocess.run(
+            ["bash", str(ROOT / "scripts" / "reproduce_all_figures.sh"), "--paper-only", "--check"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        diagnostics_result = subprocess.run(
+            [
+                "bash",
+                str(ROOT / "scripts" / "reproduce_all_figures.sh"),
+                "--diagnostics-only",
+                "--check",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert paper_result.returncode == 0
+        assert diagnostics_result.returncode != 0
+        assert f"Missing required file: {diagnostic_path}" in diagnostics_result.stderr
+    finally:
+        diagnostic_backup.replace(diagnostic_path)
+
+    paper_backup = tmp_path / paper_only_path.name
+    paper_only_path.replace(paper_backup)
+    try:
+        diagnostics_result = subprocess.run(
+            [
+                "bash",
+                str(ROOT / "scripts" / "reproduce_all_figures.sh"),
+                "--diagnostics-only",
+                "--check",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        paper_result = subprocess.run(
+            ["bash", str(ROOT / "scripts" / "reproduce_all_figures.sh"), "--paper-only", "--check"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert diagnostics_result.returncode == 0
+        assert paper_result.returncode != 0
+        assert f"Missing required file: {paper_only_path}" in paper_result.stderr
+    finally:
+        paper_backup.replace(paper_only_path)
+
+
+def test_reproduce_all_figures_check_mode_requires_contact_sheet_references(
+    tmp_path: Path,
+) -> None:
+    """Contact-sheet preflight should require the committed reference PDFs only when requested."""
+
+    reference_path = ROOT / "figures/paper/fit_ahc_para.pdf"
+    backup = tmp_path / reference_path.name
+    reference_path.replace(backup)
+    try:
+        paper_result = subprocess.run(
+            ["bash", str(ROOT / "scripts" / "reproduce_all_figures.sh"), "--paper-only", "--check"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        contact_result = subprocess.run(
+            [
+                "bash",
+                str(ROOT / "scripts" / "reproduce_all_figures.sh"),
+                "--paper-only",
+                "--with-contact-sheet",
+                "--check",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert paper_result.returncode == 0
+        assert contact_result.returncode != 0
+        assert f"Missing required file: {reference_path}" in contact_result.stderr
+    finally:
+        backup.replace(reference_path)
+
+
+def test_fit_ahc_inventory_notes_record_dft_dependency() -> None:
+    """Inventory notes should document the committed DFT compact CSV used by paper plots."""
+
+    rows = [
+        row
+        for row in reproducible_plot_rows()
+        if row["figure_file"].startswith("fit_ahc")
+    ]
+    assert len(rows) == 6
+    for row in rows:
+        assert "committed DFT compact CSV" in row["notes"]
 
 
 def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
@@ -323,14 +481,18 @@ def test_ahc_paper_configs_use_verified_model_and_dft_roles() -> None:
     assert config_111["methods"] == ["SW+ED", "DFT"]
     assert config_111["label_map"]["SW+ED"] == "model"
     assert config_111["label_map"]["DFT"] == "DFT"
-    assert config_111["style_map"]["SW+ED"]["linestyle"] == "None"
-    assert config_111["style_map"]["DFT"]["linestyle"] == "--"
+    assert config_111["style_map"]["SW+ED"]["linestyle"] == "-"
+    assert config_111["style_map"]["SW+ED"]["color"] == "tab:red"
+    assert config_111["style_map"]["SW+ED"]["marker"] == "o"
+    assert config_111["style_map"]["DFT"]["linestyle"] == "None"
+    assert config_111["style_map"]["DFT"]["color"] == "black"
+    assert config_111["style_map"]["DFT"]["marker"] == "D"
     assert config_111["legend_kwargs"]["loc"] == "upper right"
     extra_111 = module_111.paper_extra_curves("para")
     assert len(extra_111) == 1
     assert extra_111[0][0] == "fitting"
-    assert extra_111[0][3]["color"] == "tab:red"
-    assert extra_111[0][3]["linestyle"] == "--"
+    assert extra_111[0][3]["color"] == "tab:blue"
+    assert extra_111[0][3]["linestyle"] == "-"
     assert "results/figures_paper/" in str(module_111.output_dir_for("paper"))
 
     module_103 = load_script_module(
@@ -343,14 +505,18 @@ def test_ahc_paper_configs_use_verified_model_and_dft_roles() -> None:
     assert config_103["methods"] == ["SW+ED", "DFT"]
     assert config_103["label_map"]["SW+ED"] == "model"
     assert config_103["label_map"]["DFT"] == "DFT"
-    assert config_103["style_map"]["SW+ED"]["linestyle"] == "None"
-    assert config_103["style_map"]["DFT"]["linestyle"] == "--"
+    assert config_103["style_map"]["SW+ED"]["linestyle"] == "-"
+    assert config_103["style_map"]["SW+ED"]["color"] == "tab:red"
+    assert config_103["style_map"]["SW+ED"]["marker"] == "o"
+    assert config_103["style_map"]["DFT"]["linestyle"] == "None"
+    assert config_103["style_map"]["DFT"]["color"] == "black"
+    assert config_103["style_map"]["DFT"]["marker"] == "D"
     assert config_103["legend_kwargs"]["loc"] == "upper right"
     extra_103 = module_103.paper_extra_curves("para")
     assert len(extra_103) == 1
     assert extra_103[0][0] == "fitting"
-    assert extra_103[0][3]["color"] == "tab:red"
-    assert extra_103[0][3]["linestyle"] == "--"
+    assert extra_103[0][3]["color"] == "tab:blue"
+    assert extra_103[0][3]["linestyle"] == "-"
     assert "results/figures_paper/" in str(module_103.output_dir_for("paper"))
 
 
@@ -379,12 +545,15 @@ def test_fit_ahc_reference_contract_records_verified_model_and_dft_roles() -> No
         assert series[0]["verification_status"] == "verified"
         assert series[0]["source_file"].endswith("fit_ahc_angle_dependence.csv")
         assert series[0]["min_finite_points"] == 37
+        assert series[0]["paper_style"] == {"color": "tab:red", "marker": "o", "linestyle": "-"}
         assert series[1]["source_method"] == "DFT"
         assert series[1]["verification_status"] == "verified"
         assert series[1]["source_file"].endswith("fit_ahc_dft_angle_dependence.csv")
         assert series[1]["min_finite_points"] == 13
+        assert series[1]["paper_style"] == {"color": "black", "marker": "D", "linestyle": "None"}
         assert series[2]["verification_status"] == "verified"
         assert series[2]["min_finite_points"] == 181
+        assert series[2]["paper_style"] == {"color": "tab:blue", "marker": None, "linestyle": "-"}
         assert panel["optional_series"] == []
         assert panel["diagnostic_only_series"] == []
 
@@ -443,20 +612,24 @@ def test_fit_ahc_paper_notice_payload_is_stable() -> None:
     assert any("diagnostics" in line for line in lines)
 
 
-def test_rank_resolved_paper_config_uses_manuscript_series_roles() -> None:
-    """Paper-mode rank-resolved plots should expose manuscript-facing multipole labels."""
+def test_rank_resolved_paper_config_uses_reference_series_roles() -> None:
+    """Paper-mode rank-resolved plots should expose the reference `w/ rank ...` labels."""
     module = load_script_module(
         "scripts/reproduce_figures/plot_rank_resolved_103.py",
         "plot_rank_resolved_103_module",
     )
-    assert module.display_label("w_rank1", style="paper", single_rank=False) == r"$\mathbb{M}_1$"
+    assert module.display_label("w_rank1", style="paper", single_rank=False) == "w/ rank 1"
     assert (
         module.display_label("w_rank1_2_3_4", style="paper", single_rank=False)
-        == r"$\mathbb{M}_1 + \mathbb{T}_2 + \mathbb{M}_3 + \mathbb{T}_4$"
+        == "w/ rank 1,2,3,4"
     )
-    assert module.display_label("w_rank4", style="paper", single_rank=True) == r"$\mathbb{T}_4$"
-    assert module.reference_label("paper") == "all ranks"
+    assert module.display_label("w_rank4", style="paper", single_rank=True) == "w/ rank 4"
+    assert module.reference_label("paper") == "all"
     assert module.component_ylabel("axis", style="paper") == r"$\sigma_{n}\ [\mathrm{S/cm}]$"
+    assert module.PAPER_STYLE_MAP["w_rank1"] == {"marker": "s", "linestyle": "-", "color": "tab:blue"}
+    assert module.PAPER_STYLE_MAP["w_rank1_2"] == {"marker": "P", "linestyle": "--", "color": "tab:orange"}
+    assert module.PAPER_STYLE_MAP["w_rank4"] == {"marker": "D", "linestyle": ":", "color": "tab:purple"}
+    assert module.PAPER_REFERENCE_STYLE["color"] == "tab:red"
     assert "results/figures_paper/" in str(module.output_dir_for("paper"))
 
 

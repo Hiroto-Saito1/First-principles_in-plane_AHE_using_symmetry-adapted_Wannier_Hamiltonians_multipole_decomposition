@@ -3,6 +3,27 @@
 All notable repository-facing updates to this public reproducibility package
 are recorded here.
 
+## v0.1.2 - 2026-05-26
+
+- split generated outputs into manuscript-facing
+  `results/figures_paper/` and diagnostic
+  `results/figures_diagnostics/` trees, and added a contact-sheet workflow for
+  reviewing generated paper plots against committed `figures/paper/`
+  references;
+- recovered archived `fit_ahc` compact sources for both the `model` and `DFT`
+  paper roles, so the paper-facing `(111)` and `(103)` `fit_ahc` panels are
+  again backed by committed compact exports plus explicit contracts;
+- added paper-facing reference-information contracts for the remaining plot
+  families, including rank-resolved `(103)`, `[103]` strain, minimal-model
+  scans, band/bond convergence, multipole bar plots, and the `(111)`/`(103)`
+  geometric definition figures;
+- strengthened `scripts/reproduce_all_figures.sh --check` so it now guards the
+  recovered `fit_ahc` sources and the current paper-facing contract manifests;
+- hardened public-path hygiene, added a dedicated
+  `docs/redistribution_status.md` note for the copied archived module trees,
+  and removed avoidable Python 3.13 `SyntaxWarning` output from archived
+  `wannier_utils` docstrings while adding regression coverage for that check.
+
 ## v0.1.1 - 2026-05-21
 
 - marked the public reproducibility reorganization as complete on `main`;

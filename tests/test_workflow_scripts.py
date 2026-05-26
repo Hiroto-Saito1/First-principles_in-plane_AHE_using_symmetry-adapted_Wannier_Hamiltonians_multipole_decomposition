@@ -238,3 +238,48 @@ def test_export_fit_ahc_source_script_collects_archived_model_rows(tmp_path: Pat
     assert rows[0]["method"] == "SW+ED"
     assert rows[0]["phi_deg"] == "0.0000000000"
     assert rows[1]["sigma_axis_s_cm"] == "11.0000000000"
+
+
+def test_export_fit_ahc_source_script_filters_compact_dft_rows(tmp_path: Path) -> None:
+    """The fit_ahc export helper should filter compact AHC CSVs into paper DFT rows."""
+    csv_path = tmp_path / "ahc_angle_dependence.csv"
+    csv_path.write_text(
+        "plane,series_group,method,phi_deg,sigma_xy_s_cm,sigma_yz_s_cm,sigma_zx_s_cm,sigma_para_s_cm,sigma_perp_s_cm,sigma_axis_s_cm\n"
+        "103,primary_ahc,SW+ED,0.0,0.0,1.0,2.0,3.0,4.0,5.0\n"
+        "103,primary_ahc,Wan90,0.0,9.0,8.0,7.0,6.0,5.0,4.0\n"
+        "103,primary_ahc,SW+ED,30.0,10.0,11.0,12.0,13.0,14.0,15.0\n",
+        encoding="utf-8",
+    )
+
+    output = tmp_path / "fit_ahc_dft_angle_dependence.csv"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "workflow" / "export_fit_ahc_source.py"),
+            "--csv",
+            str(csv_path),
+            "--plane",
+            "103",
+            "--series-group",
+            "fit_ahc_dft",
+            "--select-method",
+            "SW+ED",
+            "--rename-method",
+            "DFT",
+            "--output",
+            str(output),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert output.is_file()
+    assert "Wrote 2 rows" in result.stdout
+    with output.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    assert [row["method"] for row in rows] == ["DFT", "DFT"]
+    assert {row["series_group"] for row in rows} == {"fit_ahc_dft"}
+    assert [row["phi_deg"] for row in rows] == ["0.0", "30.0"]
+    assert rows[1]["sigma_axis_s_cm"] == "15.0"

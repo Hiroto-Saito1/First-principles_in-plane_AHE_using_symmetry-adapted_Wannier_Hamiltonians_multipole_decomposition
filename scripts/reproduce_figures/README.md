@@ -14,12 +14,15 @@ The paper-facing `fit_ahc` scripts consult
 `data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json`. The
 `(103)` script reads the committed
 `data/processed/ahc_103/fit_ahc_angle_dependence.csv`, recovered from the
-archived `FM_sqa_103/anisotropy/angle_dep_ahc.xml` model source, and the
+archived `FM_sqa_103/anisotropy/angle_dep_ahc.xml` model source, plus
+`data/processed/ahc_103/fit_ahc_dft_angle_dependence.csv` for the verified
+DFT overlay role. The
 `(111)` script reads the committed
 `data/processed/ahc_111/fit_ahc_angle_dependence.csv`, recovered from the
-archived `FM_sqa_111/.../anisotropy/angle_dep_ahc.xml` model source. The
-diagnostic AHC outputs continue to show the raw implementation-comparison
-series.
+archived `FM_sqa_111/.../anisotropy/angle_dep_ahc.xml` model source, plus
+`data/processed/ahc_111/fit_ahc_dft_angle_dependence.csv` for the same DFT
+overlay role. Diagnostic AHC outputs continue to show the raw
+implementation-comparison series.
 
 The paper-facing `(103)` rank-resolved plots are now guarded by
 `data/source/workflow_manifests/rank_resolved_103/rank_resolved_reference_contract.json`.

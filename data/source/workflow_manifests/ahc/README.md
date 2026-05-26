@@ -18,9 +18,9 @@ manuscript-reproducible.
 
 Archived manuscript-side `fit_ahc.py` scripts indicate that the `fit_ahc*.pdf`
 panels are built from the first `angle_dep_ahc.xml` series plus an analytic fit
-curve. The broader DFT overlay belongs to the archived `plot_ahc.py` scripts
-and their separate `angle_dep_ahc_dft.xml` input, not to the `fit_ahc*.pdf`
-contract itself.
+curve. The archived `plot_ahc.py` scripts show how the broader `DFT` overlay is
+added: they use the `SW+ED` branch of `angle_dep_ahc_dft.xml` as the paper's
+`DFT` role.
 
 At the moment, both planes are backed by committed archived-model compact
 exports:
@@ -30,6 +30,14 @@ exports:
 - `(111)` uses `data/source/production_exports/ahc_111/fit_ahc_angle_dependence.csv`,
   recovered from
   `SYMWAN_ROOT/tests/Fe/FM_sqa_111/theta0_qe-7.2/hamiltonian_hdf5_trs/anisotropy/angle_dep_ahc.xml`.
+
+Both planes now also have committed compact DFT overlays:
+
+- `(103)` uses `data/source/production_exports/ahc_103/fit_ahc_dft_angle_dependence.csv`,
+  which preserves the `SW+ED` branch of `angle_dep_ahc_dft.xml` under the
+  paper-facing `DFT` label.
+- `(111)` uses `data/source/production_exports/ahc_111/fit_ahc_dft_angle_dependence.csv`,
+  with the same role mapping.
 
 The diagnostic AHC plots under `results/figures_diagnostics/` remain the place
 where `Wan90`, `SW+PD`, and other implementation-comparison series are shown.

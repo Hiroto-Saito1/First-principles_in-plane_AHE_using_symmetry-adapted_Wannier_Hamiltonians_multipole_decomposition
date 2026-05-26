@@ -287,7 +287,7 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=DEFAULT_OUTPUT / "definitions",
+        default=DEFAULT_OUTPUT,
     )
     args = parser.parse_args()
 

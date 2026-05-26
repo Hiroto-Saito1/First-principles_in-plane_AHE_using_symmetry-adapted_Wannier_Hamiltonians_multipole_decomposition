@@ -8,6 +8,10 @@ the public `(111)` AHC processed CSV files.
 - `fit_ahc_angle_dependence.csv` is a curated compact export recovered from the
   archived `FM_sqa_111/anisotropy/angle_dep_ahc.xml` model source used by the
   manuscript-side `fit_ahc.py`.
+- `fit_ahc_dft_angle_dependence.csv` is a curated compact export of the
+  `SW+ED` branch from `ahc_angle_dependence.csv`, promoted to the paper-facing
+  `DFT` role because archived `plot_ahc.py` overlays that branch as the DFT
+  comparison.
 
 Rebuild the corresponding processed CSV files with:
 

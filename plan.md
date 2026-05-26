@@ -426,6 +426,59 @@ serve both purposes.
    - Pixel identity is not the target, but series membership, label semantics,
      scale, and panel structure should match the paper.
 
+### Phase G: Resolve findings from the 2026-05-26 re-audit
+
+The latest visual comparison and execution audit found that the figure
+infrastructure works, but manuscript-style acceptance is not yet met. Apply
+the following fixes in order.
+
+1. Restore the missing `fit_ahc` DFT series before declaring those panels
+   reproducible.
+   - The recovered `fit_ahc_angle_dependence.csv` files establish the
+     manuscript `model` source for `(111)` and `(103)`.
+   - The committed reference PDFs nevertheless show three paper roles in all
+     six `fit_ahc` panels: `model`, `DFT`, and `fitting`. The generated
+     paper-facing plots currently show only `model` and `fitting`.
+   - Recover and verify the compact DFT source corresponding to the reference
+     panels, then make `DFT` a required series in
+     `fit_ahc_reference_contract.json` and in the plotting scripts.
+   - Match the reference curve/marker semantics as part of this correction;
+     the fitting curve must not change visual role while reconstructing the
+     missing series.
+   - Until all required reference roles are backed by verified compact sources,
+     set affected panels to `paper_reproducible: false` or classify them as
+     not yet paper-reproducible rather than emitting incomplete paper output.
+
+2. Make reproduction checks cover the declared plotting dependencies.
+   - Extend `scripts/reproduce_all_figures.sh --check` to require the two
+     processed `fit_ahc_angle_dependence.csv` files, their committed source
+     exports, and all reference-contract JSON files consumed by or asserted
+     for paper-facing figures.
+   - Prefer deriving this list from the figure inventory and contract
+     manifests where practical, to prevent future additions from bypassing the
+     preflight gate.
+   - Add a regression test that removes or substitutes each newly required
+     input in a temporary copy and verifies that `--check` fails.
+
+3. Close the remaining paper-label and output-path defects.
+   - Restore the minimal-model legends' parameter identity (`t_T` with the
+     appropriate neighbor-order superscript) and the reference y-axis unit /
+     Fermi-level wording; protect both in its contract and tests.
+   - Fix the standalone default of `plot_bcc_planes.py` so it writes directly
+     to `results/figures_paper/definitions/`, not a nested
+     `definitions/definitions/` directory.
+   - Regenerate the contact sheet after these changes and review all pages
+     before changing a figure family from open to complete.
+
+4. Clear public-release maintenance items.
+   - Remove Python 3.13 `SyntaxWarning` output in archived `wannier_utils`
+     docstrings by using raw docstrings or escaped backslashes, without
+     changing executable behavior.
+   - Confirm redistribution permission or upstream license coverage for the
+     copied `symwannier/` and `wannier_utils/` trees. If permission cannot be
+     established, remove those copied trees from the public distribution or
+     replace them with documented external prerequisites.
+
 ## Tests And Acceptance Criteria
 
 Default tests remain lightweight. Required default checks:
@@ -438,8 +491,9 @@ Default tests remain lightweight. Required default checks:
   software, expected outputs, and downstream large-file dependencies;
 - every processed CSV has a documented source-chain path or a labeled
   fallback provenance;
-- `scripts/reproduce_all_figures.sh --check` verifies both processed and
-  source files;
+- `scripts/reproduce_all_figures.sh --check` verifies every processed input,
+  committed source export, and reference-contract manifest used to create or
+  assert paper-facing output;
 - `pytest` validates compact numerical invariants (row counts, angle grids,
   method labels, signs, representative reference values).
 - manuscript-style plot checks validate that paper-facing outputs do not
@@ -458,6 +512,10 @@ Default tests remain lightweight. Required default checks:
   grids, finite points, and fit/reference roles; bar plots check selection,
   order, signs, magnitudes, and family legends; geometric definition plots
   check required vectors, labels, and angle annotations.
+- Plot entry-point tests validate documented default output paths, including
+  standalone geometric-definition generation.
+- Default validation on supported Python versions completes without avoidable
+  `SyntaxWarning` output from packaged module docstrings.
 
 Tests must not require Quantum ESPRESSO, Wannier90, SymWannier, MultiPie,
 WannierBerri, MPI, HDF5 generation, cluster access, or the private
@@ -498,14 +556,12 @@ workspaces.
 - The generated figure count matches the repository inventory, and the
   repository now splits manuscript-style outputs (`results/figures_paper/`)
   from diagnostic outputs (`results/figures_diagnostics/`) for the AHC,
-  rank-resolved, and multipole-coefficient plots. The `fit_ahc`
-  reference-series contract exists, but its role mapping now needs a stricter
-  identity audit: the generated curve currently labeled `model` must be
-  proven to be the paper's `model` series, not the paper's `DFT` series or a
-  mislabeled implementation-comparison series. Until that role identity is
-  proven, the affected `fit_ahc` paper-facing panels should be treated as
-  not fully manuscript-reproducible, even if their files are generated
-  successfully. The `(103)` rank-resolved plots now also have a
+  rank-resolved, and multipole-coefficient plots. The archived-model source
+  now verifies the `model` role used by the `fit_ahc` scripts, and committed
+  compact DFT exports now preserve the `SW+ED` branch used by archived
+  `plot_ahc.py` for the paper-facing `DFT` role. The six `fit_ahc` panels are
+  therefore backed by committed compact sources for `model`, `DFT`, and
+  `fitting`. The `(103)` rank-resolved plots now also have a
   reference-information contract that fixes the required grouped/single-rank
   curves, manuscript-facing labels, and expected angle grids. The `[103]`
   strain plots now have an equivalent contract for their paper-facing
@@ -514,85 +570,96 @@ workspaces.
   composite now has an equivalent contract for its included cutoff set and
   recovered curve membership. The multipole bar plots and geometric
   definition plots now also have explicit paper-facing information contracts.
-- Similar checks should then be applied to the other paper-facing generated
-  plots at lower priority. The goal is not pixel matching, but preventing
-  silent information loss: missing rank/reference curves, altered bar
-  selections, dropped family legends, changed cutoffs, or absent geometric
-  annotations should be caught by a manifest or test fixture before visual
-  polish is considered complete.
+- The minimal-model output now preserves the committed numerical sweeps and
+  restores manuscript-facing parameter identity plus the reference y-axis /
+  Fermi-level wording through its paper-facing contract.
+- `scripts/reproduce_all_figures.sh --check` now requires the recovered
+  `fit_ahc` compact sources and the current paper-facing reference-contract
+  manifests, and the test suite exercises failure behavior when those
+  dependencies are absent. Preflight reliability is therefore no longer a
+  current gap.
+- Standalone `plot_bcc_planes.py` now defaults to the documented single
+  `results/figures_paper/definitions/` output directory, and that default is
+  covered by tests.
+- Python 3.13 reports invalid-escape `SyntaxWarning` messages in archived
+  `wannier_utils` docstrings during compilation.
+- The copied archived `symwannier/` and `wannier_utils/` trees remain in the
+  public repository without confirmed redistribution status. Excluding them
+  from the local MIT grant documents uncertainty but does not itself establish
+  permission to distribute them.
 
 ## Current Status
 
-The reorganization goals for the public reproducibility package are satisfied
-on the current `main` branch. The repository now includes the production input
-templates, cleaned public workflow drivers, compact processed figure data,
-repository-backed plotting scripts, figure/data/source inventories, archived
-workflow manifests for large regenerated artifacts, lightweight regression
-tests, figure smoke tests for the non-heavy plotting scripts, and CI coverage
-for the default reproducibility checks.
+The repository has a functional public data-availability baseline on the
+current `main` branch: it includes production input templates, cleaned public
+workflow drivers, compact processed figure data, plotting scripts,
+figure/data/source inventories, archived workflow manifests for large
+regenerated artifacts, regression tests, and CI checks. The remaining blockers
+for the stronger manuscript-style completion criterion are now limited to
+packaged warning cleanup and archived-code redistribution hygiene.
 
-What remains is follow-on work rather than a blocker for data availability:
+Required work before claiming manuscript-style reproduction complete:
 
-- continue Phase F by correcting the `fit_ahc` role-identity problem first:
-  verify whether each generated `model`, `DFT`, and `fitting` legend entry
-  really corresponds to the same paper role in the reference PDFs, remove or
-  demote unverified series to diagnostics, then extend figure-type contracts
-  to the remaining curve, bar, and geometric plots before contact-sheet review
-  and fine panel/layout polish;
+- remove avoidable compilation warnings and resolve the archived-code
+  redistribution basis.
+
+Optional provenance or maintenance upgrades after those blockers:
+
 - recover a direct archived compact export for the multipole coefficients if a
   later backup search turns one up;
 - copy additional private helper scripts only if they carry unique behavior
   that is not already represented by the public manifests;
 - add future release notes or tags as the package evolves.
 
-## Post-Audit Improvement Queue
+## Re-Audit Improvement Queue
 
-The repository was re-audited on 2026-05-21 after the v0.1.1 fixes. The core
-checks passed (`pytest`, `compileall`, `pip check`, figure-input check, and full
-figure generation). No data-availability blockers remain on `main`; the
-follow-up items below are maintenance, provenance, or manuscript-figure
-presentation upgrades.
+The repository was re-audited on 2026-05-26 after the paper/diagnostic plot
+split and archived `fit_ahc` model-source recovery. The working tree was clean
+and synchronized with `origin/main`; `pytest` passed with 62 tests;
+`scripts/reproduce_all_figures.sh --check` and `pip check` completed; and a
+fresh `/tmp` generation produced 27 paper PDFs, 20 diagnostic PDFs, and a
+reference-vs-generated contact sheet. `compileall` completed but emitted
+invalid-escape `SyntaxWarning` messages from archived `wannier_utils`
+docstrings.
 
-### Resolved In v0.1.1
+### Required Corrections
 
-- `HamK.get_minus_d_fermi` now stores eigenvalues rather than the tuple returned
-  by `np.linalg.eigh`.
-- The lightweight public API and workflow-only dependency boundary are now
-  documented in `README.md`, with focused import tests.
-- The public reuse policy is now explicit: repository-authored code is MIT,
-  documentation/data/figure artifacts are CC BY 4.0, and the copied archived
-  `symwannier/` / `wannier_utils/` module trees remain excluded pending
-  upstream clarification.
-- `docs/source_inventory.md` and the extra `Yourmanuscript BN15047 Saito.pdf`
-  artifact have been removed from the public release set.
-- `Fe_all_35_recipe.md` now uses repository-relative links, reader-facing docs
-  use symbolic workspace names (`PAPER_ROOT`, `SYMWAN_ROOT`), and historical
-  archived excerpts are handled as provenance evidence rather than public
-  instructions.
-- Private-path hygiene checks now extend beyond `inputs/` to the reader-facing
-  public docs and source-manifest set, with a narrow allowlist for curated
-  archived excerpts and command-shape assertions that avoid private workstation
-  prefixes.
+1. `fit_ahc` paper reproduction.
+   - Resolved: both planes now keep the recovered archived-model compact
+     exports as the verified `model` sources, and committed
+     `fit_ahc_dft_angle_dependence.csv` exports preserve the `SW+ED` branch
+     used by archived `plot_ahc.py` for the paper-facing `DFT` role.
+   - Contracts, plotting behavior, and tests now require `model`, `DFT`, and
+     `fitting` together for the six paper-facing panels.
 
-### Remaining Optional Follow-up
+2. Preflight reliability.
+   - Require all paper-generation inputs and reference contracts in
+     `scripts/reproduce_all_figures.sh --check`, including the recovered
+     `fit_ahc` processed/source CSVs and the contract manifests.
+   - Test the failure behavior for absent required dependencies rather than
+     only asserting that the current complete checkout succeeds.
 
-- The `fit_ahc` paper-facing scripts are again paper-reproducible for both
-  `(111)` and `(103)` because each plane now has a committed archived-model
-  compact export derived from `angle_dep_ahc.xml`. The remaining follow-up is
-  therefore narrower: prove which committed DFT-like comparison branch
-  corresponds to the manuscript's DFT overlay, if that overlay is later needed
-  for a public paper-facing role.
-- Continue contact-sheet review and fine panel/label polish now that the
-  remaining paper-facing figure families have explicit information contracts.
-- Obtain upstream clarification for the copied archived code under
-  `src/symwan_multipie/symwannier/` and
-  `src/symwan_multipie/wannier_utils/`, then update `LICENSE` / `README.md`
-  if those trees can move into the permissive grant.
+3. Remaining paper-presentation defects.
+   - Restore minimal-model legend identities and y-axis units / `E_F`
+     annotation from the reference figures.
+   - Correct the standalone bcc-plane output default so the documented output
+     path and actual output path are identical.
+   - Re-run the contact sheet after correction and treat it as required review
+     evidence for manuscript-style completion.
+
+4. Public-release hygiene.
+   - Eliminate avoidable Python 3.13 docstring warnings.
+   - Resolve redistribution permission for copied archived code before relying
+     on the repository as a distributable public package.
+
+### Later Provenance Improvements
+
 - Recover a direct archived compact export for the multipole coefficients if a
   later backup search turns one up, so the current recovered snapshot under
   `data/source/pdf_vector/multipole_coefficients/` can be retired.
-- Continue to cut small release notes and tags as the reproducibility package
-  evolves.
+- Copy additional private helper scripts only if they carry unique behavior
+  not represented by the public manifests.
+- Add release notes and tags after the required corrections are complete.
 
 ### Local Workspace Hygiene
 
@@ -615,17 +682,25 @@ The reorganization is considered complete when:
   modules and tests pass;
 - a reader can run `./scripts/reproduce_from_inputs.sh` to rebuild all
   committed processed CSV files and regenerate every repository-backed plot;
+- `scripts/reproduce_all_figures.sh --check` covers the complete set of
+  paper-output dependencies and fails when any required source or contract is
+  absent;
 - every repository-backed figure PDF is generated by a repository script;
 - every paper-facing generated figure has a defined diagnostic/paper role,
   and manuscript-style outputs preserve at least the reference panel's
   information content while matching the paper's series membership, role
   identity, labels, units, and panel structure;
+- copied archived modules have confirmed redistribution terms, or are no
+  longer distributed in the public repository;
 - expensive single artifacts above 100 MB are not tracked, but have an
   exact regeneration recipe and required-input list.
 
-Status on `main`: satisfied for the public data-availability package; still
-open for manuscript-style plot alignment.
+Status on `main` as audited on 2026-05-26: the executable data-availability
+baseline passes, but this completion definition is not satisfied. The fit AHC
+role/source gap, preflight, minimal-model presentation, and bcc-plane
+default-path items have been resolved; the remaining open items are Python
+3.13 warning cleanup and archived-code redistribution status.
 
-The remaining optional upgrade after those conditions are met is to replace
-the recovered multipole-coefficient compact snapshot with a recovered direct
+After those requirements are met, the principal optional provenance upgrade is
+to replace the recovered multipole-coefficient compact snapshot with a direct
 compact export, if one turns up in a later archive or backup search.

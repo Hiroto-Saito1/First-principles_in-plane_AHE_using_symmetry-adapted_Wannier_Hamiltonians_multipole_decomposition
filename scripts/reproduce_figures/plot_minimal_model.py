@@ -10,11 +10,28 @@ from _common import DEFAULT_OUTPUT, PROCESSED, get_pyplot, parse_float, read_csv
 
 
 PAPER_XLABEL = r"$\psi\ [\mathrm{deg}]$"
-PAPER_YLABEL = r"$\sigma_{n}$"
+PAPER_YLABEL = r"$\sigma_{\mathbf{n}}$ at $E_F$ [S/cm]"
 SCAN_OUTPUTS = {
     "first_nn": "sigma_axis_model_1st_nn.pdf",
     "second_nn": "sigma_axis_model_2nd_nn.pdf",
 }
+SCAN_LABELS = {
+    "first_nn": {
+        "varying_symbol": r"t^{(1)}_{\mathrm{T}}",
+        "fixed_symbol": r"t^{(2)}_{\mathrm{T}}",
+        "fixed_value": 0.0,
+    },
+    "second_nn": {
+        "varying_symbol": r"t^{(2)}_{\mathrm{T}}",
+        "fixed_symbol": r"t^{(1)}_{\mathrm{T}}",
+        "fixed_value": 0.2,
+    },
+}
+
+
+def format_parameter_label(scan: str, parameter: float) -> str:
+    symbol = SCAN_LABELS[scan]["varying_symbol"]
+    return rf"${symbol}={parameter:g}$"
 
 
 def plot_scan(rows, scan: str, output: Path) -> None:
@@ -28,7 +45,14 @@ def plot_scan(rows, scan: str, output: Path) -> None:
         series.sort(key=lambda row: parse_float(row["phi_deg"]))
         x = [parse_float(row["phi_deg"]) for row in series]
         y = [parse_float(row["sigma_axis"]) for row in series]
-        plt.plot(x, y, marker="o", markersize=3, linewidth=1.2, label=f"{parameter:g}")
+        plt.plot(
+            x,
+            y,
+            marker="o",
+            markersize=3,
+            linewidth=1.2,
+            label=format_parameter_label(scan, parameter),
+        )
     plt.xlabel(PAPER_XLABEL)
     plt.ylabel(PAPER_YLABEL)
     plt.xlim(0, 180)

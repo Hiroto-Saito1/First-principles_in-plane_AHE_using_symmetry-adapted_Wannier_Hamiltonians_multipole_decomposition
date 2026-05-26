@@ -175,11 +175,11 @@ manuscript's `z_i` + SAMB labeling, while the diagnostic output keeps the more
 explicit family-role legend text.
 
 For the `fit_ahc` panels, both paper-facing planes are now backed by committed
-compact exports of the archived `angle_dep_ahc.xml` model sources. That means
-the paper-facing `fit_ahc` panels show the verified manuscript `model` curve
-plus the analytic `fitting` curve for both `(111)` and `(103)`, while the
-diagnostic outputs continue to keep the raw `SW+ED`/`Wan90`/`fitting`
-comparison curves separate.
+compact exports of the archived `angle_dep_ahc.xml` model sources and a second
+compact export for the archived `plot_ahc.py` DFT overlay role. That means the
+paper-facing `fit_ahc` panels now carry the verified `model`, `DFT`, and
+`fitting` roles for both `(111)` and `(103)`, while the diagnostic outputs
+continue to keep the raw `SW+ED`/`Wan90`/`SW+PD` comparison curves separate.
 
 For the `(103)` rank-resolved panels, the paper-facing outputs now also follow
 an explicit reference-information contract under

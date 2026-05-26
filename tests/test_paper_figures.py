@@ -199,6 +199,45 @@ def test_reproduce_all_figures_check_mode() -> None:
     assert "processed and source inputs" in result.stdout
 
 
+def test_reproduce_all_figures_check_mode_requires_fit_sources_and_contracts(
+    tmp_path: Path,
+) -> None:
+    """Preflight should fail when recovered fit sources or paper contracts are missing."""
+
+    required_paths = [
+        ROOT / "data/processed/ahc_111/fit_ahc_angle_dependence.csv",
+        ROOT / "data/processed/ahc_111/fit_ahc_dft_angle_dependence.csv",
+        ROOT / "data/processed/ahc_103/fit_ahc_angle_dependence.csv",
+        ROOT / "data/processed/ahc_103/fit_ahc_dft_angle_dependence.csv",
+        ROOT / "data/source/production_exports/ahc_111/fit_ahc_angle_dependence.csv",
+        ROOT / "data/source/production_exports/ahc_111/fit_ahc_dft_angle_dependence.csv",
+        ROOT / "data/source/production_exports/ahc_103/fit_ahc_angle_dependence.csv",
+        ROOT / "data/source/production_exports/ahc_103/fit_ahc_dft_angle_dependence.csv",
+        ROOT / "data/source/workflow_manifests/ahc/fit_ahc_reference_contract.json",
+        ROOT / "data/source/workflow_manifests/rank_resolved_103/rank_resolved_reference_contract.json",
+        ROOT / "data/source/workflow_manifests/strain_103/strain_reference_contract.json",
+        ROOT / "data/source/workflow_manifests/minimal_model/minimal_model_reference_contract.json",
+        ROOT / "data/source/workflow_manifests/band_bond/band_bond_reference_contract.json",
+        ROOT / "data/source/workflow_manifests/multipole_coefficients/bar_plot_reference_contract.json",
+        ROOT / "data/source/workflow_manifests/definitions/bcc_planes_reference_contract.json",
+    ]
+
+    for path in required_paths:
+        backup = tmp_path / path.name
+        path.replace(backup)
+        try:
+            result = subprocess.run(
+                ["bash", str(ROOT / "scripts" / "reproduce_all_figures.sh"), "--check"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            assert result.returncode != 0
+            assert f"Missing required file: {path}" in result.stderr
+        finally:
+            backup.replace(path)
+
+
 def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
     tmp_path: Path,
 ) -> None:
@@ -272,8 +311,8 @@ def test_reproducible_plot_scripts_generate_nonempty_pdfs_except_bcc_planes(
             assert "T magnetic-toroidal" not in text
 
 
-def test_ahc_paper_configs_fail_closed_on_unverified_roles() -> None:
-    """Paper-mode fit_ahc plots should only relabel verified compact series."""
+def test_ahc_paper_configs_use_verified_model_and_dft_roles() -> None:
+    """Paper-mode fit_ahc plots should expose the verified model/DFT/fitting roles."""
     module_111 = load_script_module(
         "scripts/reproduce_figures/plot_ahc_111.py",
         "plot_ahc_111_module",
@@ -281,9 +320,11 @@ def test_ahc_paper_configs_fail_closed_on_unverified_roles() -> None:
     panel_111 = module_111.load_contract("para")
     assert panel_111["paper_reproducible"] is True
     config_111 = module_111.paper_plot_config("para")
-    assert config_111["methods"] == ["SW+ED"]
+    assert config_111["methods"] == ["SW+ED", "DFT"]
     assert config_111["label_map"]["SW+ED"] == "model"
+    assert config_111["label_map"]["DFT"] == "DFT"
     assert config_111["style_map"]["SW+ED"]["linestyle"] == "None"
+    assert config_111["style_map"]["DFT"]["linestyle"] == "--"
     assert config_111["legend_kwargs"]["loc"] == "upper right"
     extra_111 = module_111.paper_extra_curves("para")
     assert len(extra_111) == 1
@@ -299,9 +340,11 @@ def test_ahc_paper_configs_fail_closed_on_unverified_roles() -> None:
     panel_103 = module_103.load_contract("para")
     assert panel_103["paper_reproducible"] is True
     config_103 = module_103.paper_plot_config("para")
-    assert config_103["methods"] == ["SW+ED"]
+    assert config_103["methods"] == ["SW+ED", "DFT"]
     assert config_103["label_map"]["SW+ED"] == "model"
+    assert config_103["label_map"]["DFT"] == "DFT"
     assert config_103["style_map"]["SW+ED"]["linestyle"] == "None"
+    assert config_103["style_map"]["DFT"]["linestyle"] == "--"
     assert config_103["legend_kwargs"]["loc"] == "upper right"
     extra_103 = module_103.paper_extra_curves("para")
     assert len(extra_103) == 1
@@ -311,8 +354,8 @@ def test_ahc_paper_configs_fail_closed_on_unverified_roles() -> None:
     assert "results/figures_paper/" in str(module_103.output_dir_for("paper"))
 
 
-def test_fit_ahc_reference_contract_records_verified_model_roles() -> None:
-    """The AHC contract should distinguish verified paper roles from diagnostic-only ones."""
+def test_fit_ahc_reference_contract_records_verified_model_and_dft_roles() -> None:
+    """The AHC contract should track the verified paper model/DFT/fitting roles."""
     contract = fit_ahc_contract()
     assert sorted(contract["panels"]) == [
         "103:axis",
@@ -331,51 +374,51 @@ def test_fit_ahc_reference_contract_records_verified_model_roles() -> None:
         assert panel["paper_reproducible"] is True
         assert panel["blocker"] is None
         series = panel["required_series"]
-        assert [item["paper_label"] for item in series] == ["model", "fitting"]
+        assert [item["paper_label"] for item in series] == ["model", "DFT", "fitting"]
         assert series[0]["source_method"] == "SW+ED"
         assert series[0]["verification_status"] == "verified"
         assert series[0]["source_file"].endswith("fit_ahc_angle_dependence.csv")
         assert series[0]["min_finite_points"] == 37
+        assert series[1]["source_method"] == "DFT"
         assert series[1]["verification_status"] == "verified"
-        assert series[1]["min_finite_points"] == 181
+        assert series[1]["source_file"].endswith("fit_ahc_dft_angle_dependence.csv")
+        assert series[1]["min_finite_points"] == 13
+        assert series[2]["verification_status"] == "verified"
+        assert series[2]["min_finite_points"] == 181
         assert panel["optional_series"] == []
-        diagnostic = panel["diagnostic_only_series"]
-        assert len(diagnostic) == 1
-        assert diagnostic[0]["paper_label"] == "DFT"
-        assert diagnostic[0]["source_method"] == "Wan90"
-        assert diagnostic[0]["verification_status"] == "unverified"
+        assert panel["diagnostic_only_series"] == []
 
 
 def test_fit_ahc_processed_data_matches_contract_sources() -> None:
     """Current compact fit_ahc sources should match the contract source counts."""
     contract = fit_ahc_contract()["panels"]
-    processed_map = {
-        "111": ROOT / "data/processed/ahc_111/fit_ahc_angle_dependence.csv",
-        "103": ROOT / "data/processed/ahc_103/fit_ahc_angle_dependence.csv",
-    }
     for plane in ["111", "103"]:
-        with processed_map[plane].open(
-            newline="", encoding="utf-8"
-        ) as handle:
-            rows = list(csv.DictReader(handle))
+        processed_map = {
+            "fit_ahc_angle_dependence.csv": ROOT / f"data/processed/ahc_{plane}/fit_ahc_angle_dependence.csv",
+            "fit_ahc_dft_angle_dependence.csv": ROOT / f"data/processed/ahc_{plane}/fit_ahc_dft_angle_dependence.csv",
+        }
+        rows_by_file = {}
+        for key, path in processed_map.items():
+            with path.open(newline="", encoding="utf-8") as handle:
+                rows_by_file[key] = list(csv.DictReader(handle))
         for component in ["para", "perp", "axis"]:
             panel = contract[f"{plane}:{component}"]
-            requirement = panel["required_series"][0]
-            finite = sum(
-                1
-                for row in rows
-                if row["method"] == requirement["source_method"]
-                and row[requirement["source_column"]].strip().lower() != "nan"
-            )
-            assert finite == requirement["min_finite_points"]
+            for requirement in panel["required_series"][:2]:
+                rows = rows_by_file[Path(requirement["source_file"]).name]
+                finite = sum(
+                    1
+                    for row in rows
+                    if row["method"] == requirement["source_method"]
+                    and row[requirement["source_column"]].strip().lower() != "nan"
+                )
+                assert finite == requirement["min_finite_points"]
             assert panel["paper_reproducible"] is True
 
 
-def test_fit_ahc_optional_dft_overlay_matches_compact_availability() -> None:
-    """DFT-like diagnostic overlays should reflect the actual compact-source coverage."""
-    expected = {"111": 0, "103": 5}
-    for plane, target in expected.items():
-        with (ROOT / f"data/processed/ahc_{plane}/ahc_angle_dependence.csv").open(
+def test_fit_ahc_verified_dft_overlay_matches_compact_availability() -> None:
+    """Recovered DFT fit sources should preserve the archived SW+ED overlay branch."""
+    for plane in ["111", "103"]:
+        with (ROOT / f"data/processed/ahc_{plane}/fit_ahc_dft_angle_dependence.csv").open(
             newline="", encoding="utf-8"
         ) as handle:
             rows = list(csv.DictReader(handle))
@@ -383,9 +426,9 @@ def test_fit_ahc_optional_dft_overlay_matches_compact_availability() -> None:
             finite = sum(
                 1
                 for row in rows
-                if row["method"] == "Wan90" and row[column].strip().lower() != "nan"
+                if row["method"] == "DFT" and row[column].strip().lower() != "nan"
             )
-            assert finite == target
+            assert finite == 13
 
 
 def test_fit_ahc_paper_notice_payload_is_stable() -> None:
@@ -395,9 +438,8 @@ def test_fit_ahc_paper_notice_payload_is_stable() -> None:
         "plot_ahc_111_notice_module",
     )
     lines = module.paper_notice_lines()
-    assert lines[0] == "Paper fit_ahc role identity is unverified."
-    assert any("angle_dep_ahc_dft.xml" in line for line in lines)
-    assert any("angle_dep_ahc.xml" in line for line in lines)
+    assert lines[0] == "Paper fit_ahc source recovery is incomplete."
+    assert any("model or DFT role" in line for line in lines)
     assert any("diagnostics" in line for line in lines)
 
 
@@ -544,8 +586,17 @@ def test_minimal_model_paper_config_matches_reference_contract() -> None:
     assert contract["component"]["paper_xlabel"] == module.PAPER_XLABEL
     assert contract["scans"]["first_nn"]["figure_file"] == module.SCAN_OUTPUTS["first_nn"]
     assert contract["scans"]["second_nn"]["figure_file"] == module.SCAN_OUTPUTS["second_nn"]
+    assert module.format_parameter_label("first_nn", 0.1) == r"$t^{(1)}_{\mathrm{T}}=0.1$"
+    assert module.format_parameter_label("second_nn", 0.12) == r"$t^{(2)}_{\mathrm{T}}=0.12$"
+    assert module.SCAN_LABELS["first_nn"]["fixed_value"] == 0.0
+    assert module.SCAN_LABELS["second_nn"]["fixed_value"] == 0.2
     for scan_name, scan in contract["scans"].items():
         assert scan["generated_output"].startswith("results/figures_paper/minimal_model/")
+        varying_symbol = module.SCAN_LABELS[scan_name]["varying_symbol"]
+        fixed_symbol = module.SCAN_LABELS[scan_name]["fixed_symbol"]
+        fixed_value = module.SCAN_LABELS[scan_name]["fixed_value"]
+        assert scan["varying_parameter_label"] == f"${varying_symbol}$"
+        assert scan["fixed_parameter_label"] == f"${fixed_symbol}={fixed_value:g}$"
 
 
 def test_minimal_model_processed_data_satisfies_contract() -> None:
@@ -673,6 +724,10 @@ def test_bcc_definition_contract_matches_processed_json_and_script() -> None:
 
     assert contract["generated_output_root"] == "results/figures_paper/definitions/"
     assert str(module.DEFAULT_OUTPUT).endswith("results/figures_paper/definitions")
+    parser = module.argparse.ArgumentParser()
+    parser.add_argument("--output-dir", type=Path, default=module.DEFAULT_OUTPUT)
+    args = parser.parse_args([])
+    assert args.output_dir == module.DEFAULT_OUTPUT
     assert sorted(module.REQUIRED_CONFIG_KEYS) == sorted(
         [
             "id",
@@ -768,9 +823,11 @@ def test_processed_csv_files_have_source_chain() -> None:
     export_backed = {
         Path("data/processed/ahc_111/ahc_angle_dependence.csv"),
         Path("data/processed/ahc_111/fit_ahc_angle_dependence.csv"),
+        Path("data/processed/ahc_111/fit_ahc_dft_angle_dependence.csv"),
         Path("data/processed/ahc_111/energy_angle_dependence.csv"),
         Path("data/processed/ahc_103/ahc_angle_dependence.csv"),
         Path("data/processed/ahc_103/fit_ahc_angle_dependence.csv"),
+        Path("data/processed/ahc_103/fit_ahc_dft_angle_dependence.csv"),
         Path("data/processed/ahc_103/energy_angle_dependence.csv"),
         Path("data/processed/rank_resolved_103/rank_resolved_ahc.csv"),
         Path("data/processed/rank_resolved_103/rank_cumulative_energy.csv"),

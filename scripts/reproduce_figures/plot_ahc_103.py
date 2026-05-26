@@ -30,11 +30,12 @@ CONTRACT_PATH = (
     / "ahc"
     / "fit_ahc_reference_contract.json"
 )
-PAPER_SOURCE = PROCESSED / "ahc_103" / "fit_ahc_angle_dependence.csv"
+PAPER_MODEL_SOURCE = PROCESSED / "ahc_103" / "fit_ahc_angle_dependence.csv"
+PAPER_DFT_SOURCE = PROCESSED / "ahc_103" / "fit_ahc_dft_angle_dependence.csv"
 
 PAPER_STYLES = {
     "SW+ED": {"marker": "o", "linestyle": "None", "color": "tab:red", "markersize": 5.0},
-    "Wan90": {"marker": "D", "linestyle": "None", "color": "black", "markersize": 4.5},
+    "DFT": {"marker": "D", "linestyle": "--", "color": "black", "markersize": 4.5, "linewidth": 1.0},
 }
 PAPER_YLABELS = {
     "para": r"$\sigma_{\parallel}$ at $E_F$ [S/cm]",
@@ -120,10 +121,9 @@ def paper_extra_curves(component: str) -> list[tuple[str, list[float], list[floa
 
 def paper_notice_lines() -> list[str]:
     return [
-        "Paper fit_ahc role identity is unverified.",
-        "Committed compact AHC data come from angle_dep_ahc_dft.xml.",
-        "Archived fit_ahc.py expects angle_dep_ahc.xml.",
-        "Use diagnostics for SW+ED / Wan90 / fitting curves.",
+        "Paper fit_ahc source recovery is incomplete.",
+        "A required compact model or DFT role is missing.",
+        "Use diagnostics for raw implementation curves until the role is restored.",
     ]
 
 
@@ -134,7 +134,10 @@ def main() -> None:
     args = parser.parse_args()
 
     diagnostic_rows = read_csv(require_file(PROCESSED / "ahc_103" / "ahc_angle_dependence.csv"))
-    paper_rows = read_csv(require_file(PAPER_SOURCE))
+    paper_rows = (
+        read_csv(require_file(PAPER_MODEL_SOURCE))
+        + read_csv(require_file(PAPER_DFT_SOURCE))
+    )
     output_dir = args.output_dir or output_dir_for(args.style)
     outputs = {
         "para": "fit_ahc_para_103.pdf",

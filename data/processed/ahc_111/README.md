@@ -14,13 +14,20 @@ Immediate committed sources:
 
 - `data/source/production_exports/ahc_111/ahc_angle_dependence.csv`
 - `data/source/production_exports/ahc_111/fit_ahc_angle_dependence.csv`
+- `data/source/production_exports/ahc_111/fit_ahc_dft_angle_dependence.csv`
 - `data/source/production_exports/ahc_111/energy_angle_dependence.csv`
 
-The paper-facing `fit_ahc_*.pdf` plots now read from
-`fit_ahc_angle_dependence.csv`, which is a compact export recovered from the
-archived `FM_sqa_111/anisotropy/angle_dep_ahc.xml` model source. The broader
-diagnostic AHC comparisons still read from `ahc_angle_dependence.csv`, which is
-the compact snapshot extracted from `angle_dep_ahc_dft.xml`.
+The paper-facing `fit_ahc_*.pdf` plots now read from two committed compact
+sources:
+
+- `fit_ahc_angle_dependence.csv` for the archived `angle_dep_ahc.xml` model
+  series
+- `fit_ahc_dft_angle_dependence.csv` for the archived `plot_ahc.py` DFT
+  overlay role, recovered from the `SW+ED` branch of
+  `angle_dep_ahc_dft.xml`
+
+The broader diagnostic AHC comparisons still read from `ahc_angle_dependence.csv`,
+which keeps the full `SW+ED` / `Wan90` / `SW+PD` implementation comparison.
 
 Rebuild command:
 

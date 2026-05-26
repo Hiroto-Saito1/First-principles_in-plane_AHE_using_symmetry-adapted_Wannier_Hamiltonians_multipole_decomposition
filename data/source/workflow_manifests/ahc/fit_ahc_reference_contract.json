@@ -4,8 +4,8 @@
     "notes": [
       "Committed public compact AHC CSVs are extracted from angle_dep_ahc_dft.xml.",
       "Archived manuscript-side fit_ahc.py scripts read angle_dep_ahc.xml and fit the first SW+ED series.",
-      "Archived FM_sqa_103/anisotropy/plot_ahc.py explicitly labels angle_dep_ahc.xml as the model series and overlays angle_dep_ahc_dft.xml as the DFT comparison.",
-      "Paper-facing fit_ahc outputs must fail closed until a committed compact source can prove which plotted values correspond to the manuscript's model and DFT roles."
+      "Archived FM_sqa_103/anisotropy/plot_ahc.py explicitly labels angle_dep_ahc.xml as the model series and overlays the SW+ED branch of angle_dep_ahc_dft.xml as the DFT comparison.",
+      "Paper-facing fit_ahc outputs use committed compact exports for both roles: angle_dep_ahc.xml for the model series and the SW+ED branch of ahc_angle_dependence.csv for the DFT overlay."
     ],
     "reference_scripts": [
       "PAPER_ROOT/figs/Fe/FM_sqa_111/anisotropy/fit_ahc.py",
@@ -31,6 +31,15 @@
           "reference_evidence": "Archived fit_ahc.py reads angle_dep_ahc.xml, and the recovered 2024 anisotropy/angle_dep_ahc.xml now backs the committed compact fit source."
         },
         {
+          "paper_label": "DFT",
+          "source_method": "DFT",
+          "source_file": "data/processed/ahc_111/fit_ahc_dft_angle_dependence.csv",
+          "source_column": "sigma_axis_s_cm",
+          "min_finite_points": 13,
+          "verification_status": "verified",
+          "reference_evidence": "Archived plot_ahc.py overlays dft_label='SW+ED' from angle_dep_ahc_dft.xml, and the committed compact DFT fit source preserves that branch under the DFT method label."
+        },
+        {
           "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_file": "scripts/reproduce_figures/plot_ahc_111.py",
@@ -41,17 +50,7 @@
         }
       ],
       "optional_series": [],
-      "diagnostic_only_series": [
-        {
-          "paper_label": "DFT",
-          "source_method": "Wan90",
-          "source_file": "data/processed/ahc_111/ahc_angle_dependence.csv",
-          "source_column": "sigma_axis_s_cm",
-          "min_finite_points": 0,
-          "verification_status": "unverified",
-          "reference_evidence": "The committed diagnostic compact CSV still has no finite DFT overlay points for the (111) fit panels."
-        }
-      ]
+      "diagnostic_only_series": []
     },
     "111:para": {
       "figure_file": "fit_ahc_para.pdf",
@@ -69,6 +68,15 @@
           "reference_evidence": "Archived fit_ahc.py reads angle_dep_ahc.xml, and the recovered 2024 anisotropy/angle_dep_ahc.xml now backs the committed compact fit source."
         },
         {
+          "paper_label": "DFT",
+          "source_method": "DFT",
+          "source_file": "data/processed/ahc_111/fit_ahc_dft_angle_dependence.csv",
+          "source_column": "sigma_para_s_cm",
+          "min_finite_points": 13,
+          "verification_status": "verified",
+          "reference_evidence": "Archived plot_ahc.py overlays dft_label='SW+ED' from angle_dep_ahc_dft.xml, and the committed compact DFT fit source preserves that branch under the DFT method label."
+        },
+        {
           "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_file": "scripts/reproduce_figures/plot_ahc_111.py",
@@ -79,17 +87,7 @@
         }
       ],
       "optional_series": [],
-      "diagnostic_only_series": [
-        {
-          "paper_label": "DFT",
-          "source_method": "Wan90",
-          "source_file": "data/processed/ahc_111/ahc_angle_dependence.csv",
-          "source_column": "sigma_para_s_cm",
-          "min_finite_points": 0,
-          "verification_status": "unverified",
-          "reference_evidence": "The committed diagnostic compact CSV still has no finite DFT overlay points for the (111) fit panels."
-        }
-      ]
+      "diagnostic_only_series": []
     },
     "111:perp": {
       "figure_file": "fit_ahc_perp.pdf",
@@ -107,6 +105,15 @@
           "reference_evidence": "Archived fit_ahc.py reads angle_dep_ahc.xml, and the recovered 2024 anisotropy/angle_dep_ahc.xml now backs the committed compact fit source."
         },
         {
+          "paper_label": "DFT",
+          "source_method": "DFT",
+          "source_file": "data/processed/ahc_111/fit_ahc_dft_angle_dependence.csv",
+          "source_column": "sigma_perp_s_cm",
+          "min_finite_points": 13,
+          "verification_status": "verified",
+          "reference_evidence": "Archived plot_ahc.py overlays dft_label='SW+ED' from angle_dep_ahc_dft.xml, and the committed compact DFT fit source preserves that branch under the DFT method label."
+        },
+        {
           "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_file": "scripts/reproduce_figures/plot_ahc_111.py",
@@ -117,17 +124,7 @@
         }
       ],
       "optional_series": [],
-      "diagnostic_only_series": [
-        {
-          "paper_label": "DFT",
-          "source_method": "Wan90",
-          "source_file": "data/processed/ahc_111/ahc_angle_dependence.csv",
-          "source_column": "sigma_perp_s_cm",
-          "min_finite_points": 0,
-          "verification_status": "unverified",
-          "reference_evidence": "The committed diagnostic compact CSV still has no finite DFT overlay points for the (111) fit panels."
-        }
-      ]
+      "diagnostic_only_series": []
     },
     "103:axis": {
       "figure_file": "fit_ahc_axis_103.pdf",
@@ -145,6 +142,15 @@
           "reference_evidence": "Archived fit_ahc.py reads angle_dep_ahc.xml and archived plot_ahc.py labels that XML's SW+ED series as the model curve."
         },
         {
+          "paper_label": "DFT",
+          "source_method": "DFT",
+          "source_file": "data/processed/ahc_103/fit_ahc_dft_angle_dependence.csv",
+          "source_column": "sigma_axis_s_cm",
+          "min_finite_points": 13,
+          "verification_status": "verified",
+          "reference_evidence": "Archived plot_ahc.py overlays dft_label='SW+ED' from angle_dep_ahc_dft.xml, and the committed compact DFT fit source preserves that branch under the DFT method label."
+        },
+        {
           "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_file": "scripts/reproduce_figures/plot_ahc_103.py",
@@ -155,17 +161,7 @@
         }
       ],
       "optional_series": [],
-      "diagnostic_only_series": [
-        {
-          "paper_label": "DFT",
-          "source_method": "Wan90",
-          "source_file": "data/processed/ahc_103/ahc_angle_dependence.csv",
-          "source_column": "sigma_axis_s_cm",
-          "min_finite_points": 5,
-          "verification_status": "unverified",
-          "reference_evidence": "Archived plot_ahc.py overlays DFT from angle_dep_ahc_dft.xml, but the committed compact CSV does not yet prove that its Wan90 branch is the manuscript DFT curve."
-        }
-      ]
+      "diagnostic_only_series": []
     },
     "103:para": {
       "figure_file": "fit_ahc_para_103.pdf",
@@ -183,6 +179,15 @@
           "reference_evidence": "Archived fit_ahc.py reads angle_dep_ahc.xml and archived plot_ahc.py labels that XML's SW+ED series as the model curve."
         },
         {
+          "paper_label": "DFT",
+          "source_method": "DFT",
+          "source_file": "data/processed/ahc_103/fit_ahc_dft_angle_dependence.csv",
+          "source_column": "sigma_para_s_cm",
+          "min_finite_points": 13,
+          "verification_status": "verified",
+          "reference_evidence": "Archived plot_ahc.py overlays dft_label='SW+ED' from angle_dep_ahc_dft.xml, and the committed compact DFT fit source preserves that branch under the DFT method label."
+        },
+        {
           "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_file": "scripts/reproduce_figures/plot_ahc_103.py",
@@ -193,17 +198,7 @@
         }
       ],
       "optional_series": [],
-      "diagnostic_only_series": [
-        {
-          "paper_label": "DFT",
-          "source_method": "Wan90",
-          "source_file": "data/processed/ahc_103/ahc_angle_dependence.csv",
-          "source_column": "sigma_para_s_cm",
-          "min_finite_points": 5,
-          "verification_status": "unverified",
-          "reference_evidence": "Archived plot_ahc.py overlays DFT from angle_dep_ahc_dft.xml, but the committed compact CSV does not yet prove that its Wan90 branch is the manuscript DFT curve."
-        }
-      ]
+      "diagnostic_only_series": []
     },
     "103:perp": {
       "figure_file": "fit_ahc_perp_103.pdf",
@@ -221,6 +216,15 @@
           "reference_evidence": "Archived fit_ahc.py reads angle_dep_ahc.xml and archived plot_ahc.py labels that XML's SW+ED series as the model curve."
         },
         {
+          "paper_label": "DFT",
+          "source_method": "DFT",
+          "source_file": "data/processed/ahc_103/fit_ahc_dft_angle_dependence.csv",
+          "source_column": "sigma_perp_s_cm",
+          "min_finite_points": 13,
+          "verification_status": "verified",
+          "reference_evidence": "Archived plot_ahc.py overlays dft_label='SW+ED' from angle_dep_ahc_dft.xml, and the committed compact DFT fit source preserves that branch under the DFT method label."
+        },
+        {
           "paper_label": "fitting",
           "source_method": "analytic_fit",
           "source_file": "scripts/reproduce_figures/plot_ahc_103.py",
@@ -231,17 +235,7 @@
         }
       ],
       "optional_series": [],
-      "diagnostic_only_series": [
-        {
-          "paper_label": "DFT",
-          "source_method": "Wan90",
-          "source_file": "data/processed/ahc_103/ahc_angle_dependence.csv",
-          "source_column": "sigma_perp_s_cm",
-          "min_finite_points": 5,
-          "verification_status": "unverified",
-          "reference_evidence": "Archived plot_ahc.py overlays DFT from angle_dep_ahc_dft.xml, but the committed compact CSV does not yet prove that its Wan90 branch is the manuscript DFT curve."
-        }
-      ]
+      "diagnostic_only_series": []
     }
   }
 }

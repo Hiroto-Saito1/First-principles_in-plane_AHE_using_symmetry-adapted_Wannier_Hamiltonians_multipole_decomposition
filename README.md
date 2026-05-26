@@ -17,7 +17,8 @@ large intermediate artifacts that are intentionally left out of Git.
 ## Release Status
 
 The current `main` branch corresponds to the polished public reproducibility
-release, `v0.1.2`. Earlier public milestones are preserved as `v0.1.1` and
+release, `v0.1.3`. Earlier public milestones are preserved as `v0.1.2`,
+`v0.1.1`, and
 `v0.1.0`.
 At this point the repository contains:
 
@@ -28,10 +29,10 @@ At this point the repository contains:
 - documented regeneration recipes for large omitted intermediates; and
 - default CI coverage for the lightweight public checks.
 
-The `v0.1.2` update adds the paper/diagnostic figure split, contact-sheet
-review workflow, recovered `fit_ahc` paper-role compact sources, paper-facing
-figure contracts across the remaining plot families, and Python 3.13 warning
-cleanup for the archived `wannier_utils` tree.
+The `v0.1.3` update restores the reference-facing `rank_resolved_103` labels
+and `fit_ahc` visual roles, and centralizes mode-aware figure preflight so
+paper-only, diagnostics-only, and contact-sheet checks validate the right
+runtime and rebuild dependencies.
 
 Release notes are summarized in [CHANGELOG.md](CHANGELOG.md).
 

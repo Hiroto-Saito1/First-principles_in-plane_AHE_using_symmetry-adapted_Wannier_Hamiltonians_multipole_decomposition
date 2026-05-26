@@ -3,6 +3,23 @@
 All notable repository-facing updates to this public reproducibility package
 are recorded here.
 
+## v0.1.3 - 2026-05-26
+
+- restored the paper-facing `(103)` rank-resolved figures to the committed
+  reference vocabulary (`w/ rank ...` and `all`) together with the archived
+  marker and linestyle roles;
+- restored the paper-facing `fit_ahc` visual roles so the six `(111)`/`(103)`
+  panels now use reference-style `model`, `DFT`, and `fitting` encodings on
+  top of the already recovered compact sources;
+- centralized paper, diagnostic, and contact-sheet dependency tracking in
+  `scripts/workflow/figure_dependencies.py` and taught
+  `scripts/reproduce_all_figures.sh --check` to validate mode-specific
+  requirements instead of one blended file list;
+- corrected the `fit_ahc` figure-inventory notes so they explicitly record the
+  committed DFT compact inputs used by the paper-facing panels;
+- expanded regression coverage for reference-facing figure roles and
+  dependency-failure paths, raising the default suite to 70 passing tests.
+
 ## v0.1.2 - 2026-05-26
 
 - split generated outputs into manuscript-facing

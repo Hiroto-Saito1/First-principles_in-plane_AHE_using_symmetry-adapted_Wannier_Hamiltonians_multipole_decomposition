@@ -4,7 +4,9 @@ This file maps manuscript artifacts to repository data and scripts. It is a
 living document and should be updated whenever processed data or figure
 scripts are added.
 
-Manuscript preprint: [arXiv:2601.05689](https://arxiv.org/abs/2601.05689).
+Published article: [Phys. Rev. B 114, 084410 (2026)](https://doi.org/10.1103/wbhp-rvb7).
+
+Preprint: [arXiv:2601.05689](https://arxiv.org/abs/2601.05689).
 
 ## Current Status
 

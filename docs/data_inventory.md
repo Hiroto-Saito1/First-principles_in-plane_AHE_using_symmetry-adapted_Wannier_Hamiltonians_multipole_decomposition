@@ -5,8 +5,9 @@ that must be regenerated. Files larger than 100 MB should not be committed to
 Git. For those files, this repository should provide the generation procedure
 rather than the file itself.
 
-The associated manuscript preprint is available at
-[arXiv:2601.05689](https://arxiv.org/abs/2601.05689).
+The associated article is published as
+[Phys. Rev. B 114, 084410 (2026)](https://doi.org/10.1103/wbhp-rvb7). A
+preprint is available at [arXiv:2601.05689](https://arxiv.org/abs/2601.05689).
 
 ## Included Data
 

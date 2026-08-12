@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this repository, please cite the accompanying manuscript and consult LICENSE for reuse terms."
+message: "If you use this repository, please cite the published article listed under preferred-citation and consult LICENSE for reuse terms."
 title: "First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition"
 authors:
   - family-names: Saito
@@ -7,7 +7,21 @@ authors:
   - family-names: Koretsune
     given-names: Takashi
 repository-code: "https://github.com/Hiroto-Saito1/First-principles_in-plane_AHE_using_symmetry-adapted_Wannier_Hamiltonians_multipole_decomposition"
-url: "https://arxiv.org/abs/2601.05689"
+url: "https://github.com/Hiroto-Saito1/First-principles_in-plane_AHE_using_symmetry-adapted_Wannier_Hamiltonians_multipole_decomposition"
 type: software
 version: 0.1.3
 date-released: 2026-05-26
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Saito
+      given-names: Hiroto
+    - family-names: Koretsune
+      given-names: Takashi
+  title: "First-principles analysis of in-plane anomalous Hall effect using symmetry-adapted Wannier Hamiltonians and multipole decomposition"
+  doi: "10.1103/wbhp-rvb7"
+  journal: "Physical Review B"
+  volume: 114
+  issue: 8
+  start: "084410"
+  year: 2026
